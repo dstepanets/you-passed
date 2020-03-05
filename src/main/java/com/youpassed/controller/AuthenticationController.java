@@ -24,6 +24,11 @@ public class AuthenticationController {
 		return "index";
 	}
 
+	@GetMapping(value = {"/login"})
+	public String logIn() {
+		return "login";
+	}
+
 	@GetMapping(value = {"/register"})
 	public String register(Model model) {
 		model.addAttribute("user", User.builder().build());
@@ -33,7 +38,7 @@ public class AuthenticationController {
 	@PostMapping(value = {"/register"})
 	public String register(@ModelAttribute @Valid User user) throws ValidationException {
 		userService.register(user);
-		return "login";
+		return "redirect:/login";
 	}
 
 }
