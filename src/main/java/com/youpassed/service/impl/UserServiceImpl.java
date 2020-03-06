@@ -1,14 +1,16 @@
 package com.youpassed.service.impl;
 
+import com.youpassed.domain.User;
 import com.youpassed.entity.users.UserEntity;
+import com.youpassed.exception.ValidationException;
 import com.youpassed.mapper.Mapper;
 import com.youpassed.repository.UserRepository;
 import com.youpassed.service.UserService;
-import com.youpassed.domain.User;
-import com.youpassed.exception.ValidationException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +24,14 @@ public class UserServiceImpl implements UserService {
 	private UserRepository userRepository;
 	private PasswordEncoder passwordEncoder;
 	private Mapper<UserEntity, User> userMapper;
+
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		final Optional<UserEntity> userEntity = userRepository.findByEmail(username);
+		return userEntity
+				.map(userMapper::mapEntityToDomain)
+				.orElseThrow(() -> new UsernameNotFoundException("User with email '" + username + "' is not found."));
+	}
 
 	@Override
 	public Optional<User> login(String email, String password) {
