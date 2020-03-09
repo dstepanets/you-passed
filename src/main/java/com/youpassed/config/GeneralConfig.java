@@ -1,22 +1,29 @@
 package com.youpassed.config;
 
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-
-import javax.sql.DataSource;
 
 @Configuration
 @EnableTransactionManagement
-//@ComponentScan(basePackages = {"com.youpassed.service"})
-public class JpaConfig {
-	private static final Logger LOGGER = LoggerFactory.getLogger(JpaConfig.class);
+@ComponentScan(basePackages = {"com.youpassed.service"})
+@Slf4j
+public class GeneralConfig {
+	private static final Logger LOGGER = LoggerFactory.getLogger(GeneralConfig.class);
 
-	@Bean
+
+/*	@Bean
+	public DataSource dataSource() {
+		DriverManagerDataSource dataSource = new DriverManagerDataSource();
+
+		return dataSource;
+	}*/
+
+
+/*	@Bean
 	public DataSource dataSource () {
 		try {
 			EmbeddedDatabaseBuilder dbBuilder = new EmbeddedDatabaseBuilder();
@@ -27,7 +34,9 @@ public class JpaConfig {
 			LOGGER.error("Embedded DataSource bean cannot Ье created!", е);
 			return null;
 		}
-	}
+	}*/
+
+
 
 
 }

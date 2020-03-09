@@ -1,7 +1,9 @@
 package com.youpassed.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,15 +12,17 @@ import java.util.Collection;
 import java.util.Collections;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class User implements UserDetails {
-	private final Integer id;
-	private final String email;
-	private final String password;
-	private final String salt;
-	private final String firstName;
-	private final String lastName;
-	private final Role role;
+	private Integer id;
+	private String email;
+	private String password;
+	private String password2;
+	private String firstName;
+	private String lastName;
+	private Role role;
 
 	public enum Role { STUDENT, ADMIN }
 

@@ -9,20 +9,20 @@ import java.util.Optional;
 @Component
 public class UserMapper implements Mapper<UserEntity, User> {
 	@Override
-	public UserEntity mapDomainToEntity(User item) {
-		return item == null ? null :
+	public UserEntity mapDomainToEntity(User user) {
+		return user == null ? null :
 				UserEntity.builder()
-						.id(item.getId())
-						.email(item.getEmail())
-						.password(item.getPassword())
-						.role(getUserRoleNullSafe(item))
-						.firstName(item.getFirstName())
-						.lastName(item.getLastName())
+						.id(user.getId())
+						.email(user.getEmail())
+						.password(user.getPassword())
+						.role(getUserEntityRoleNullSafe(user))
+						.firstName(user.getFirstName())
+						.lastName(user.getLastName())
 						.build();
 	}
 
-	private UserEntity.Role getUserRoleNullSafe(User item) {
-		Optional<User.Role> userRole = Optional.ofNullable(item.getRole());
+	private UserEntity.Role getUserEntityRoleNullSafe(User user) {
+		Optional<User.Role> userRole = Optional.ofNullable(user.getRole());
 		return userRole.map(role -> UserEntity.Role.valueOf(role.name())).orElse(null);
 	}
 
@@ -33,13 +33,13 @@ public class UserMapper implements Mapper<UserEntity, User> {
 						.id(enity.getId())
 						.email(enity.getEmail())
 						.password(enity.getPassword())
-						.role(getUserEntityRoleNullSafe(enity))
+						.role(getUserRoleNullSafe(enity))
 						.firstName(enity.getFirstName())
 						.lastName(enity.getLastName())
 						.build();
 	}
 
-	private User.Role getUserEntityRoleNullSafe(UserEntity enity) {
+	private User.Role getUserRoleNullSafe(UserEntity enity) {
 		Optional<UserEntity.Role> userEntityRole = Optional.ofNullable(enity.getRole());
 		return userEntityRole.map(role -> User.Role.valueOf(role.name())).orElse(null);
 	}

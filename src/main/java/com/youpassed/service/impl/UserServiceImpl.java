@@ -25,8 +25,22 @@ public class UserServiceImpl implements UserService {
 	private PasswordEncoder passwordEncoder;
 	private Mapper<UserEntity, User> userMapper;
 
+/*	@Override
+	public void defaultAllUsersPasswords() {
+		List<UserEntity> userList = userRepository.findAll();
+		final String encodedPass = passwordEncoder.encode("pass");
+		for (UserEntity ue : userList) {
+			System.out.println(ue);
+			ue.setPassword(encodedPass);
+			System.out.println(encodedPass);
+			userRepository.save(ue);
+		}
+	}*/
+
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+//		defaultAllUsersPasswords();
+
 		final Optional<UserEntity> userEntity = userRepository.findByEmail(username);
 		return userEntity
 				.map(userMapper::mapEntityToDomain)
