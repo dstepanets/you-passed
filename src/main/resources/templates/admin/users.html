@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="includes.html :: headPublic ('Users - YouPassed')"></head>
+
+<body>
+
+<div th:with="usersActive='active'" th:insert="includes.html :: navAdmin"></div>
+
+<main class="page catalog-page" style="height: 800px;">
+	<section class="clean-block clean-catalog dark" style="height: 601px;">
+		<div class="container">
+			<div class="block-heading" style="padding-top: 120px">
+				<h2 class="text-info">Users List</h2>
+			</div>
+			<div class="content">
+				<div class="table-responsive" style="font-size: 14px;">
+					<table class="table">
+						<thead>
+							<tr>
+								<th style="width: 70px;height: 30px;">ID</th>
+								<th style="width: 180px;height: 30px;">Email</th>
+								<th style="width: 180px;height: 30px;">First Name</th>
+								<th style="width: 180px;height: 30px;">Last Name</th>
+								<th style="width: 100px;height: 30px;">Role</th>
+								<th style="width: 100px;height: 30px;"></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td style="width: 70px;">01</td>
+								<td style="height: 30px;">asdasdas@sada.df</td>
+								<td style="height: 30px;">John</td>
+								<td style="height: 30px;">LastNameson</td>
+								<td style="height: 30px;width: 100px;">STUDENT</td>
+								<td style="height: 30px;width: 100px;"><button class="btn btn-primary" type="button" style="font-size: 14px;padding-bottom: 0px;padding-top: 0px;">Update</button></td>
+							</tr>
+						<tr></tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</section>
+</main>
+
+<div th:replace="includes.html :: footer"></div>
+
+</body>
+</html>
