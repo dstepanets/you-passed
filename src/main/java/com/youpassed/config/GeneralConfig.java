@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @ComponentScan(basePackages = {"com.youpassed.service"})
 @Slf4j
 public class GeneralConfig {
-	private static final Logger LOGGER = LoggerFactory.getLogger(GeneralConfig.class);
 
 
 /*	@Bean

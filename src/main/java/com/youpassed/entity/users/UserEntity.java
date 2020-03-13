@@ -55,6 +55,6 @@ public class UserEntity {
 	@Enumerated(EnumType.STRING)
 	private UserEntity.Role role;
 
-	public enum Role {STUDENT, ADMIN }
+	public enum Role { STUDENT, ADMIN }
 
 }

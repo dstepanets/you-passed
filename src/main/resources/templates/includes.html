@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 
 
 <head th:fragment="headPublic (pageTitle)">
@@ -51,10 +51,15 @@
 			<a href="#" style="font-size: 14px;">UA</a><span class="navbar-text">&nbsp;/&nbsp;</span><a href="#" style="font-size: 14px;">EN</a>
 		</div>
 		<div class="dropdown" style="margin-left: 30px;">
-			<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false" href="#" style="font-size: 15px;">UserName</a>
+			<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false" href="#" th:text="${#authentication.principal.firstName}" style="font-size: 15px;">UserFirstName</a>
 			<div class="dropdown-menu" role="menu">
 				<a class="dropdown-item" role="presentation" href="#" style="font-size: 15px;">Profile</a>
-				<a class="dropdown-item" role="presentation" href="#" style="font-size: 15px;">Log Out</a>
+					<form th:action="@{/logout}" method="POST">
+<!--						<a class="dropdown-item" role="presentation" style="font-size: 15px;" th:href="@{/logout}">Log Out</a>-->
+<!--						<button type="submit" name="submit" value="logout" class="link-button">Log Out</button>-->
+						<input class="dropdown-item" role="presentation" style="font-size: 15px;" type="submit" value="Log Out" />
+					</form>
+
 			</div>
 		</div>
 	</div>
