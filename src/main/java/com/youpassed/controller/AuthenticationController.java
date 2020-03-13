@@ -21,17 +21,18 @@ import java.util.Set;
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class AuthenticationController {
 
+	private final AuthenticationFacade authFacade;
 	private final UserService userService;
 
 	@GetMapping({"", "/"})
 	public String index(){
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Authentication authentication = authFacade.getAuthentication();
 		Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
-		if (roles.contains("ROLE_ANONYMOUS")) {
+		if (!authentication.isAuthenticated() || roles.contains("ROLE_ANONYMOUS")) {
 			return "index";
 		}
-		User user = (User) authentication.getPrincipal();
-		return user.getRole().equals(User.Role.STUDENT) ? "student/student-home" : "admin/admin-home";
+		return authFacade.getPrincipalUser().getRole().equals(User.Role.STUDENT) ?
+				"student/student-home" : "admin/admin-home";
 	}
 
 	@GetMapping(value = {"/login"})

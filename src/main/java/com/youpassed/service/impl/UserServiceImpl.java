@@ -9,11 +9,14 @@ import com.youpassed.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 @Service
@@ -66,17 +69,70 @@ public class UserServiceImpl implements UserService {
 		final String encryptedPass = passwordEncoder.encode(user.getPassword());
 
 		UserEntity newUserEntity = UserEntity.builder()
-						.email(user.getEmail())
-						.password(encryptedPass)
-						.firstName(user.getFirstName())
-						.lastName(user.getLastName())
-						.role(UserEntity.Role.valueOf(user.getRole().name()))
-						.build();
+				.email(user.getEmail())
+				.password(encryptedPass)
+				.firstName(user.getFirstName())
+				.lastName(user.getLastName())
+				.role(UserEntity.Role.valueOf(user.getRole().name()))
+				.build();
 
 		userRepository.save(newUserEntity);
 //		як варіант, id повертати?
 		return user;
 	}
+
+
+	@Override
+	public Page<User> findAll(String pageNumStr, String pageSizeStr) {
+		final int pageSize = parsePageSize(pageSizeStr);
+		final int pageNum = parsePageNumber(pageNumStr, pageSize);
+
+		return userRepository.findAll(PageRequest.of(pageNum, pageSize))
+				.map(userMapper::mapEntityToDomain);
+	}
+
+
+	private static final int BUTTONS_TO_SHOW = 3;
+	private static final int INITIAL_PAGE_SIZE = 5;
+	private static final int[] PAGE_SIZES = {5, 10};
+
+	private int parsePageSize(String pageSizeStr) {
+		int pageSize;
+		try {
+			if (pageSizeStr == null) {
+				throw new NumberFormatException("");
+			}
+			pageSize = Integer.parseInt(pageSizeStr);
+			if (!Arrays.asList(PAGE_SIZES).contains(pageSize)) {
+				throw new NumberFormatException("Illegal value for pageSize parameter");
+			}
+		} catch (NumberFormatException e) {
+			log.warn(e.getMessage());
+			pageSize = INITIAL_PAGE_SIZE;
+		}
+		return pageSize;
+	}
+
+	private static final int INITIAL_PAGE_NUM = 0;
+//		final int firstPage = 1;
+
+	private int parsePageNumber(String pageNumStr, int pageSize) {
+		int pageNum;
+		try {
+			if (pageNumStr == null) {
+				throw new NumberFormatException("");
+			}
+			pageNum = Integer.parseInt(pageNumStr);
+			if (pageNum < 0) {
+				throw new NumberFormatException("Illegal value for pageNum parameter");
+			}
+		} catch (NumberFormatException e) {
+			log.warn(e.getMessage());
+			pageNum = INITIAL_PAGE_NUM;
+		}
+		return pageNum;
+	}
+
 
 	//	@Override
 //	public PaginalList<User> findAll(String strPageNum) {
@@ -94,25 +150,5 @@ public class UserServiceImpl implements UserService {
 //		return userDao.count();
 //	}
 //
-//	private int parsePageNumber(String strPageNum) {
-//		final int firstPage = 1;
-//		if (strPageNum == null) {
-//			return firstPage;
-//		}
-//		int usersCount = userDao.count();
-//		int maxPage = usersCount / USERS_PER_PAGE + ((usersCount % USERS_PER_PAGE == 0) ? 0 : 1);
-//
-//		try {
-//			final int p = Integer.parseInt(strPageNum);
-//			if (p > maxPage) {
-//				return maxPage;
-//			} else if (p < 1) {
-//				return firstPage;
-//			}
-//			return p;
-//		} catch (NumberFormatException e) {
-//			LOG.warn("Wrong page number format.");
-//			return firstPage;
-//		}
-//	}
+
 }
