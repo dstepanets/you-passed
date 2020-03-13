@@ -8,11 +8,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 @AllArgsConstructor(onConstructor = @__(@Autowired))
-public class AdminController {
+public class StudentController {
 
-	@GetMapping(value = {"/admin/users"})
+	@GetMapping(value = {"/student/majors"})
 	public String listUsers(Model model) {
-		return "admin/users";
+		return "student/majors";
 	}
 
 }

@@ -6,6 +6,7 @@ import com.youpassed.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
-import java.security.Principal;
+import java.util.Set;
 
 @Controller
 @AllArgsConstructor(onConstructor = @__(@Autowired))
@@ -22,9 +23,15 @@ public class AuthenticationController {
 
 	private final UserService userService;
 
-	@GetMapping({"/", ""})
+	@GetMapping({"", "/"})
 	public String index(){
-		return "index";
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
+		if (roles.contains("ROLE_ANONYMOUS")) {
+			return "index";
+		}
+		User user = (User) authentication.getPrincipal();
+		return user.getRole().equals(User.Role.STUDENT) ? "student/student-home" : "admin/admin-home";
 	}
 
 	@GetMapping(value = {"/login"})
@@ -33,11 +40,8 @@ public class AuthenticationController {
 	}
 
 	@PostMapping("/login-success")
-	public String logInSuccess(Model model) {
-		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		model.addAttribute(user);
-		System.out.println("lgin-scss: " + user);
-		return "redirect:/admin/users";
+	public String logInSuccess() {
+		return "redirect:";
 	}
 
 	@GetMapping(value = {"/register"})

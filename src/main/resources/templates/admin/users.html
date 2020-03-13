@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 
-<head th:replace="includes.html :: headPublic ('Users - YouPassed')"></head>
+<head th:replace="includes.html :: headCommon ('Users - YouPassed')"></head>
 
 <body>
 
@@ -40,19 +40,6 @@
 					</table>
 				</div>
 			</div>
-
-			<div>
-				Authenticated username:
-				<div sec:authentication="name">Name</div>
-				Authenticated user roles:
-				<div sec:authentication="principal.authorities">Roles</div>
-				<!--/*@thymesVar id="user" type="User"*/-->
-				<div th:text="${user.firstName}">FN</div>
-				<div th:text="${#authentication.principal.firstName}">
-					The value of the "name" property of the authentication object should appear here.
-				</div>
-			</div>
-
 		</div>
 	</section>
 </main>
