@@ -27,7 +27,7 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr th:each="user : ${usersList}">
+							<tr th:each="user : ${usersPage}">
 								<td style="width: 70px;" th:text="${user.id}">id</td>
 								<td style="height: 30px;" th:text="${user.email}">asdasdas@sada.df</td>
 								<td style="height: 30px;" th:text="${user.firstName}">John</td>
@@ -44,28 +44,28 @@
 			</div>
 <!--	PAGINATION		-->
 			<nav th:with="currentViewPath='/admin/users'">
-				<ul th:if="${usersList.totalPages != 1}" class="pagination">
-					<li th:class="${usersList.number == 0} ? disabled" class="page-item">
+				<ul th:if="${usersPage.totalPages != 1}" class="pagination">
+					<li th:class="${usersPage.number == 0} ? 'page-item disabled'" class="page-item">
 						<a class="page-link" th:href="@{${currentViewPath}(pageSize=${selectedPageSize}, page=1)}" aria-label="Previous">
 							<span aria-hidden="true">&laquo;</span>
 						</a>
 					</li>
-					<li th:class="${usersList.number == 0} ? disabled" class="page-item">
-						<a class="page-link" th:href="@{${currentViewPath}(pageSize=${selectedPageSize}, page=${usersList.number})}" aria-label="Previous">
+					<li th:class="${usersPage.number == 0} ? 'page-item disabled'" class="page-item">
+						<a class="page-link" th:href="@{${currentViewPath}(pageSize=${selectedPageSize}, page=${usersPage.number})}" aria-label="Previous">
 							<span aria-hidden="true">&larr;</span>
 						</a>
 					</li>
-					<li class="page-item" th:class="${usersList.number == (page - 1)} ? 'active pointer-disabled'"
+					<li class="page-item" th:class="${usersPage.number == (page - 1)} ? 'page-item active'"
 					    th:each="page : ${#numbers.sequence(pager.startPage, pager.endPage)}">
 						<a class="page-link" th:href="@{${currentViewPath}(pageSize=${selectedPageSize}, page=${page})}" th:text="${page}">1</a>
 					</li>
-					<li class="page-item" th:class="${usersList.number == usersList.totalPages} ? disabled">
-						<a class="page-link" th:href="@{${currentViewPath}(pageSize=${selectedPageSize}, page=${usersList.number} + 2)}" aria-label="Next">
+					<li class="page-item" th:class="${usersPage.number >= usersPage.totalPages - 1} ? 'page-item disabled'">
+						<a class="page-link" th:href="@{${currentViewPath}(pageSize=${selectedPageSize}, page=${usersPage.number} + 2)}" aria-label="Next">
 							<span aria-hidden="true">&rarr;</span>
 						</a>
 					</li>
-					<li class="page-item" th:class="${usersList.number + 1 == usersList.totalPages} ? disabled">
-						<a class="page-link" th:href="@{${currentViewPath}(pageSize=${selectedPageSize}, page=${usersList.totalPages})}" aria-label="Next">
+					<li class="page-item" th:class="${usersPage.number >= usersPage.totalPages - 1} ? 'page-item disabled'">
+						<a class="page-link" th:href="@{${currentViewPath}(pageSize=${selectedPageSize}, page=${usersPage.totalPages})}" aria-label="Next">
 							<span aria-hidden="true">&raquo;</span>
 						</a>
 					</li>

@@ -30,17 +30,17 @@ public class AdminController {
 		final int pageSize = PagerModel.parsePageSize(pageSizeStr);
 		final int pageIndex = PagerModel.parsePageNumber(pageNumStr) - 1;
 
-		Page<User> usersList = userService.findAll(pageIndex, pageSize);
+		Page<User> usersPage = userService.findAll(pageIndex, pageSize);
 
-		System.out.println("\n||| totalPages=" + usersList.getTotalPages() + "; pageNumStr=" + pageNumStr +
-				"; pageIndex=" + pageIndex + "; usersList.number=" + usersList.getNumber());
+		System.out.println("\n||| totalPages=" + usersPage.getTotalPages() + "; pageNumStr=" + pageNumStr +
+				"; pageIndex=" + pageIndex + "; usersPage.number=" + usersPage.getNumber());
 
-		PagerModel pager = new PagerModel(usersList.getTotalPages(), usersList.getNumber());
+		PagerModel pager = new PagerModel(usersPage.getTotalPages(), usersPage.getNumber());
 
 		ModelAndView modelAndView = new ModelAndView("admin/users");
 
-// add usersList
-		modelAndView.addObject("usersList", usersList);
+// add usersPage
+		modelAndView.addObject("usersPage", usersPage);
 // evaluate page size
 		modelAndView.addObject("selectedPageSize", pageSize);
 // add page sizes

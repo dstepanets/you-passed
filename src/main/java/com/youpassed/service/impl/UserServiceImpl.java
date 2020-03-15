@@ -85,6 +85,11 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public Page<User> findAll(int pageIndex, int pageSize) {
+		long count = userRepository.count();
+		int maxPageIndex = (int) (count / pageSize);
+		maxPageIndex -= (count % pageSize == 0) ? 1 : 0;
+		pageIndex = Math.min(pageIndex, maxPageIndex);
+
 		return userRepository.findAll(PageRequest.of(pageIndex, pageSize))
 				.map(userMapper::mapEntityToDomain);
 	}
