@@ -27,19 +27,57 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr>
-								<td style="width: 70px;">01</td>
-								<td style="height: 30px;">asdasdas@sada.df</td>
-								<td style="height: 30px;">John</td>
-								<td style="height: 30px;">LastNameson</td>
-								<td style="height: 30px;width: 100px;">STUDENT</td>
-								<td style="height: 30px;width: 100px;"><button class="btn btn-primary" type="button" style="font-size: 14px;padding-bottom: 0px;padding-top: 0px;">Update</button></td>
+							<tr th:each="user : ${usersList}">
+								<td style="width: 70px;" th:text="${user.id}">id</td>
+								<td style="height: 30px;" th:text="${user.email}">asdasdas@sada.df</td>
+								<td style="height: 30px;" th:text="${user.firstName}">John</td>
+								<td style="height: 30px;" th:text="${user.lastName}">LastNameson</td>
+								<td style="height: 30px;width: 100px;" th:text="${user.role}">STUDENT</td>
+								<td style="height: 30px;width: 100px;">
+									<button class="btn btn-primary" type="button" style="font-size: 14px;padding-bottom: 0px;padding-top: 0px;">Update</button>
+								</td>
 							</tr>
 						<tr></tr>
 						</tbody>
 					</table>
 				</div>
 			</div>
+<!--	PAGINATION		-->
+			<nav th:with="currentViewPath='/admin/users'">
+				<ul th:if="${usersList.totalPages != 1}" class="pagination">
+					<li th:class="${usersList.number == 0} ? disabled" class="page-item">
+						<a class="page-link" th:href="@{${currentViewPath}(pageSize=${selectedPageSize}, page=1)}" aria-label="Previous">
+							<span aria-hidden="true">&laquo;</span>
+						</a>
+					</li>
+					<li th:class="${usersList.number == 0} ? disabled" class="page-item">
+						<a class="page-link" th:href="@{${currentViewPath}(pageSize=${selectedPageSize}, page=${usersList.number})}" aria-label="Previous">
+							<span aria-hidden="true">&larr;</span>
+						</a>
+					</li>
+					<li class="page-item" th:class="${usersList.number == (page - 1)} ? 'active pointer-disabled'"
+					    th:each="page : ${#numbers.sequence(pager.startPage, pager.endPage)}">
+						<a class="page-link" th:href="@{${currentViewPath}(pageSize=${selectedPageSize}, page=${page})}" th:text="${page}">1</a>
+					</li>
+					<li class="page-item" th:class="${usersList.number == usersList.totalPages} ? disabled">
+						<a class="page-link" th:href="@{${currentViewPath}(pageSize=${selectedPageSize}, page=${usersList.number} + 2)}" aria-label="Next">
+							<span aria-hidden="true">&rarr;</span>
+						</a>
+					</li>
+					<li class="page-item" th:class="${usersList.number + 1 == usersList.totalPages} ? disabled">
+						<a class="page-link" th:href="@{${currentViewPath}(pageSize=${selectedPageSize}, page=${usersList.totalPages})}" aria-label="Next">
+							<span aria-hidden="true">&raquo;</span>
+						</a>
+					</li>
+					<div class="form-group col-md-1">
+						<select class="form-control pagination" id="pageSizeSelect">
+							<option th:each="pageSize : ${pageSizes}" th:text="${pageSize}" th:value="${pageSize}"
+							        th:selected="${pageSize} == ${selectedPageSize}"></option>
+						</select>
+					</div>
+				</ul>
+			</nav>
+<!--	PAGINATION END		-->
 		</div>
 	</section>
 </main>

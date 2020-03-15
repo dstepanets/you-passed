@@ -1,5 +1,6 @@
 package com.youpassed.service.impl;
 
+import com.youpassed.domain.PagerModel;
 import com.youpassed.domain.User;
 import com.youpassed.entity.users.UserEntity;
 import com.youpassed.exception.ValidationException;
@@ -83,55 +84,12 @@ public class UserServiceImpl implements UserService {
 
 
 	@Override
-	public Page<User> findAll(String pageNumStr, String pageSizeStr) {
-		final int pageSize = parsePageSize(pageSizeStr);
-		final int pageNum = parsePageNumber(pageNumStr, pageSize);
-
-		return userRepository.findAll(PageRequest.of(pageNum, pageSize))
+	public Page<User> findAll(int pageIndex, int pageSize) {
+		return userRepository.findAll(PageRequest.of(pageIndex, pageSize))
 				.map(userMapper::mapEntityToDomain);
 	}
 
 
-	private static final int BUTTONS_TO_SHOW = 3;
-	private static final int INITIAL_PAGE_SIZE = 5;
-	private static final int[] PAGE_SIZES = {5, 10};
-
-	private int parsePageSize(String pageSizeStr) {
-		int pageSize;
-		try {
-			if (pageSizeStr == null) {
-				throw new NumberFormatException("");
-			}
-			pageSize = Integer.parseInt(pageSizeStr);
-			if (!Arrays.asList(PAGE_SIZES).contains(pageSize)) {
-				throw new NumberFormatException("Illegal value for pageSize parameter");
-			}
-		} catch (NumberFormatException e) {
-			log.warn(e.getMessage());
-			pageSize = INITIAL_PAGE_SIZE;
-		}
-		return pageSize;
-	}
-
-	private static final int INITIAL_PAGE_NUM = 0;
-//		final int firstPage = 1;
-
-	private int parsePageNumber(String pageNumStr, int pageSize) {
-		int pageNum;
-		try {
-			if (pageNumStr == null) {
-				throw new NumberFormatException("");
-			}
-			pageNum = Integer.parseInt(pageNumStr);
-			if (pageNum < 0) {
-				throw new NumberFormatException("Illegal value for pageNum parameter");
-			}
-		} catch (NumberFormatException e) {
-			log.warn(e.getMessage());
-			pageNum = INITIAL_PAGE_NUM;
-		}
-		return pageNum;
-	}
 
 
 	//	@Override
