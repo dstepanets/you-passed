@@ -73,4 +73,16 @@ public class AuthenticationController {
 		return "redirect:/login";
 	}
 
+	@GetMapping(value = {"/profile"})
+	public String showProfileForm(Model model) {
+		model.addAttribute("userUpdate", authFacade.getPrincipalUser());
+		return "profile";
+	}
+
+	@PostMapping(value = {"/profile"})
+	public String submitProfileForm(@ModelAttribute @Valid User userUpdate) throws ValidationException {
+		userService.register(userUpdate);
+		return "redirect:";
+	}
+
 }
