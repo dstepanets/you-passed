@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Controller
 @RequestMapping("/admin")
@@ -34,6 +35,7 @@ public class AdminController {
 
 		System.out.println("\n||| totalPages=" + usersPage.getTotalPages() + "; pageNumStr=" + pageNumStr +
 				"; pageIndex=" + pageIndex + "; usersPage.number=" + usersPage.getNumber());
+		System.out.println("|| pageSize=" + pageSize);
 
 		PagerModel pager = new PagerModel(usersPage.getTotalPages(), usersPage.getNumber());
 

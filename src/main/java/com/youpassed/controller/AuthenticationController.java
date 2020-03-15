@@ -42,6 +42,21 @@ public class AuthenticationController {
 
 	@PostMapping("/login-success")
 	public String logInSuccess() {
+/*		for (int i = 0; i < 100 ; i++) {
+			User user = User.builder()
+					.email(i + "@email.com")
+					.password(i + "passw@RD")
+					.password2(i + "passw@RD")
+					.firstName(i + " Name")
+					.lastName(i + " lastName")
+					.role(User.Role.STUDENT)
+					.build();
+			try {
+				userService.register(user);
+			} catch (ValidationException e) {
+				e.printStackTrace();
+			}
+		}*/
 		return "redirect:";
 	}
 

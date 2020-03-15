@@ -4,10 +4,10 @@ import java.util.Arrays;
 
 public class PagerModel {
 
-	public static final int DEFAULT_BUTTONS_NUM = 3;
+	public static final int DEFAULT_BUTTONS_NUM = 10;
 	public static final int INITIAL_PAGE_NUM = 1;
 	public static final int INITIAL_PAGE_SIZE = 5;
-	public static final int[] PAGE_SIZES = {5, 10};
+	public static final Integer[] PAGE_SIZES = {5, 10, 20};
 
 	private int buttonsToShow;
 	private int startPage;
@@ -66,9 +66,6 @@ public class PagerModel {
 		}
 		return pageNum;
 	}
-
-
-
 
 
 	public int getButtonsToShow() {

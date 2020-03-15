@@ -7,8 +7,8 @@
 
 <div th:with="usersActive='active'" th:insert="includes.html :: navAdmin"></div>
 
-<main class="page catalog-page" style="height: 800px;">
-	<section class="clean-block clean-catalog dark" style="height: 601px;">
+<main class="page catalog-page">
+	<section class="clean-block clean-catalog dark">
 		<div class="container">
 			<div class="block-heading" style="padding-top: 120px">
 				<h2 class="text-info">Users List</h2>
@@ -71,8 +71,7 @@
 					</li>
 					<div class="form-group col-md-1">
 						<select class="form-control pagination" id="pageSizeSelect">
-							<option th:each="pageSize : ${pageSizes}" th:text="${pageSize}" th:value="${pageSize}"
-							        th:selected="${pageSize} == ${selectedPageSize}"></option>
+							<option th:each="size : ${pageSizes}" th:text="${size}" th:value="${size}" th:selected="${size} == ${selectedPageSize}"></option>
 						</select>
 					</div>
 				</ul>
@@ -83,6 +82,20 @@
 </main>
 
 <div th:replace="includes.html :: footer"></div>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    $(document).ready(function() {
+        changePageAndSize();
+    });
+    function changePageAndSize() {
+        $('#pageSizeSelect').change(function(evt) {
+            window.location.replace("users?pageSize=" +
+                this.value + "&page=1");
+        });
+    }
+    /*]]>*/
+</script>
 
 </body>
 </html>

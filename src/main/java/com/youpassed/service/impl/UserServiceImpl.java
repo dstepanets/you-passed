@@ -1,6 +1,5 @@
 package com.youpassed.service.impl;
 
-import com.youpassed.domain.PagerModel;
 import com.youpassed.domain.User;
 import com.youpassed.entity.users.UserEntity;
 import com.youpassed.exception.ValidationException;
@@ -17,7 +16,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.Optional;
 
 @Service
@@ -93,8 +91,6 @@ public class UserServiceImpl implements UserService {
 		return userRepository.findAll(PageRequest.of(pageIndex, pageSize))
 				.map(userMapper::mapEntityToDomain);
 	}
-
-
 
 
 	//	@Override
