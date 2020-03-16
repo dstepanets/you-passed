@@ -5,15 +5,22 @@ import com.youpassed.exception.ValidationException;
 import com.youpassed.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.servlet.View;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.Set;
 
@@ -45,8 +52,8 @@ public class AuthenticationController {
 /*		for (int i = 0; i < 100 ; i++) {
 			User user = User.builder()
 					.email(i + "@email.com")
-					.password(i + "passw@RD")
-					.password2(i + "passw@RD")
+					.password("passw@RD")
+					.password2("passw@RD")
 					.firstName(i + " Name")
 					.lastName(i + " lastName")
 					.role(User.Role.STUDENT)
@@ -75,14 +82,21 @@ public class AuthenticationController {
 
 	@GetMapping(value = {"/profile"})
 	public String showProfileForm(Model model) {
-		model.addAttribute("userUpdate", authFacade.getPrincipalUser());
+		User currentUser = userService.findById(authFacade.getPrincipalUser().getId());
+//		session.setAttribute("userUpdate", currentUser);
+//		User currentUser = authFacade.getPrincipalUser();
+		model.addAttribute("userUpdate", currentUser);
 		return "profile";
 	}
 
 	@PostMapping(value = {"/profile"})
-	public String submitProfileForm(@ModelAttribute @Valid User userUpdate) throws ValidationException {
-		userService.register(userUpdate);
-		return "redirect:";
+	public String submitProfileForm(@ModelAttribute @Valid User userUpdate,
+									HttpServletRequest request,
+									HttpServletResponse response) throws ValidationException {
+		User currentUser = authFacade.getPrincipalUser();
+		userService.update(currentUser, userUpdate);
+		new SecurityContextLogoutHandler().logout(request, response, authFacade.getAuthentication());
+		return "redirect:/login";
 	}
 
 }

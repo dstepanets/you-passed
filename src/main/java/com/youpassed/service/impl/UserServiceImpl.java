@@ -2,6 +2,7 @@ package com.youpassed.service.impl;
 
 import com.youpassed.domain.User;
 import com.youpassed.entity.users.UserEntity;
+import com.youpassed.exception.UserNotFoundException;
 import com.youpassed.exception.ValidationException;
 import com.youpassed.mapper.Mapper;
 import com.youpassed.repository.UserRepository;
@@ -49,7 +50,7 @@ public class UserServiceImpl implements UserService {
 				.orElseThrow(() -> new UsernameNotFoundException("User with email '" + username + "' is not found."));
 	}
 
-	@Override
+/*	@Override
 	public Optional<User> login(String email, String password) {
 		final Optional<UserEntity> userEntity = userRepository.findByEmail(email);
 		if (userEntity.isPresent()) {
@@ -58,10 +59,13 @@ public class UserServiceImpl implements UserService {
 				return Optional.of(userMapper.mapEntityToDomain(userEntity.get()));
 		}
 		return Optional.empty();
-	}
+	}*/
 
 	@Override
 	public User register(User user) throws ValidationException {
+		if (!user.getPassword().equals(user.getPassword2())) {
+			throw new ValidationException("Passwords don't match");
+		}
 		if (userRepository.findByEmail(user.getEmail()).isPresent()) {
 			throw new ValidationException("User with this email was registered already");
 		}
@@ -75,11 +79,17 @@ public class UserServiceImpl implements UserService {
 				.role(UserEntity.Role.valueOf(user.getRole().name()))
 				.build();
 
-		userRepository.save(newUserEntity);
+		UserEntity userEntity = userRepository.save(newUserEntity);
 //		як варіант, id повертати?
-		return user;
+		return userMapper.mapEntityToDomain(userEntity);
 	}
 
+	@Override
+	public User findById(Integer id) throws UserNotFoundException {
+		return userRepository.findById(id)
+				.map(userMapper::mapEntityToDomain)
+				.orElseThrow(() -> new UserNotFoundException("User with id [" + id + "] was not found"));
+	}
 
 	@Override
 	public Page<User> findAll(int pageIndex, int pageSize) {
@@ -92,8 +102,30 @@ public class UserServiceImpl implements UserService {
 				.map(userMapper::mapEntityToDomain);
 	}
 
+	@Override
+	public User update(User currentUser, User userUpdate) throws ValidationException, UserNotFoundException {
+		if (!userUpdate.getEmail().equals(currentUser.getEmail()) &&
+				userRepository.findByEmail(userUpdate.getEmail()).isPresent()) {
+			throw new ValidationException("User with this email was registered already");
+		}
 
-	//	@Override
+		String encryptedPass = currentUser.getPassword();
+		if (!userUpdate.getPassword().isEmpty() && !userUpdate.getPassword2().isEmpty()) {
+			if (!userUpdate.getPassword().equals(userUpdate.getPassword2())) {
+				throw new ValidationException("Passwords don't match");
+			}
+			encryptedPass = passwordEncoder.encode(userUpdate.getPassword());
+		}
+		userUpdate.setPassword(encryptedPass);
+
+		userUpdate.setId(currentUser.getId());
+		userUpdate.setRole(currentUser.getRole());
+
+		userRepository.save(userMapper.mapDomainToEntity(userUpdate));
+		return userUpdate;
+	}
+
+//	@Override
 //	public PaginalList<User> findAll(String strPageNum) {
 //		int pageNum = parsePageNumber(strPageNum);
 //

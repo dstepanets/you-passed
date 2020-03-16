@@ -33,6 +33,7 @@ public class UserMapper implements Mapper<UserEntity, User> {
 						.id(enity.getId())
 						.email(enity.getEmail())
 						.password(enity.getPassword())
+						.password2(enity.getPassword())
 						.role(getUserRoleNullSafe(enity))
 						.firstName(enity.getFirstName())
 						.lastName(enity.getLastName())
