@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="includes.html :: headCommon ('Majors - YouPassed')"></head>
+
+<body>
+
+<div th:insert="includes.html :: navStudent"></div>
+
+<main class="page blog-post-list">
+	<section class="clean-block clean-blog-list dark">
+		<div class="container">
+			<div class="block-heading" style="padding-top: 120px">
+				<h2 class="text-info">Available Majors</h2>
+			</div>
+			<div class="block-content">
+				<div role="tablist" id="accordion-1">
+					<div class="card">
+						<div class="card-header" role="tab">
+							<h5 class="mb-0"><a data-toggle="collapse" aria-expanded="false" aria-controls="accordion-1 .item-1" href="#accordion-1 .item-1" class="collapsed">Major Name</a></h5>
+						</div>
+						<div class="item-1 collapse" role="tabpanel" data-parent="#accordion-1" style="">
+							<div class="card-body">
+								<div>
+									<div class="table-responsive table-borderless">
+										<table class="table table-bordered table-sm">
+											<tbody>
+											<tr>
+												<td>
+													<p><strong>Students Capacity</strong></p>
+													<p>25</p>
+												</td>
+												<td>
+													<p><strong>Aplicants</strong></p>
+													<p>33</p>
+												</td>
+												<td class="text-center"><button class="btn btn-primary d-table-cell" type="button">Apply</button></td>
+											</tr>
+											</tbody>
+										</table>
+									</div>
+									<h5 class="text-center text-secondary" style="margin-bottom: 20px;margin-top: 12px;">Required Exams</h5>
+								</div>
+								<div class="table-responsive table-borderless" style="font-size: 15px;">
+									<table class="table table-bordered table-sm">
+										<thead>
+										<tr>
+											<th>Exam</th>
+											<th>Date</th>
+											<th>Location</th>
+										</tr>
+										</thead>
+										<tbody>
+										<tr>
+											<td>Exam Name</td>
+											<td>20.12.2020</td>
+											<td>Milky Way, Sun System, Earth</td>
+											<td><button class="btn btn-outline-primary btn-sm" type="button">Register</button></td>
+										</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+</main>
+
+<div th:replace="includes.html :: footer"></div>
+
+</body>
+</html>

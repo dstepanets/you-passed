@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class StudentController {
 
 	@GetMapping(value = {"/student/majors"})
-	public String listUsers(Model model) {
+	public String listMajors(Model model) {
 		return "student/majors";
 	}
 
