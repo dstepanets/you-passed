@@ -1,6 +1,6 @@
 package com.youpassed.controller;
 
-import com.youpassed.domain.PagerModel;
+import com.youpassed.domain.PaginationUtility;
 import com.youpassed.domain.User;
 import com.youpassed.service.UserService;
 import lombok.AllArgsConstructor;
@@ -12,48 +12,27 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.List;
-
 @Controller
 @RequestMapping("/admin")
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class AdminController {
-
-	private final UserService userService;
+	private  UserService userService;
 
 	@GetMapping(value = {"/users"})
-	public ModelAndView listUsers(HttpServletRequest req,
-								  @RequestParam(value = "pageSize", required = false) String pageSizeStr,
+	public ModelAndView listUsers(@RequestParam(value = "pageSize", required = false) String pageSizeStr,
 								  @RequestParam(value = "page", required = false) String pageNumStr) {
 
-
-		final int pageSize = PagerModel.parsePageSize(pageSizeStr);
-		final int pageIndex = PagerModel.parsePageNumber(pageNumStr) - 1;
-
+		final int pageSize = PaginationUtility.parsePageSize(pageSizeStr);
+		final int pageIndex = PaginationUtility.parsePageNumber(pageNumStr) - 1;
 		Page<User> usersPage = userService.findAll(pageIndex, pageSize);
-
-		System.out.println("\n||| totalPages=" + usersPage.getTotalPages() + "; pageNumStr=" + pageNumStr +
-				"; pageIndex=" + pageIndex + "; usersPage.number=" + usersPage.getNumber());
-		System.out.println("|| pageSize=" + pageSize);
-
-		PagerModel pager = new PagerModel(usersPage.getTotalPages(), usersPage.getNumber());
+		PaginationUtility pager = new PaginationUtility(usersPage.getTotalPages(), usersPage.getNumber());
 
 		ModelAndView modelAndView = new ModelAndView("admin/users");
-
-// add usersPage
-		modelAndView.addObject("usersPage", usersPage);
-// evaluate page size
-		modelAndView.addObject("selectedPageSize", pageSize);
-// add page sizes
-		modelAndView.addObject("pageSizes", PagerModel.PAGE_SIZES);
-// add pager
-		modelAndView.addObject("pager", pager);
-
-//		modelAndView.addObject("pageSize", pageSize).addObject("page", pageIndex);
+		modelAndView.addObject("usersPage", usersPage)
+					.addObject("selectedPageSize", pageSize)
+					.addObject("pageSizes", PaginationUtility.PAGE_SIZES)
+					.addObject("pager", pager);
 
 		return modelAndView;
 	}
-
-
 }

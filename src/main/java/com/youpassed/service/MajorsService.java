@@ -1,9 +1,9 @@
 package com.youpassed.service;
 
-import com.youpassed.entity.MajorEntity;
+import com.youpassed.domain.Major;
 import org.springframework.data.domain.Page;
 
 public interface MajorsService {
 
-	Page<MajorEntity> findAll(int pageIndex, int pageSize);
+	Page<Major> findAll(int pageIndex, int pageSize);
 }

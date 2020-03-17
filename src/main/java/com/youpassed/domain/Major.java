@@ -16,5 +16,5 @@ public class Major {
 	private String title;
 	private List<Exam> exams;
 	private int capacity;
-	private int applied;
+	private int applicants;
 }

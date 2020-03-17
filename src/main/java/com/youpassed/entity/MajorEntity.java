@@ -37,6 +37,6 @@ public class MajorEntity {
 	private List<ExamEntity> examEntities;
 	@Column(name = "capacity")
 	private int capacity;
-	private int applied;
+	private int applicants;
 //	private List<User> applicants;
 }

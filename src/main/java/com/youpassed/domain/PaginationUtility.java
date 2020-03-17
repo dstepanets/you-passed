@@ -2,7 +2,7 @@ package com.youpassed.domain;
 
 import java.util.Arrays;
 
-public class PagerModel {
+public class PaginationUtility {
 
 	public static final int DEFAULT_BUTTONS_NUM = 10;
 	public static final int INITIAL_PAGE_NUM = 1;
@@ -13,7 +13,7 @@ public class PagerModel {
 	private int startPage;
 	private int endPage;
 
-	public PagerModel(int totalPages, int currentPage) {
+	public PaginationUtility(int totalPages, int currentPage) {
 		buttonsToShow = DEFAULT_BUTTONS_NUM;
 		int halfPagesToShow = buttonsToShow / 2;
 		if (totalPages <= buttonsToShow) {

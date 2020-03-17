@@ -1,6 +1,6 @@
 package com.youpassed.service.impl;
 
-import com.youpassed.domain.PagerModel;
+import com.youpassed.domain.PaginationUtility;
 import com.youpassed.domain.User;
 import com.youpassed.entity.users.UserEntity;
 import com.youpassed.exception.UserNotFoundException;
@@ -93,7 +93,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public Page<User> findAll(int pageIndex, int pageSize) {
-		pageIndex = PagerModel.limitPageIndex(userRepository.count(), pageIndex, pageSize);
+		pageIndex = PaginationUtility.limitPageIndex(userRepository.count(), pageIndex, pageSize);
 
 		return userRepository.findAll(PageRequest.of(pageIndex, pageSize))
 				.map(userMapper::mapEntityToDomain);
