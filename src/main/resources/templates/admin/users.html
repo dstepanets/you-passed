@@ -83,18 +83,5 @@
 
 <div th:replace="includes.html :: footer"></div>
 
-<script th:inline="javascript">
-    /*<![CDATA[*/
-    $(document).ready(function() {
-        changePageAndSize();
-    });
-    function changePageAndSize() {
-        $('#pageSizeSelect').change(function(evt) {
-            window.location.replace("users?pageSize=" + this.value + "&page=1");
-        });
-    }
-    /*]]>*/
-</script>
-
 </body>
 </html>
