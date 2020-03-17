@@ -50,7 +50,6 @@ public class PagerModel {
 		return pageSize;
 	}
 
-	//		final int firstPage = 1;
 	public static int parsePageNumber(String pageNumStr) {
 		int pageNum;
 		try {
@@ -65,6 +64,13 @@ public class PagerModel {
 			pageNum = INITIAL_PAGE_NUM;
 		}
 		return pageNum;
+	}
+
+	public static int limitPageIndex(long itemsCount, int pageIndex, int pageSize) {
+		int maxPageIndex = (int) (itemsCount / pageSize);
+		maxPageIndex -= (itemsCount % pageSize == 0) ? 1 : 0;
+		pageIndex = Math.min(pageIndex, maxPageIndex);
+		return pageIndex;
 	}
 
 

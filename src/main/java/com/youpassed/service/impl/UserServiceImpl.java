@@ -1,5 +1,6 @@
 package com.youpassed.service.impl;
 
+import com.youpassed.domain.PagerModel;
 import com.youpassed.domain.User;
 import com.youpassed.entity.users.UserEntity;
 import com.youpassed.exception.UserNotFoundException;
@@ -23,7 +24,6 @@ import java.util.Optional;
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 @Slf4j
 public class UserServiceImpl implements UserService {
-	private static final int USERS_PER_PAGE = 5;
 	private UserRepository userRepository;
 	private PasswordEncoder passwordEncoder;
 	private Mapper<UserEntity, User> userMapper;
@@ -93,10 +93,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public Page<User> findAll(int pageIndex, int pageSize) {
-		long count = userRepository.count();
-		int maxPageIndex = (int) (count / pageSize);
-		maxPageIndex -= (count % pageSize == 0) ? 1 : 0;
-		pageIndex = Math.min(pageIndex, maxPageIndex);
+		pageIndex = PagerModel.limitPageIndex(userRepository.count(), pageIndex, pageSize);
 
 		return userRepository.findAll(PageRequest.of(pageIndex, pageSize))
 				.map(userMapper::mapEntityToDomain);

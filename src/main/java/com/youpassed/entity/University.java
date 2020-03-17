@@ -7,14 +7,14 @@ import java.util.List;
 public class University {
 	private final List<UserEntity> applicants;
 	private final List<UserEntity> admins;
-	private final List<Major> majors;
-	private final List<Exam> exams;
+	private final List<MajorEntity> majorEntities;
+	private final List<ExamEntity> examEntities;
 
-	public University(List<UserEntity> applicants, List<UserEntity> admins, List<Major> majors, List<Exam> exams) {
+	public University(List<UserEntity> applicants, List<UserEntity> admins, List<MajorEntity> majorEntities, List<ExamEntity> examEntities) {
 		this.applicants = applicants;
 		this.admins = admins;
-		this.majors = majors;
-		this.exams = exams;
+		this.majorEntities = majorEntities;
+		this.examEntities = examEntities;
 	}
 
 	public List<UserEntity> getApplicants() {
@@ -25,11 +25,11 @@ public class University {
 		return admins;
 	}
 
-	public List<Major> getMajors() {
-		return majors;
+	public List<MajorEntity> getMajorEntities() {
+		return majorEntities;
 	}
 
-	public List<Exam> getExams() {
-		return exams;
+	public List<ExamEntity> getExamEntities() {
+		return examEntities;
 	}
 }

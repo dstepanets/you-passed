@@ -16,13 +16,13 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Dumping data for table `exams`
+-- Dumping data for table `examEntities`
 --
 
-LOCK TABLES `exams` WRITE;
-/*!40000 ALTER TABLE `exams` DISABLE KEYS */;
-INSERT INTO `exams` VALUES (1,'ua_lang_lit',0),(2,'ua_history',0),(3,'math',0),(4,'physics',0),(5,'chemistry',0),(6,'biology',0),(7,'geography',0),(8,'foreign_lang',0),(9,'creativity',0);
-/*!40000 ALTER TABLE `exams` ENABLE KEYS */;
+LOCK TABLES `examEntities` WRITE;
+/*!40000 ALTER TABLE `examEntities` DISABLE KEYS */;
+INSERT INTO `examEntities` VALUES (1,'ua_lang_lit',0),(2,'ua_history',0),(3,'math',0),(4,'physics',0),(5,'chemistry',0),(6,'biology',0),(7,'geography',0),(8,'foreign_lang',0),(9,'creativity',0);
+/*!40000 ALTER TABLE `examEntities` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -46,13 +46,13 @@ INSERT INTO `major_exams` VALUES (1,1,1),(2,1,3),(3,1,4),(4,2,1),(5,2,2),(6,2,7)
 UNLOCK TABLES;
 
 --
--- Dumping data for table `majors`
+-- Dumping data for table `majorEntities`
 --
 
-LOCK TABLES `majors` WRITE;
-/*!40000 ALTER TABLE `majors` DISABLE KEYS */;
-INSERT INTO `majors` VALUES (1,'Computer Science',10),(2,'History',2),(3,'Philology',3),(4,'Economics',0),(5,'Music',4),(6,'Journalism',2),(7,'Sociology',4),(8,'Law',3),(9,'Mechanical Engineering',2),(10,'Chemical Techologies',6),(11,'Electronics',7),(12,'Architecture',1),(13,'Agriculture',3),(14,'Medicine',2),(15,'Design',0);
-/*!40000 ALTER TABLE `majors` ENABLE KEYS */;
+LOCK TABLES `majorEntities` WRITE;
+/*!40000 ALTER TABLE `majorEntities` DISABLE KEYS */;
+INSERT INTO `majorEntities` VALUES (1,'Computer Science',10),(2,'History',2),(3,'Philology',3),(4,'Economics',0),(5,'Music',4),(6,'Journalism',2),(7,'Sociology',4),(8,'Law',3),(9,'Mechanical Engineering',2),(10,'Chemical Techologies',6),(11,'Electronics',7),(12,'Architecture',1),(13,'Agriculture',3),(14,'Medicine',2),(15,'Design',0);
+/*!40000 ALTER TABLE `majorEntities` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --

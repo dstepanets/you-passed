@@ -18,13 +18,13 @@ USE `youpassed`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `exams`
+-- Table structure for table `examEntities`
 --
 
-DROP TABLE IF EXISTS `exams`;
+DROP TABLE IF EXISTS `examEntities`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `exams` (
+CREATE TABLE `examEntities` (
   `id` int NOT NULL AUTO_INCREMENT,
   `subject` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `mark` int NOT NULL,
@@ -61,19 +61,19 @@ CREATE TABLE `major_exams` (
   UNIQUE KEY `id_UNIQUE` (`id`),
   KEY `major_id_idx` (`major_id`),
   KEY `exam_id_idx` (`exam_id`),
-  CONSTRAINT `exam_id` FOREIGN KEY (`exam_id`) REFERENCES `exams` (`id`),
-  CONSTRAINT `major_id` FOREIGN KEY (`major_id`) REFERENCES `majors` (`id`)
+  CONSTRAINT `exam_id` FOREIGN KEY (`exam_id`) REFERENCES `examEntities` (`id`),
+  CONSTRAINT `major_id` FOREIGN KEY (`major_id`) REFERENCES `majorEntities` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `majors`
+-- Table structure for table `majorEntities`
 --
 
-DROP TABLE IF EXISTS `majors`;
+DROP TABLE IF EXISTS `majorEntities`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `majors` (
+CREATE TABLE `majorEntities` (
   `id` int NOT NULL AUTO_INCREMENT,
   `title` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `capacity` int DEFAULT '0',
@@ -99,7 +99,7 @@ CREATE TABLE `marks` (
   UNIQUE KEY `id_UNIQUE` (`id`),
   KEY `student-id` (`student_id`),
   KEY `exam_id_idx` (`exam_id`),
-  CONSTRAINT `exam-id` FOREIGN KEY (`exam_id`) REFERENCES `exams` (`id`),
+  CONSTRAINT `exam-id` FOREIGN KEY (`exam_id`) REFERENCES `examEntities` (`id`),
   CONSTRAINT `student-id` FOREIGN KEY (`student_id`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -134,7 +134,7 @@ CREATE TABLE `student_majors` (
   KEY `student_id_idx` (`student_id`),
   KEY `student_majors_idx` (`major_id`),
   CONSTRAINT `student_id` FOREIGN KEY (`student_id`) REFERENCES `users` (`id`),
-  CONSTRAINT `student_majors` FOREIGN KEY (`major_id`) REFERENCES `majors` (`id`)
+  CONSTRAINT `student_majors` FOREIGN KEY (`major_id`) REFERENCES `majorEntities` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
