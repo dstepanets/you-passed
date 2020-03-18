@@ -1,5 +1,7 @@
 package com.youpassed.entity.users;
 
+import com.youpassed.entity.ExamEntity;
+import com.youpassed.entity.MajorEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,12 +16,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -54,6 +59,19 @@ public class UserEntity {
 	@Column(name = "role", nullable = false)
 	@Enumerated(EnumType.STRING)
 	private UserEntity.Role role;
+
+	@ManyToMany
+	@JoinTable(name = "student_majors", joinColumns = @JoinColumn(name = "student_id"),
+				inverseJoinColumns = @JoinColumn(name = "major_id"))
+//	@OneToMany
+//	@JoinTable(name = "student_majors", joinColumns = @JoinColumn(name = "student_id"))
+	private List<MajorEntity> majors = new ArrayList<>();
+	@ManyToMany
+	@JoinTable(name = "student_exams", joinColumns = @JoinColumn(name = "student_id"),
+				inverseJoinColumns = @JoinColumn(name = "exam_id"))
+//	@OneToMany
+//	@JoinTable(name = "student_exams", joinColumns = @JoinColumn(name = "student_id"))
+	private List<ExamEntity> exams = new ArrayList<>();
 
 	public enum Role { STUDENT, ADMIN }
 

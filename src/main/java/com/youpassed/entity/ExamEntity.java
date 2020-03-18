@@ -35,4 +35,5 @@ public class ExamEntity {
 	@Column(name = "location")
 	private String location;
 
+
 }

@@ -5,22 +5,17 @@ import com.youpassed.exception.ValidationException;
 import com.youpassed.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.SessionAttribute;
-import org.springframework.web.servlet.View;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.Set;
 
@@ -28,8 +23,8 @@ import java.util.Set;
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class AuthenticationController {
 
-	private final AuthenticationFacade authFacade;
-	private final UserService userService;
+	private AuthenticationFacade authFacade;
+	private UserService userService;
 
 	@GetMapping({"", "/"})
 	public String index(){
@@ -86,6 +81,10 @@ public class AuthenticationController {
 //		session.setAttribute("userUpdate", currentUser);
 //		User currentUser = authFacade.getPrincipalUser();
 		model.addAttribute("userUpdate", currentUser);
+
+		System.out.println("\n\n------------------\n" + currentUser.getExams());
+		System.out.println(currentUser.getMajors() + "\n\n========================");
+
 		return "profile";
 	}
 

@@ -6,6 +6,7 @@ import com.youpassed.entity.users.UserEntity;
 import com.youpassed.exception.UserNotFoundException;
 import com.youpassed.exception.ValidationException;
 import com.youpassed.mapper.Mapper;
+import com.youpassed.mapper.UserMapper;
 import com.youpassed.repository.UserRepository;
 import com.youpassed.service.UserService;
 import lombok.AllArgsConstructor;
@@ -26,7 +27,7 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 	private UserRepository userRepository;
 	private PasswordEncoder passwordEncoder;
-	private Mapper<UserEntity, User> userMapper;
+	private UserMapper userMapper;
 
 /*	@Override
 	public void defaultAllUsersPasswords() {
@@ -87,7 +88,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User findById(Integer id) throws UserNotFoundException {
 		return userRepository.findById(id)
-				.map(userMapper::mapEntityToDomain)
+				.map(userMapper::mapEntityToDomainFetchLists)
 				.orElseThrow(() -> new UserNotFoundException("User with id [" + id + "] was not found"));
 	}
 

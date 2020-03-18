@@ -1,5 +1,6 @@
 package com.youpassed.entity;
 
+import com.youpassed.entity.users.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -37,6 +38,5 @@ public class MajorEntity {
 	private List<ExamEntity> examEntities;
 	@Column(name = "capacity")
 	private int capacity;
-	private int applicants;
-//	private List<User> applicants;
+
 }

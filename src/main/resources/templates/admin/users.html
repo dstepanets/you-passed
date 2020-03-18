@@ -14,7 +14,7 @@
 				<h2 class="text-info">Users List</h2>
 			</div>
 			<div class="content">
-				<div class="table-responsive">
+				<div class="table-responsive table-borderless">
 					<table class="table table-sm table-striped">
 						<thead>
 							<tr>
@@ -28,12 +28,12 @@
 						</thead>
 						<tbody>
 							<tr th:each="user : ${usersPage}">
-								<td style="width: 70px;" th:text="${user.id}">id</td>
-								<td style="height: 30px;" th:text="${user.email}">asdasdas@sada.df</td>
-								<td style="height: 30px;" th:text="${user.firstName}">John</td>
-								<td style="height: 30px;" th:text="${user.lastName}">LastNameson</td>
-								<td style="height: 30px;width: 100px;" th:text="${user.role}">STUDENT</td>
-								<td style="height: 30px;width: 100px;">
+								<td th:text="${user.id}">id</td>
+								<td th:text="${user.email}">asdasdas@sada.df</td>
+								<td th:text="${user.firstName}">John</td>
+								<td th:text="${user.lastName}">LastNameson</td>
+								<td th:text="${user.role}">STUDENT</td>
+								<td>
 									<button class="btn btn-primary" type="button" style="font-size: 14px;padding-bottom: 0px;padding-top: 0px;">Update</button>
 								</td>
 							</tr>
@@ -44,7 +44,7 @@
 			</div>
 <!--	PAGINATION		-->
 			<nav th:with="currentViewPath='/admin/users'">
-				<ul th:if="${usersPage.totalPages != 1}" class="pagination">
+				<ul class="pagination">
 					<li th:class="${usersPage.number == 0} ? 'page-item disabled'" class="page-item">
 						<a class="page-link" th:href="@{${currentViewPath}(pageSize=${selectedPageSize}, page=1)}" aria-label="Previous">
 							<span aria-hidden="true">&laquo;</span>

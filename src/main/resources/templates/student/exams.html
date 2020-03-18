@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="includes.html :: headCommon ('Exams - YouPassed')"></head>
+
+<body>
+
+<div th:with="usersActive='active'" th:insert="includes.html :: navStudent"></div>
+
+<main class="page catalog-page">
+	<section class="clean-block clean-catalog dark">
+		<div class="container">
+			<div class="block-heading" style="padding-top: 120px">
+				<h2 class="text-info">Exams List</h2>
+			</div>
+			<div class="content">
+				<div class="table-responsive table-borderless">
+					<table class="table table-sm table-striped">
+						<thead>
+						<tr>
+							<th>Subject</th>
+							<th>Date</th>
+							<th>Location</th>
+							<th>Your Mark</th>
+							<th></th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr th:each="exam : ${examList}">
+							<td th:text="${exam.subject}">Subject</td>
+							<td th:text="${exam.date}">00.00.00</td>
+							<td th:text="${exam.location}">Somewhere</td>
+							<td th:text="777">###</td>
+							<td>
+								<button class="btn btn-primary" type="button" style="font-size: 14px;padding-bottom: 0px;padding-top: 0px;">Register</button>
+							</td>
+						</tr>
+						<tr></tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</section>
+</main>
+
+<div th:replace="includes.html :: footer"></div>
+
+</body>
+</html>

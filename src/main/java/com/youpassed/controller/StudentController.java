@@ -1,22 +1,28 @@
 package com.youpassed.controller;
 
+import com.youpassed.domain.Exam;
 import com.youpassed.domain.Major;
 import com.youpassed.domain.PaginationUtility;
+import com.youpassed.service.ExamService;
 import com.youpassed.service.MajorsService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/student")
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class StudentController {
 	private MajorsService majorsService;
+	private ExamService examService;
 
 	@GetMapping(value = {"/majors"})
 	public ModelAndView listMajors(@RequestParam(value = "pageSize", required = false) String pageSizeStr,
@@ -34,6 +40,13 @@ public class StudentController {
 					.addObject("pager", pager);
 
 		return modelAndView;
+	}
+
+	@GetMapping(value = {"/exams"})
+	public String listExams(Model model) {
+		List<Exam> examList = examService.findAll();
+		model.addAttribute(examList);
+		return "student/exams";
 	}
 
 }
