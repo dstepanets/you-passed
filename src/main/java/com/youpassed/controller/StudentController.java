@@ -3,8 +3,10 @@ package com.youpassed.controller;
 import com.youpassed.domain.Exam;
 import com.youpassed.domain.Major;
 import com.youpassed.domain.PaginationUtility;
+import com.youpassed.domain.User;
 import com.youpassed.service.ExamService;
 import com.youpassed.service.MajorsService;
+import com.youpassed.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,6 +25,8 @@ import java.util.List;
 public class StudentController {
 	private MajorsService majorsService;
 	private ExamService examService;
+	private UserService userService;
+	private AuthenticationFacade authFacade;
 
 	@GetMapping(value = {"/majors"})
 	public ModelAndView listMajors(@RequestParam(value = "pageSize", required = false) String pageSizeStr,
@@ -45,7 +49,8 @@ public class StudentController {
 	@GetMapping(value = {"/exams"})
 	public String listExams(Model model) {
 		List<Exam> examList = examService.findAll();
-		model.addAttribute(examList);
+		User student = userService.findById(authFacade.getPrincipalUser().getId());
+		model.addAttribute(examList).addAttribute(student);
 		return "student/exams";
 	}
 

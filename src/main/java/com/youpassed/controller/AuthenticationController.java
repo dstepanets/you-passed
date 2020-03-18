@@ -22,7 +22,6 @@ import java.util.Set;
 @Controller
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class AuthenticationController {
-
 	private AuthenticationFacade authFacade;
 	private UserService userService;
 
