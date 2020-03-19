@@ -30,9 +30,10 @@
 							<td th:text="${exam.subject}">Subject</td>
 							<td th:text="${exam.date}">00.00.00</td>
 							<td th:text="${exam.location}">Somewhere</td>
-							<td th:text="777">###</td>
+							<td th:text="${exam.mark}">###</td>
 							<td>
-								<button class="btn btn-primary" type="button" style="font-size: 14px;padding-bottom: 0px;padding-top: 0px;">Register</button>
+								<button th:if="${exam.registered}" class="btn btn-primary" type="button" disabled style="font-size: 14px;padding-bottom: 0px;padding-top: 0px;">Registered</button>
+								<button th:unless="${exam.registered}" class="btn btn-primary" type="button" style="font-size: 14px;padding-bottom: 0px;padding-top: 0px;">Register</button>
 							</td>
 						</tr>
 						<tr></tr>

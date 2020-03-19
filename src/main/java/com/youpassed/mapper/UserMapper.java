@@ -5,7 +5,6 @@ import com.youpassed.domain.Major;
 import com.youpassed.domain.User;
 import com.youpassed.entity.ExamEntity;
 import com.youpassed.entity.MajorEntity;
-import com.youpassed.entity.StudentMarkEntity;
 import com.youpassed.entity.users.UserEntity;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,6 +79,7 @@ public class UserMapper implements Mapper<UserEntity, User> {
 						.exams(enity.getMarks().stream()
 								.map(mark -> {
 									Exam exam = examMapper.mapEntityToDomain(mark.getExam());
+									exam.setRegistered(true);
 									exam.setMark(mark.getMark());
 									return exam;
 								}).collect(Collectors.toList()))

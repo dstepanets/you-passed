@@ -11,9 +11,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,16 +30,19 @@ public class ExamServiceImpl implements ExamService {
 				.collect(Collectors.toList());
 	}
 
-	public List<Exam> findAllForUser(User user) {
-		Map<Integer, Exam> map = findAll().stream().collect(Collectors.toMap(Exam::getId, exam -> exam));
-		for (Exam exam : user.getExams()) {
-			map.get(exam.getId()).setApplied(true);
-			map.get(exam.getId()).setMark(0); // TODO
-		}
+	@Override
+	public List<Exam> findAllForStudent(User user) {
+		List<Exam> userExams = user.getExams();
+		List<Exam> allExams = findAll();
 
-		return examRepository.findAll().stream()
-				.map(examMapper::mapEntityToDomain)
-				.collect(Collectors.toList());
+		Set<Integer> studentExamsIds = userExams.stream()
+				.map(Exam::getId)
+				.collect(Collectors.toSet());
+		allExams.stream()
+				.filter(exam -> !studentExamsIds.contains(exam.getId()))
+				.forEach(userExams::add);
+
+		return userExams;
 	}
 
 }

@@ -48,9 +48,9 @@ public class StudentController {
 
 	@GetMapping(value = {"/exams"})
 	public String listExams(Model model) {
-		List<Exam> examList = examService.findAll();
 		User student = userService.findById(authFacade.getPrincipalUser().getId());
-		model.addAttribute(examList).addAttribute(student);
+		List<Exam> examList = examService.findAllForStudent(student);
+		model.addAttribute(examList);
 		return "student/exams";
 	}
 
