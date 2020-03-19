@@ -2,12 +2,14 @@ package com.youpassed.entity.users;
 
 import com.youpassed.entity.ExamEntity;
 import com.youpassed.entity.MajorEntity;
+import com.youpassed.entity.StudentMarkEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -30,7 +32,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Entity
+@Entity(name = "user")
 @Table(name = "users")
 //@DiscriminatorColumn(name="role_id")
 public class UserEntity {
@@ -63,15 +65,15 @@ public class UserEntity {
 	@ManyToMany
 	@JoinTable(name = "student_majors", joinColumns = @JoinColumn(name = "student_id"),
 				inverseJoinColumns = @JoinColumn(name = "major_id"))
-//	@OneToMany
+//	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 //	@JoinTable(name = "student_majors", joinColumns = @JoinColumn(name = "student_id"))
 	private List<MajorEntity> majors = new ArrayList<>();
-	@ManyToMany
-	@JoinTable(name = "student_exams", joinColumns = @JoinColumn(name = "student_id"),
-				inverseJoinColumns = @JoinColumn(name = "exam_id"))
-//	@OneToMany
+//	@ManyToMany
+//	@JoinTable(name = "student_exams", joinColumns = @JoinColumn(name = "student_id"),
+//				inverseJoinColumns = @JoinColumn(name = "exam_id"))
+	@OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
 //	@JoinTable(name = "student_exams", joinColumns = @JoinColumn(name = "student_id"))
-	private List<ExamEntity> exams = new ArrayList<>();
+	private List<StudentMarkEntity> marks = new ArrayList<>();
 
 	public enum Role { STUDENT, ADMIN }
 

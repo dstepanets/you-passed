@@ -34,7 +34,7 @@ public class ExamServiceImpl implements ExamService {
 		Map<Integer, Exam> map = findAll().stream().collect(Collectors.toMap(Exam::getId, exam -> exam));
 		for (Exam exam : user.getExams()) {
 			map.get(exam.getId()).setApplied(true);
-			map.get(exam.getId()).setMark();
+			map.get(exam.getId()).setMark(0); // TODO
 		}
 
 		return examRepository.findAll().stream()
