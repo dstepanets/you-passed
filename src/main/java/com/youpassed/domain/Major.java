@@ -17,4 +17,7 @@ public class Major {
 	private List<Exam> exams;
 	private int capacity;
 	private int applicants;
+
+	private boolean isApplied;
+
 }

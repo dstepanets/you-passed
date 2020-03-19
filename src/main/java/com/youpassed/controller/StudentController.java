@@ -34,7 +34,10 @@ public class StudentController {
 
 		final int pageSize = PaginationUtility.parsePageSize(pageSizeStr);
 		final int pageIndex = PaginationUtility.parsePageNumber(pageNumStr) - 1;
-		Page<Major> majorsPage = majorsService.findAll(pageIndex, pageSize);
+
+		User student = userService.findById(authFacade.getPrincipalUser().getId());
+		Page<Major> majorsPage = majorsService.findAllForStudent(student, pageIndex, pageSize);
+
 		PaginationUtility pager = new PaginationUtility(majorsPage.getTotalPages(), majorsPage.getNumber());
 
 		ModelAndView modelAndView = new ModelAndView("student/majors");

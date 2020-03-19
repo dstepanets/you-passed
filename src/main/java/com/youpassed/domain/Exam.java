@@ -18,6 +18,6 @@ public class Exam {
 	private Date date;
 	private String location;
 
-	private boolean registered;
+	private boolean isRegistered;
 	private int mark;
 }

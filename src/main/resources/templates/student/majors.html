@@ -42,7 +42,10 @@
 													<p><strong>Applicants</strong></p>
 													<p th:text="${major.applicants}">33</p>
 												</td>
-												<td class="text-center"><button class="btn btn-primary d-table-cell" type="button">Apply</button></td>
+												<td class="text-center">
+													<button th:unless="${major.applied}" class="btn btn-primary d-table-cell" type="button">Apply</button>
+													<button th:if="${major.applied}" class="btn btn-primary d-table-cell" type="button" disabled>Applied</button>
+												</td>
 											</tr>
 											</tbody>
 										</table>
@@ -63,7 +66,10 @@
 											<td th:text="${exam.subject}">Subject</td>
 											<td th:text="${exam.date}">20.12.2020</td>
 											<td th:text="${exam.location}">Location</td>
-											<td><button class="btn btn-outline-primary btn-sm" type="button">Register</button></td>
+											<td>
+												<button th:unless="${exam.registered}" class="btn btn-outline-primary btn-sm" type="button">Register</button>
+												<button th:if="${exam.registered}"class="btn btn-outline-primary btn-sm" type="button" disabled>Registered</button>
+											</td>
 										</tr>
 										</tbody>
 									</table>
