@@ -5,18 +5,22 @@ import com.youpassed.domain.Major;
 import com.youpassed.domain.PaginationUtility;
 import com.youpassed.domain.User;
 import com.youpassed.entity.MajorEntity;
+import com.youpassed.exception.MajorNotFoundException;
 import com.youpassed.mapper.Mapper;
 import com.youpassed.repository.MajorRepository;
 import com.youpassed.service.MajorsService;
+import com.youpassed.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,6 +29,7 @@ import java.util.stream.Collectors;
 public class MajorServiceImpl implements MajorsService {
 	private MajorRepository majorRepository;
 	private Mapper<MajorEntity, Major> majorMapper;
+	private UserService userService;
 
 	@Override
 	public Page<Major> findAll(int pageIndex, int pageSize) {
@@ -56,5 +61,22 @@ public class MajorServiceImpl implements MajorsService {
 				}));
 
 		return majorPage;
+	}
+
+	@Override
+	@Transactional
+	public Major applyForMajor(Integer majorId, User student) {
+		MajorEntity majorEntity = majorRepository.findById(majorId)
+				.orElseThrow(() -> new MajorNotFoundException("Major with id [" + majorId + "] is not found"));
+		majorEntity.setApplicants(majorEntity.getApplicants() + 1);
+		majorEntity = majorRepository.save(majorEntity);
+
+		Set<Integer> majorIds = student.getMajors().stream().map(Major::getId).collect(Collectors.toSet());
+		if (!majorIds.contains(majorId)) {
+			student.getMajors().add(majorMapper.mapEntityToDomain(majorEntity));
+			userService.saveStudentWithLists(student);
+		}
+
+		return majorMapper.mapEntityToDomain(majorEntity);
 	}
 }

@@ -92,7 +92,7 @@ public class UserController {
 									HttpServletRequest request,
 									HttpServletResponse response) throws ValidationException {
 		User currentUser = authFacade.getPrincipalUser();
-		userService.update(currentUser, userUpdate);
+		userService.updateProfile(currentUser, userUpdate);
 		new SecurityContextLogoutHandler().logout(request, response, authFacade.getAuthentication());
 		return "redirect:/login";
 	}

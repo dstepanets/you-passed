@@ -13,6 +13,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -44,7 +46,27 @@ public class StudentController {
 		modelAndView.addObject("majorsPage", majorsPage)
 					.addObject("selectedPageSize", pageSize)
 					.addObject("pageSizes", PaginationUtility.PAGE_SIZES)
-					.addObject("pager", pager);
+					.addObject("pager", pager)
+					.addObject("selectedMajor", new Major());
+
+		return modelAndView;
+	}
+
+	@PostMapping(value = {"/majors/apply"})
+	public ModelAndView listMajors(@RequestParam Integer majorId,
+								   @RequestParam(value = "pageSize", required = false) String pageSizeStr,
+								   @RequestParam(value = "page", required = false) String pageNumStr) {
+
+		System.out.println("\n\n==== Major: " + majorId);
+
+		User student = userService.findById(authFacade.getPrincipalUser().getId());
+		Major selectedMajor = majorsService.applyForMajor(majorId, student);
+
+		System.out.println("\n\n===> " + selectedMajor + "\n\n");
+
+		ModelAndView modelAndView = new ModelAndView("redirect:/student/majors");
+		modelAndView.addObject("pageSize", pageSizeStr)
+					.addObject("page", pageNumStr);
 
 		return modelAndView;
 	}

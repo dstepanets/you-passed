@@ -5,7 +5,6 @@ import com.youpassed.domain.User;
 import com.youpassed.entity.users.UserEntity;
 import com.youpassed.exception.UserNotFoundException;
 import com.youpassed.exception.ValidationException;
-import com.youpassed.mapper.Mapper;
 import com.youpassed.mapper.UserMapper;
 import com.youpassed.repository.UserRepository;
 import com.youpassed.service.UserService;
@@ -18,6 +17,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -62,6 +62,7 @@ public class UserServiceImpl implements UserService {
 		return Optional.empty();
 	}*/
 
+	@Transactional
 	@Override
 	public User register(User user) throws ValidationException {
 		if (!user.getPassword().equals(user.getPassword2())) {
@@ -101,7 +102,8 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User update(User currentUser, User userUpdate) throws ValidationException, UserNotFoundException {
+	@Transactional
+	public User updateProfile(User currentUser, User userUpdate) throws ValidationException, UserNotFoundException {
 		if (!userUpdate.getEmail().equals(currentUser.getEmail()) &&
 				userRepository.findByEmail(userUpdate.getEmail()).isPresent()) {
 			throw new ValidationException("User with this email was registered already");
@@ -121,6 +123,13 @@ public class UserServiceImpl implements UserService {
 
 		userRepository.save(userMapper.mapDomainToEntity(userUpdate));
 		return userUpdate;
+	}
+
+	@Override
+	@Transactional
+	public User saveStudentWithLists(User student) {
+		UserEntity userEntity = userRepository.save(userMapper.mapDomainToEntityWithLists(student));
+		return userMapper.mapEntityToDomain(userEntity);
 	}
 
 }

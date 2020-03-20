@@ -18,13 +18,13 @@ public class ExamMapper implements Mapper<ExamEntity, Exam> {
 	}
 
 	@Override
-	public Exam mapEntityToDomain(ExamEntity enity) {
-		return enity == null ? null :
+	public Exam mapEntityToDomain(ExamEntity entity) {
+		return entity == null ? null :
 				Exam.builder()
-						.id(enity.getId())
-						.subject(enity.getSubject())
-						.date(enity.getDate())
-						.location(enity.getLocation())
+						.id(entity.getId())
+						.subject(entity.getSubject())
+						.date(entity.getDate())
+						.location(entity.getLocation())
 						.build();
 	}
 }

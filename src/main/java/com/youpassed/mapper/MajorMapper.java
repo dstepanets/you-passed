@@ -20,6 +20,7 @@ public class MajorMapper implements Mapper<MajorEntity, Major> {
 						.id(major.getId())
 						.title(major.getTitle())
 						.capacity(major.getCapacity())
+						.applicants(major.getApplicants())
 						.examEntities(major.getExams().stream()
 								.map(examMapper::mapDomainToEntity)
 								.collect(Collectors.toList()))
@@ -27,13 +28,14 @@ public class MajorMapper implements Mapper<MajorEntity, Major> {
 	}
 
 	@Override
-	public Major mapEntityToDomain(MajorEntity enity) {
-		return enity == null ? null :
+	public Major mapEntityToDomain(MajorEntity entity) {
+		return entity == null ? null :
 				Major.builder()
-						.id(enity.getId())
-						.title(enity.getTitle())
-						.capacity(enity.getCapacity())
-						.exams(enity.getExamEntities().stream()
+						.id(entity.getId())
+						.title(entity.getTitle())
+						.capacity(entity.getCapacity())
+						.applicants(entity.getApplicants())
+						.exams(entity.getExamEntities().stream()
 								.map(examMapper::mapEntityToDomain)
 								.collect(Collectors.toList()))
 						.build();

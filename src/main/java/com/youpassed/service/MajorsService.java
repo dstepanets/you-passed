@@ -8,4 +8,5 @@ public interface MajorsService {
 
 	Page<Major> findAll(int pageIndex, int pageSize);
 	Page<Major> findAllForStudent(User student,int pageIndex, int pageSize);
+	Major applyForMajor(Integer majorId, User student);
 }

@@ -5,6 +5,7 @@ import com.youpassed.domain.Major;
 import com.youpassed.domain.User;
 import com.youpassed.entity.ExamEntity;
 import com.youpassed.entity.MajorEntity;
+import com.youpassed.entity.StudentMarkEntity;
 import com.youpassed.entity.users.UserEntity;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,13 +30,62 @@ public class UserMapper implements Mapper<UserEntity, User> {
 						.role(getUserEntityRoleNullSafe(user))
 						.firstName(user.getFirstName())
 						.lastName(user.getLastName())
-//						.majors(user.getMajors().stream()
-//								.map(majorMapper::mapDomainToEntity)
-//								.collect(Collectors.toList()))
-//						.exams(user.getExams().stream()
-//								.map(examMapper::mapDomainToEntity)
-//								.collect(Collectors.toList()))
 						.build();
+	}
+
+	public UserEntity mapDomainToEntityWithLists(User user) {
+		UserEntity userEntity = mapDomainToEntity(user);
+
+		if (userEntity != null) {
+			userEntity.setMajors(user.getMajors().stream()
+					.map(majorMapper::mapDomainToEntity)
+					.collect(Collectors.toList()));
+
+			userEntity.setMarks(user.getExams().stream()
+					.map(exam -> {
+						StudentMarkEntity mark = new StudentMarkEntity();
+						mark.setExam(examMapper.mapDomainToEntity(exam));
+						mark.setMark(exam.getMark());
+						mark.setStudent(userEntity);
+						return mark;
+					}).collect(Collectors.toList()));
+		}
+
+		return userEntity;
+	}
+
+	@Override
+	public User mapEntityToDomain(UserEntity entity) {
+		return entity == null ? null :
+				User.builder()
+						.id(entity.getId())
+						.email(entity.getEmail())
+						.password(entity.getPassword())
+						.password2(entity.getPassword())
+						.role(getUserRoleNullSafe(entity))
+						.firstName(entity.getFirstName())
+						.lastName(entity.getLastName())
+						.build();
+	}
+
+	public User mapEntityToDomainFetchLists(UserEntity entity) {
+		User user = mapEntityToDomain(entity);
+
+		if (user != null) {
+			user.setMajors(entity.getMajors().stream()
+					.map(majorMapper::mapEntityToDomain)
+					.collect(Collectors.toList()));
+
+			user.setExams(entity.getMarks().stream()
+					.map(mark -> {
+						Exam exam = examMapper.mapEntityToDomain(mark.getExam());
+						exam.setRegistered(true);
+						exam.setMark(mark.getMark());
+						return exam;
+					}).collect(Collectors.toList()));
+		}
+
+		return user;
 	}
 
 	private UserEntity.Role getUserEntityRoleNullSafe(User user) {
@@ -43,51 +93,8 @@ public class UserMapper implements Mapper<UserEntity, User> {
 		return userRole.map(role -> UserEntity.Role.valueOf(role.name())).orElse(null);
 	}
 
-	@Override
-	public User mapEntityToDomain(UserEntity enity) {
-		return enity == null ? null :
-				User.builder()
-						.id(enity.getId())
-						.email(enity.getEmail())
-						.password(enity.getPassword())
-						.password2(enity.getPassword())
-						.role(getUserRoleNullSafe(enity))
-						.firstName(enity.getFirstName())
-						.lastName(enity.getLastName())
-//						.majors(enity.getMajors().stream()
-//								.map(majorMapper::mapEntityToDomain)
-//								.collect(Collectors.toList()))
-//						.exams(enity.getExams().stream()
-//								.map(examMapper::mapEntityToDomain)
-//								.collect(Collectors.toList()))
-						.build();
-	}
-
-	public User mapEntityToDomainFetchLists(UserEntity enity) {
-		return enity == null ? null :
-				User.builder()
-						.id(enity.getId())
-						.email(enity.getEmail())
-						.password(enity.getPassword())
-						.password2(enity.getPassword())
-						.role(getUserRoleNullSafe(enity))
-						.firstName(enity.getFirstName())
-						.lastName(enity.getLastName())
-						.majors(enity.getMajors().stream()
-								.map(majorMapper::mapEntityToDomain)
-								.collect(Collectors.toList()))
-						.exams(enity.getMarks().stream()
-								.map(mark -> {
-									Exam exam = examMapper.mapEntityToDomain(mark.getExam());
-									exam.setRegistered(true);
-									exam.setMark(mark.getMark());
-									return exam;
-								}).collect(Collectors.toList()))
-						.build();
-	}
-
-	private User.Role getUserRoleNullSafe(UserEntity enity) {
-		Optional<UserEntity.Role> userEntityRole = Optional.ofNullable(enity.getRole());
+	private User.Role getUserRoleNullSafe(UserEntity entity) {
+		Optional<UserEntity.Role> userEntityRole = Optional.ofNullable(entity.getRole());
 		return userEntityRole.map(role -> User.Role.valueOf(role.name())).orElse(null);
 	}
 }

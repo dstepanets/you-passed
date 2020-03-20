@@ -38,5 +38,7 @@ public class MajorEntity {
 	private List<ExamEntity> examEntities;
 	@Column(name = "capacity")
 	private int capacity;
+	@Column(name = "applicants")
+	private int applicants;
 
 }
