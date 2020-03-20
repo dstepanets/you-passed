@@ -59,7 +59,7 @@ public class StudentController {
 	}
 
 	@PostMapping(value = {"/majors/apply"})
-	public ModelAndView listMajors(@RequestParam Integer majorId,
+	public ModelAndView applyForMajor(@RequestParam Integer majorId,
 								   @RequestParam(value = "pageSize", required = false) String pageSizeStr,
 								   @RequestParam(value = "page", required = false) String pageNumStr) {
 
@@ -80,7 +80,7 @@ public class StudentController {
 	}
 
 	@PostMapping(value = {"/majors/exam-register"})
-	public ModelAndView listMajors(@RequestParam Integer examId,
+	public ModelAndView registerForExamInMajors(@RequestParam Integer examId,
 								   @RequestParam Integer majorId,
 								   @RequestParam(value = "pageSize", required = false) String pageSizeStr,
 								   @RequestParam(value = "page", required = false) String pageNumStr) {
@@ -107,6 +107,19 @@ public class StudentController {
 		List<Exam> examList = examService.findAllForStudent(student);
 		model.addAttribute(examList);
 		return "student/exams";
+	}
+
+	@PostMapping(value = {"/exams/register"})
+	public String registerForExam(@RequestParam Integer examId) {
+
+		System.out.println("\n\nEXAMS||examId=" + examId);
+
+		User student = userService.findById(authFacade.getPrincipalUser().getId());
+		Exam exam = examService.registerStudent(examId, student);
+
+		System.out.println("\n\nEXAMS||exam=" + exam + "\n\n");
+
+		return "redirect:/student/exams";
 	}
 
 }
