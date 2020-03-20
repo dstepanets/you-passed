@@ -74,7 +74,29 @@ public class StudentController {
 		ModelAndView modelAndView = new ModelAndView("redirect:/student/majors");
 		modelAndView.addObject("pageSize", pageSizeStr)
 				.addObject("page", pageNumStr)
-				.addObject("selected", selectedMajor.getId());
+				.addObject("selected", majorId);
+
+		return modelAndView;
+	}
+
+	@PostMapping(value = {"/majors/exam-register"})
+	public ModelAndView listMajors(@RequestParam Integer examId,
+								   @RequestParam Integer majorId,
+								   @RequestParam(value = "pageSize", required = false) String pageSizeStr,
+								   @RequestParam(value = "page", required = false) String pageNumStr) {
+
+		System.out.println("\n\n==exam-reg== majorId=" + majorId + "| examId=" + examId);
+		System.out.println("==exam-reg== pageSize=" + pageSizeStr + " | pageNum=" + pageNumStr);
+
+		User student = userService.findById(authFacade.getPrincipalUser().getId());
+		Exam exam = examService.registerStudent(examId, student);
+
+		System.out.println("\n\nexam=" + exam + "\n\n");
+
+		ModelAndView modelAndView = new ModelAndView("redirect:/student/majors");
+		modelAndView.addObject("pageSize", pageSizeStr)
+				.addObject("page", pageNumStr)
+				.addObject("selected", majorId);
 
 		return modelAndView;
 	}

@@ -6,6 +6,7 @@ import com.youpassed.domain.User;
 import com.youpassed.entity.ExamEntity;
 import com.youpassed.entity.MajorEntity;
 import com.youpassed.entity.StudentMarkEntity;
+import com.youpassed.entity.StudentMarkPK;
 import com.youpassed.entity.users.UserEntity;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,10 @@ public class UserMapper implements Mapper<UserEntity, User> {
 			userEntity.setMarks(user.getExams().stream()
 					.map(exam -> {
 						StudentMarkEntity mark = new StudentMarkEntity();
+						StudentMarkPK pk = new StudentMarkPK();
+						pk.setExamId(exam.getId());
+						pk.setStudentId(userEntity.getId());
+						mark.setPk(pk);
 						mark.setExam(examMapper.mapDomainToEntity(exam));
 						mark.setMark(exam.getMark());
 						mark.setStudent(userEntity);

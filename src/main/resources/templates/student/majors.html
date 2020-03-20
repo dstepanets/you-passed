@@ -74,7 +74,11 @@
 											<td th:text="${exam.date}">20.12.2020</td>
 											<td th:text="${exam.location}">Location</td>
 											<td>
-												<button th:unless="${exam.registered}" class="btn btn-outline-primary btn-sm" type="button">Register</button>
+												<form th:action="@{'/student/majors/exam-register?pageSize=' + ${selectedPageSize} + '&page=' + ${majorsPage.number + 1}}" method="post">
+													<button th:unless="${exam.registered}" class="btn btn-outline-primary btn-sm"
+													        type="submit" th:name="examId" th:value="${exam.id}">Register</button>
+													<input th:type="hidden" th:name="majorId" th:value="${major.id}"/>
+												</form>
 												<button th:if="${exam.registered}"class="btn btn-outline-primary btn-sm" type="button" disabled>Registered</button>
 											</td>
 										</tr>

@@ -21,7 +21,7 @@ import java.io.Serializable;
 public class StudentMarkEntity implements Serializable {
 
 	@EmbeddedId
-	StudentMarkPK id;
+	StudentMarkPK pk;
 
 	@ManyToOne
 	@MapsId("studentId")
@@ -30,7 +30,6 @@ public class StudentMarkEntity implements Serializable {
 	@ManyToOne
 	@MapsId("examId")
 	@JoinColumn(name = "exam_id")
-
 	private ExamEntity exam;
 	private Integer mark;
 }

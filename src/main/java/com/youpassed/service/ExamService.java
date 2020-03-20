@@ -8,4 +8,6 @@ import java.util.List;
 public interface ExamService {
 	List<Exam> findAll();
 	List<Exam> findAllForStudent(User user);
+
+	Exam registerStudent(Integer examId, User student);
 }
