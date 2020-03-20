@@ -20,13 +20,17 @@
 					<div class="card" th:each="major : ${majorsPage}">
 						<div class="card-header" role="tab">
 							<h5 class="mb-0">
-								<a data-toggle="collapse" aria-expanded="false"
+								<a data-toggle="collapse"
+								   th:aria-expanded="${major.id == selected} ? true : false"
 								   aria-controls="accordion-1 .item-" href="#accordion-1 .item-"
-								   class="collapsed" th:attrappend="aria-controls=${major.id}, href=${major.id}"
+								   th:class="${major.id != selected} ? 'collapsed'"
+								   th:attrappend="aria-controls=${major.id}, href=${major.id}"
 								   th:text="${major.title}">Major Title</a>
 							</h5>
 						</div>
-						<div class=" collapse" th:attrprepend="class='item-' + ${major.id}"
+						<div class=" collapse"
+						     th:attrprepend="class='item-' + ${major.id}"
+						     th:attrappend="class=${major.id == selected} ? ' show'"
 						     role="tabpanel" data-parent="#accordion-1" style="">
 							<div class="card-body">
 								<div>
@@ -43,7 +47,7 @@
 													<p th:text="${major.applicants}">33</p>
 												</td>
 												<td class="text-center">
-													<form th:action="@{/student/majors/apply}" method="post">
+													<form th:action="@{'/student/majors/apply?pageSize=' + ${selectedPageSize} + '&page=' + ${majorsPage.number + 1}}" method="post">
 														<button th:unless="${major.applied}" class="btn btn-primary d-table-cell"
 														        type="submit" th:name="majorId" th:value="${major.id}">Apply</button>
 													</form>

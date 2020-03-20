@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,7 +33,10 @@ public class StudentController {
 
 	@GetMapping(value = {"/majors"})
 	public ModelAndView listMajors(@RequestParam(value = "pageSize", required = false) String pageSizeStr,
-								   @RequestParam(value = "page", required = false) String pageNumStr) {
+								   @RequestParam(value = "page", required = false) String pageNumStr,
+								   @RequestParam(required = false) Integer selected) {
+
+
 
 		final int pageSize = PaginationUtility.parsePageSize(pageSizeStr);
 		final int pageIndex = PaginationUtility.parsePageNumber(pageNumStr) - 1;
@@ -44,10 +48,12 @@ public class StudentController {
 
 		ModelAndView modelAndView = new ModelAndView("student/majors");
 		modelAndView.addObject("majorsPage", majorsPage)
-					.addObject("selectedPageSize", pageSize)
-					.addObject("pageSizes", PaginationUtility.PAGE_SIZES)
-					.addObject("pager", pager)
-					.addObject("selectedMajor", new Major());
+				.addObject("selectedPageSize", pageSize)
+				.addObject("pageSizes", PaginationUtility.PAGE_SIZES)
+				.addObject("pager", pager)
+				.addObject("selected", selected);
+
+		System.out.println("\n\n>>>> SelectedMajor id=" + selected + "\n");
 
 		return modelAndView;
 	}
@@ -58,6 +64,7 @@ public class StudentController {
 								   @RequestParam(value = "page", required = false) String pageNumStr) {
 
 		System.out.println("\n\n==== Major: " + majorId);
+		System.out.println("==== pageSize=" + pageSizeStr + " | pageNum=" + pageNumStr);
 
 		User student = userService.findById(authFacade.getPrincipalUser().getId());
 		Major selectedMajor = majorsService.applyForMajor(majorId, student);
@@ -66,7 +73,8 @@ public class StudentController {
 
 		ModelAndView modelAndView = new ModelAndView("redirect:/student/majors");
 		modelAndView.addObject("pageSize", pageSizeStr)
-					.addObject("page", pageNumStr);
+				.addObject("page", pageNumStr)
+				.addObject("selected", selectedMajor.getId());
 
 		return modelAndView;
 	}
