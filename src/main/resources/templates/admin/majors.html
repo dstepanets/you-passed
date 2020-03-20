@@ -5,7 +5,7 @@
 
 <body>
 
-<div th:with="majorsActive='active'" th:insert="includes.html :: navStudent"></div>
+<div th:with="majorsActive='active'" th:insert="includes.html :: navAdmin"></div>
 
 <main class="page blog-post-list">
 	<section class="clean-block clean-blog-list dark">
@@ -13,10 +13,10 @@
 			<div class="block-heading" style="padding-top: 120px">
 				<h2 class="text-info">Available Majors</h2>
 			</div>
-<!-- Accordion -->
+			<!-- Accordion -->
 			<div class="block-content">
 				<div role="tablist" id="accordion-1">
-<!-- Accordion card -->
+					<!-- Accordion card -->
 					<div class="card" th:each="major : ${majorsPage}">
 						<div class="card-header" role="tab">
 							<h5 class="mb-0">
@@ -48,10 +48,9 @@
 												</td>
 												<td class="text-center">
 													<form th:action="@{'/student/majors/apply?pageSize=' + ${selectedPageSize} + '&page=' + ${majorsPage.number + 1}}" method="post">
-														<button th:unless="${major.applied}" class="btn btn-primary d-table-cell"
-														        type="submit" th:name="majorId" th:value="${major.id}">Apply</button>
+														<button class="btn btn-primary d-table-cell"
+														        type="submit" th:name="majorId" th:value="${major.id}">Edit</button>
 													</form>
-													<button th:if="${major.applied}" class="btn btn-primary d-table-cell" type="button" disabled>Applied</button>
 												</td>
 											</tr>
 											</tbody>
@@ -73,14 +72,6 @@
 											<td th:text="${exam.subject}">Subject</td>
 											<td th:text="${exam.date}">20.12.2020</td>
 											<td th:text="${exam.location}">Location</td>
-											<td>
-												<form th:action="@{'/student/majors/exam-register?pageSize=' + ${selectedPageSize} + '&page=' + ${majorsPage.number + 1}}" method="post">
-													<button th:unless="${exam.registered}" class="btn btn-outline-primary btn-sm"
-													        type="submit" th:name="examId" th:value="${exam.id}">Register</button>
-													<input th:type="hidden" th:name="majorId" th:value="${major.id}"/>
-												</form>
-												<button th:if="${exam.registered}"class="btn btn-outline-primary btn-sm" type="button" disabled>Registered</button>
-											</td>
 										</tr>
 										</tbody>
 									</table>
@@ -88,12 +79,15 @@
 							</div>
 						</div>
 					</div>
-<!-- Accordion Tab End -->
+					<!-- Accordion Tab End -->
+				</div>
+				<div class="text-right" style="padding-top: 12px;">
+					<button class="btn btn-info btn-block" type="submit">+ New Major</button>
 				</div>
 			</div>
-<!-- Accordion End -->
-<!--	PAGINATION		-->
-			<nav th:with="currentViewPath='/student/majors'" class="row d-flex justify-content-center">
+			<!-- Accordion End -->
+			<!--	PAGINATION		-->
+			<nav th:with="currentViewPath='/admin/majors'" class="row d-flex justify-content-center">
 				<ul class="pagination">
 					<li th:class="${majorsPage.number == 0} ? 'page-item disabled'" class="page-item">
 						<a class="page-link" th:href="@{${currentViewPath}(pageSize=${selectedPageSize}, page=1)}" aria-label="Previous">
@@ -119,12 +113,12 @@
 							<span aria-hidden="true">&raquo;</span>
 						</a>
 					</li>
-						<select class="form-control pagination" id="pageSizeSelect">
-							<option th:each="size : ${pageSizes}" th:text="${size}" th:value="${size}" th:selected="${size} == ${selectedPageSize}"></option>
-						</select>
+					<select class="form-control pagination" id="pageSizeSelect">
+						<option th:each="size : ${pageSizes}" th:text="${size}" th:value="${size}" th:selected="${size} == ${selectedPageSize}"></option>
+					</select>
 				</ul>
 			</nav>
-<!--	PAGINATION END		-->
+			<!--	PAGINATION END		-->
 		</div>
 	</section>
 </main>

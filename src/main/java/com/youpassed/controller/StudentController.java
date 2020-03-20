@@ -48,10 +48,10 @@ public class StudentController {
 
 		ModelAndView modelAndView = new ModelAndView("student/majors");
 		modelAndView.addObject("majorsPage", majorsPage)
-				.addObject("selectedPageSize", pageSize)
-				.addObject("pageSizes", PaginationUtility.PAGE_SIZES)
-				.addObject("pager", pager)
-				.addObject("selected", selected);
+					.addObject("selectedPageSize", pageSize)
+					.addObject("pageSizes", PaginationUtility.PAGE_SIZES)
+					.addObject("pager", pager)
+					.addObject("selected", selected);
 
 		System.out.println("\n\n>>>> SelectedMajor id=" + selected + "\n");
 
