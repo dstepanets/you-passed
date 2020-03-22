@@ -80,4 +80,10 @@ public class ExamServiceImpl implements ExamService {
 		ExamEntity examEntity = examRepository.save(examMapper.mapDomainToEntity(exam));
 		return examMapper.mapEntityToDomain(examEntity);
 	}
+
+	@Override
+	@Transactional
+	public void delete(Exam exam) {
+		examRepository.delete(examMapper.mapDomainToEntity(exam));
+	}
 }

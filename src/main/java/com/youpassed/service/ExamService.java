@@ -13,4 +13,6 @@ public interface ExamService {
 	Exam save(Exam exam);
 
 	Exam findById(Integer examId);
+
+	void delete(Exam exam);
 }

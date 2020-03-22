@@ -18,16 +18,27 @@
 			<form th:action="@{/admin/exams/save}" method="post" th:object="${exam}">
 
 				<label for="id">ID</label>
-					<input class="form-control item" type="number" id="id" name="id" th:field="*{id}" disabled>
+				<input class="form-control item" type="number" id="id" name="id" th:field="*{id}" disabled>
 				<label for="subject">Subject</label>
-					<input class="form-control item" type="text" id="subject" name="subject" required="required" th:field="*{subject}">
+				<input class="form-control item" type="text" id="subject" name="subject" required="required"
+				       th:field="*{subject}">
 				<label for="date">Date</label>
-					<input class="form-control item" type="date" id="date" name="date" required="required" th:field="*{date}">
+				<input class="form-control item" type="date" id="date" name="date" required="required" th:field="*{date}">
 				<label for="location">Location</label>
-					<input class="form-control item" type="text" id="location" name="location" required="required" th:field="*{location}">
+				<input class="form-control item" type="text" id="location" name="location" required="required"
+				       th:field="*{location}">
 
 				<div style="padding-top: 12px">
-					<button class="btn btn-primary btn-block" type="submit" th:value="${exam}">Save Exam</button>
+					<button class="btn btn-primary btn-block" type="submit"
+					        th:formaction="@{/admin/exams/save}" th:value="${exam}">Save Exam
+					</button>
+				</div>
+
+				<div th:if="${exam.id != null}" style="padding-top: 12px">
+					<button class="btn btn-danger btn-block" type="submit" th:value="${exam}"
+					        th:formaction="@{/admin/exams/remove}"
+					         onclick="return confirm('Are you sure you want to delete this exam permanently?');">Remove Exam
+					</button>
 				</div>
 
 			</form>

@@ -121,19 +121,27 @@ public class AdminController {
 		return "admin/exam-edit";
 	}
 
+	@GetMapping(value = {"/exams/edit/{examId}"})
+	public String showEditExamForm(@PathVariable Integer examId, Model model) {
+		Exam exam = examService.findById(examId);
+		model.addAttribute(exam);
+		return "admin/exam-edit";
+	}
+
 	@PostMapping(value = {"/exams/save"})
-	public String submitNewExam(@ModelAttribute @Valid Exam exam,
+	public String saveExam(@ModelAttribute @Valid Exam exam,
 								SessionStatus sessionStatus) throws ValidationException {
 		examService.save(exam);
 		sessionStatus.setComplete();
 		return "redirect:/admin/exams";
 	}
 
-	@GetMapping(value = {"/exams/edit/{examId}"})
-	public String showEditExamForm(@PathVariable Integer examId, Model model) {
-		Exam exam = examService.findById(examId);
-		model.addAttribute(exam);
-		return "admin/exam-edit";
+	@PostMapping(value = {"/exams/remove"})
+	public String removeExam(@ModelAttribute @Valid Exam exam,
+							 SessionStatus sessionStatus) throws ValidationException {
+		examService.delete(exam);
+		sessionStatus.setComplete();
+		return "redirect:/admin/exams";
 	}
 
 
