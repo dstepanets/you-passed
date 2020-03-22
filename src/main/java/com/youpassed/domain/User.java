@@ -1,7 +1,5 @@
 package com.youpassed.domain;
 
-import com.youpassed.entity.ExamEntity;
-import com.youpassed.entity.MajorEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,10 +8,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.Transient;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -33,10 +27,8 @@ public class User implements UserDetails {
 	private String lastName;
 	private Role role;
 
-	private transient List<Exam> exams = new ArrayList<>();;
 	private transient List<Major> majors = new ArrayList<>();;
-
-	public enum Role { STUDENT, ADMIN }
+	private transient List<Exam> exams = new ArrayList<>();;
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {

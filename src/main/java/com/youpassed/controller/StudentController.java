@@ -8,6 +8,7 @@ import com.youpassed.service.ExamService;
 import com.youpassed.service.MajorsService;
 import com.youpassed.service.UserService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -25,6 +26,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/student")
 @AllArgsConstructor(onConstructor = @__(@Autowired))
+@Slf4j
 public class StudentController {
 	private MajorsService majorsService;
 	private ExamService examService;
@@ -81,9 +83,9 @@ public class StudentController {
 
 	@PostMapping(value = {"/majors/exam-register"})
 	public ModelAndView registerForExamInMajors(@RequestParam Integer examId,
-								   @RequestParam Integer majorId,
-								   @RequestParam(value = "pageSize", required = false) String pageSizeStr,
-								   @RequestParam(value = "page", required = false) String pageNumStr) {
+											   @RequestParam Integer majorId,
+											   @RequestParam(value = "pageSize", required = false) String pageSizeStr,
+											   @RequestParam(value = "page", required = false) String pageNumStr) {
 
 		System.out.println("\n\n==exam-reg== majorId=" + majorId + "| examId=" + examId);
 		System.out.println("==exam-reg== pageSize=" + pageSizeStr + " | pageNum=" + pageNumStr);

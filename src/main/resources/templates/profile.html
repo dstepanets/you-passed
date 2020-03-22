@@ -6,7 +6,7 @@
 <body>
 
 <div th:insert="includes.html :: ${#authentication.principal.role == 'ADMIN'} ? 'navAdmin' : 'navStudent'"></div>
-<!--th:replace="fragments/footer :: ${#authentication.principal.isAdmin()} ? 'footer-admin' : 'footer'"-->
+
 <main class="page registration-page">
 	<section class="clean-block clean-form dark">
 		<div class="container">

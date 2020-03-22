@@ -1,5 +1,6 @@
 package com.youpassed.controller;
 
+import com.youpassed.domain.Role;
 import com.youpassed.domain.User;
 import com.youpassed.exception.ValidationException;
 import com.youpassed.service.UserService;
@@ -32,7 +33,7 @@ public class UserController {
 		if (!authentication.isAuthenticated() || roles.contains("ROLE_ANONYMOUS")) {
 			return "index";
 		}
-		return authFacade.getPrincipalUser().getRole().equals(User.Role.STUDENT) ?
+		return authFacade.getPrincipalUser().getRole().equals(Role.STUDENT) ?
 				"student/student-home" : "admin/admin-home";
 	}
 
@@ -69,7 +70,7 @@ public class UserController {
 
 	@PostMapping(value = {"/register"})
 	public String submitRegisterForm(@ModelAttribute @Valid User user) throws ValidationException {
-		user.setRole(User.Role.STUDENT);
+		user.setRole(Role.STUDENT);
 		userService.register(user);
 		return "redirect:/login";
 	}

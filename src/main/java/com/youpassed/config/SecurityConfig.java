@@ -1,6 +1,6 @@
 package com.youpassed.config;
 
-import com.youpassed.domain.User;
+import com.youpassed.domain.Role;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -29,8 +29,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http
 //			.csrf().disable()
 			.authorizeRequests()
-				.antMatchers("/admin/**").hasRole(User.Role.ADMIN.toString())
-				.antMatchers("/student/**").hasRole(User.Role.STUDENT.toString())
+				.antMatchers("/admin/**").hasRole(Role.ADMIN.toString())
+				.antMatchers("/student/**").hasRole(Role.STUDENT.toString())
 				.antMatchers("/", "/login", "/register", "/static/**").permitAll()
 				.antMatchers("/profile", "/logout").authenticated()
 //				.anyRequest().authenticated()

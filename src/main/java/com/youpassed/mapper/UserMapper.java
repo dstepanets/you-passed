@@ -2,6 +2,7 @@ package com.youpassed.mapper;
 
 import com.youpassed.domain.Exam;
 import com.youpassed.domain.Major;
+import com.youpassed.domain.Role;
 import com.youpassed.domain.User;
 import com.youpassed.entity.ExamEntity;
 import com.youpassed.entity.MajorEntity;
@@ -94,12 +95,12 @@ public class UserMapper implements Mapper<UserEntity, User> {
 	}
 
 	private UserEntity.Role getUserEntityRoleNullSafe(User user) {
-		Optional<User.Role> userRole = Optional.ofNullable(user.getRole());
+		Optional<Role> userRole = Optional.ofNullable(user.getRole());
 		return userRole.map(role -> UserEntity.Role.valueOf(role.name())).orElse(null);
 	}
 
-	private User.Role getUserRoleNullSafe(UserEntity entity) {
+	private Role getUserRoleNullSafe(UserEntity entity) {
 		Optional<UserEntity.Role> userEntityRole = Optional.ofNullable(entity.getRole());
-		return userEntityRole.map(role -> User.Role.valueOf(role.name())).orElse(null);
+		return userEntityRole.map(role -> Role.valueOf(role.name())).orElse(null);
 	}
 }
