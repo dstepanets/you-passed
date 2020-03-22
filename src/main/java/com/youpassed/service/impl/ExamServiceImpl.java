@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -53,17 +54,30 @@ public class ExamServiceImpl implements ExamService {
 	}
 
 	@Override
+	public Exam findById(Integer examId) throws ExamNotFoundException{
+		return examRepository.findById(examId)
+				.map(examMapper::mapEntityToDomain)
+				.orElseThrow(() -> new ExamNotFoundException("Exam with id [" + examId + "] was not found"));
+	}
+
+	@Override
 	@Transactional
 	public Exam registerStudent(Integer examId, User student) {
-		ExamEntity examEntity = examRepository.findById(examId)
-				.orElseThrow(() -> new ExamNotFoundException("Exam with id [" + examId + "] is not found"));
+		Exam exam = findById(examId);
 
 		Set<Integer> examIds = student.getExams().stream().map(Exam::getId).collect(Collectors.toSet());
 		if (!examIds.contains(examId)) {
-			student.getExams().add(examMapper.mapEntityToDomain(examEntity));
+			student.getExams().add(exam);
 			userService.saveStudentWithLists(student);
 		}
 
+		return exam;
+	}
+
+	@Override
+	@Transactional
+	public Exam save(Exam exam) {
+		ExamEntity examEntity = examRepository.save(examMapper.mapDomainToEntity(exam));
 		return examMapper.mapEntityToDomain(examEntity);
 	}
 }

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="includes.html :: headCommon ('Profile - YouPassed')"></head>
+
+<body>
+
+<div th:insert="includes.html :: navAdmin"></div>
+
+<main class="page registration-page">
+	<section class="clean-block clean-form dark">
+		<div class="container">
+
+			<div class="block-heading" style="padding-top: 120px">
+				<h2 class="text-info">Edit Exam</h2>
+			</div>
+
+			<form th:action="@{/admin/exams/save}" method="post" th:object="${exam}">
+
+				<label for="id">ID</label>
+					<input class="form-control item" type="number" id="id" name="id" th:field="*{id}" disabled>
+				<label for="subject">Subject</label>
+					<input class="form-control item" type="text" id="subject" name="subject" required="required" th:field="*{subject}">
+				<label for="date">Date</label>
+					<input class="form-control item" type="date" id="date" name="date" required="required" th:field="*{date}">
+				<label for="location">Location</label>
+					<input class="form-control item" type="text" id="location" name="location" required="required" th:field="*{location}">
+
+				<div style="padding-top: 12px">
+					<button class="btn btn-primary btn-block" type="submit" th:value="${exam}">Save Exam</button>
+				</div>
+
+			</form>
+
+		</div>
+	</section>
+</main>
+
+<div th:replace="includes.html :: footer"></div>
+
+</body>
+</html>

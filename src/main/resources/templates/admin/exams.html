@@ -30,10 +30,10 @@
 							<td th:text="${exam.date}">00.00.00</td>
 							<td th:text="${exam.location}">Somewhere</td>
 							<td>
-								<form th:action="@{/admin/exams/edit}" method="post">
+								<form th:action="@{'/admin/exams/edit/' + ${exam.id}}" method="get">
 									<button class="btn btn-primary" type="submit"
-									        th:name="examId" th:value="${exam.id}"
-									        style="font-size: 14px;padding-bottom: 0px;padding-top: 0px;">Edit</button>
+									        style="font-size: 14px;padding-bottom: 0px;padding-top: 0px;">Edit
+									</button>
 								</form>
 							</td>
 						</tr>
@@ -41,7 +41,7 @@
 						</tbody>
 					</table>
 					<div style="padding-top: 12px;">
-						<form>
+						<form th:action="@{/admin/exams/new}" method="get">
 							<button class="btn btn-primary btn-block" type="submit">+ New Exam</button>
 						</form>
 					</div>

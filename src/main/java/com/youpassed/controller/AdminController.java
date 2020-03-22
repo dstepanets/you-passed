@@ -3,7 +3,9 @@ package com.youpassed.controller;
 import com.youpassed.domain.Exam;
 import com.youpassed.domain.Major;
 import com.youpassed.domain.PaginationUtility;
+import com.youpassed.domain.Role;
 import com.youpassed.domain.User;
+import com.youpassed.exception.ValidationException;
 import com.youpassed.service.ExamService;
 import com.youpassed.service.MajorsService;
 import com.youpassed.service.UserService;
@@ -21,13 +23,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
 @RequestMapping("/admin")
-@SessionAttributes("user")
+@SessionAttributes({"user", "exam"})
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 @Slf4j
 public class AdminController {
@@ -67,12 +71,14 @@ public class AdminController {
 	}
 
 	@PostMapping(value = {"/users/update/submit"})
-	public ModelAndView submitUserUpdate(@ModelAttribute User user) {
+	public ModelAndView submitUserUpdate(@ModelAttribute User user,
+										 SessionStatus sessionStatus) {
 
 		System.out.println("\n\n///submit//user=" + user + "\n\n");
 		userService.saveStudentWithLists(user);
 //		user = userService.saveStudentWithLists(user);
 
+		sessionStatus.setComplete();
 		ModelAndView modelAndView = new ModelAndView("redirect:/admin/users/update/" + user.getId());
 //		modelAndView.addObject(user);
 		return modelAndView;
@@ -107,6 +113,27 @@ public class AdminController {
 		List<Exam> examList = examService.findAll();
 		model.addAttribute(examList);
 		return "admin/exams";
+	}
+
+	@GetMapping(value = {"/exams/new"})
+	public String showNewExamForm(Model model) {
+		model.addAttribute("exam", new Exam());
+		return "admin/exam-edit";
+	}
+
+	@PostMapping(value = {"/exams/save"})
+	public String submitNewExam(@ModelAttribute @Valid Exam exam,
+								SessionStatus sessionStatus) throws ValidationException {
+		examService.save(exam);
+		sessionStatus.setComplete();
+		return "redirect:/admin/exams";
+	}
+
+	@GetMapping(value = {"/exams/edit/{examId}"})
+	public String showEditExamForm(@PathVariable Integer examId, Model model) {
+		Exam exam = examService.findById(examId);
+		model.addAttribute(exam);
+		return "admin/exam-edit";
 	}
 
 
