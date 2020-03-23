@@ -28,6 +28,7 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -111,7 +112,9 @@ public class AdminController {
 
 	@GetMapping(value = {"/major/new"})
 	public String showNewMajorForm(Model model, @ModelAttribute List<Exam> examList) {
-		model	.addAttribute("major", new Major())
+		Major newMajor = new Major();
+		newMajor.setExams(new ArrayList<>());
+		model	.addAttribute("major", newMajor)
 				.addAttribute(examList);
 		return "admin/major-edit";
 	}
@@ -123,8 +126,7 @@ public class AdminController {
 		Major major = majorsService.findById(majorId);
 		System.out.println("\n\n][][[][]Major-edit][] " + major);
 		model	.addAttribute(major)
-				.addAttribute(examList)
-				.addAttribute("exam", new Exam());
+				.addAttribute(examList);
 		return "admin/major-edit";
 	}
 
@@ -151,7 +153,10 @@ public class AdminController {
 	@PostMapping(value = {"/majors/save"})
 	public String saveMajor(@ModelAttribute @Valid Major major,
 								SessionStatus sessionStatus) {
-		majorsService.save(major);
+		Major savedMajor = majorsService.save(major);
+		if (major.getId() == null) {
+			return "redirect:/admin/majors/edit/" + savedMajor.getId();
+		}
 		sessionStatus.setComplete();
 		return "redirect:/admin/majors";
 	}

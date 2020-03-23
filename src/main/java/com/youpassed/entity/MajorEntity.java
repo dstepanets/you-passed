@@ -18,6 +18,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -37,7 +38,7 @@ public class MajorEntity {
 	@ManyToMany
 	@JoinTable(name = "major_exams", joinColumns = @JoinColumn(name = "major_id"),
 			inverseJoinColumns = @JoinColumn(name = "exam_id"))
-	@Cascade(CascadeType.ALL)
+	@Cascade({CascadeType.MERGE, CascadeType.PERSIST})
 	private List<ExamEntity> examEntities;
 	@Column(name = "capacity")
 	private int capacity;
