@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -35,6 +37,7 @@ public class MajorEntity {
 	@ManyToMany
 	@JoinTable(name = "major_exams", joinColumns = @JoinColumn(name = "major_id"),
 			inverseJoinColumns = @JoinColumn(name = "exam_id"))
+	@Cascade(CascadeType.ALL)
 	private List<ExamEntity> examEntities;
 	@Column(name = "capacity")
 	private int capacity;

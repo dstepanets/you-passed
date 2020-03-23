@@ -4,6 +4,7 @@ import com.youpassed.domain.Exam;
 import com.youpassed.domain.Major;
 import com.youpassed.domain.PaginationUtility;
 import com.youpassed.domain.User;
+import com.youpassed.entity.ExamEntity;
 import com.youpassed.entity.MajorEntity;
 import com.youpassed.exception.MajorNotFoundException;
 import com.youpassed.mapper.Mapper;
@@ -61,6 +62,26 @@ public class MajorServiceImpl implements MajorsService {
 				}));
 
 		return majorPage;
+	}
+
+	@Override
+	public Major findById(Integer majorId) {
+		return majorRepository.findById(majorId)
+				.map(majorMapper::mapEntityToDomain)
+				.orElseThrow(() -> new MajorNotFoundException("Major with ID [" + majorId + "] was not found"));
+	}
+
+	@Override
+	@Transactional
+	public Major save(Major major) {
+		MajorEntity majorEntity = majorRepository.save(majorMapper.mapDomainToEntity(major));
+		return majorMapper.mapEntityToDomain(majorEntity);
+	}
+
+	@Override
+	@Transactional
+	public void delete(Major major) {
+		majorRepository.delete(majorMapper.mapDomainToEntity(major));
 	}
 
 	@Override

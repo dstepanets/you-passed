@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
@@ -31,7 +32,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/admin")
-@SessionAttributes({"user", "exam"})
+@SessionAttributes({"user", "exam", "major"})
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 @Slf4j
 public class AdminController {
@@ -108,9 +109,69 @@ public class AdminController {
 		return modelAndView;
 	}
 
+	@GetMapping(value = {"/major/new"})
+	public String showNewMajorForm(Model model, @ModelAttribute List<Exam> examList) {
+		model	.addAttribute("major", new Major())
+				.addAttribute(examList);
+		return "admin/major-edit";
+	}
+
+	@GetMapping(value = {"/majors/edit/{majorId}"})
+	public String showEditMajorForm(@PathVariable Integer majorId,
+									@ModelAttribute List<Exam> examList,
+									Model model) {
+		Major major = majorsService.findById(majorId);
+		System.out.println("\n\n][][[][]Major-edit][] " + major);
+		model	.addAttribute(major)
+				.addAttribute(examList)
+				.addAttribute("exam", new Exam());
+		return "admin/major-edit";
+	}
+
+	@PostMapping(value = {"/majors/edit/add-exam"})
+	public String addExamToMajor(@RequestParam Integer examId,
+								 @ModelAttribute @Valid Major major,
+								 @ModelAttribute List<Exam> examList) {
+		Exam exam = examList.stream()
+				.filter(e -> e.getId().equals(examId))
+				.findFirst().orElse(null);
+		major.getExams().add(exam);
+		majorsService.save(major);
+		return "redirect:/admin/majors/edit/" + major.getId();
+	}
+
+	@PostMapping(value = {"/majors/edit/remove-exam"})
+	public String removeExamFromMajor(@RequestParam int examIdx,
+									  @ModelAttribute @Valid Major major) {
+		major.getExams().remove(examIdx);
+		majorsService.save(major);
+		return "redirect:/admin/majors/edit/" + major.getId();
+	}
+
+	@PostMapping(value = {"/majors/save"})
+	public String saveMajor(@ModelAttribute @Valid Major major,
+								SessionStatus sessionStatus) {
+		majorsService.save(major);
+		sessionStatus.setComplete();
+		return "redirect:/admin/majors";
+	}
+
+	@PostMapping(value = {"/majors/remove"})
+	public String removeMajor(@ModelAttribute @Valid Major major,
+							 SessionStatus sessionStatus) throws ValidationException {
+		majorsService.delete(major);
+		sessionStatus.setComplete();
+		return "redirect:/admin/majors";
+	}
+
+	@ModelAttribute(name = "examList")
+	public List<Exam> provideExamList(){
+		return examService.findAll();
+	}
+
 	@GetMapping(value = {"/exams"})
-	public String listExams(Model model) {
-		List<Exam> examList = examService.findAll();
+	public String listExams(Model model, @ModelAttribute List<Exam> examList) {
+//		List<Exam> examList = examService.findAll();
 		model.addAttribute(examList);
 		return "admin/exams";
 	}

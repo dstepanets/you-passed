@@ -9,4 +9,10 @@ public interface MajorsService {
 	Page<Major> findAll(int pageIndex, int pageSize);
 	Page<Major> findAllForStudent(User student,int pageIndex, int pageSize);
 	Major applyForMajor(Integer majorId, User student);
+
+	Major findById(Integer majorId);
+
+	Major save(Major major);
+
+	void delete(Major major);
 }
