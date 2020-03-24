@@ -81,6 +81,14 @@ public class StudentController {
 		return modelAndView;
 	}
 
+	@GetMapping(value = {"/majors/{majorId}/applicants"})
+	public String showMajorApplicantsRanking(@PathVariable Integer majorId, Model model) {
+		Major major = majorsService.findByIdWithUserRanking(majorId);
+		System.out.println("\n\n[][]Major-applicants[] " + major + "\n\n");
+		model.addAttribute(major);
+		return "student/major-applicants";
+	}
+
 	@PostMapping(value = {"/majors/exam-register"})
 	public ModelAndView registerForExamInMajors(@RequestParam Integer examId,
 											   @RequestParam Integer majorId,

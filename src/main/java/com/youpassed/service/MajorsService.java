@@ -11,6 +11,7 @@ public interface MajorsService {
 	Major applyForMajor(Integer majorId, User student);
 
 	Major findById(Integer majorId);
+	Major findByIdWithUserRanking(Integer majorId);
 
 	Major save(Major major);
 

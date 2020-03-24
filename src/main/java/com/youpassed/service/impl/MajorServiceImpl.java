@@ -9,6 +9,7 @@ import com.youpassed.entity.MajorEntity;
 import com.youpassed.exception.MajorNotFoundException;
 import com.youpassed.mapper.Mapper;
 import com.youpassed.repository.MajorRepository;
+import com.youpassed.service.ExamService;
 import com.youpassed.service.MajorsService;
 import com.youpassed.service.UserService;
 import lombok.AllArgsConstructor;
@@ -19,6 +20,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -31,6 +34,7 @@ public class MajorServiceImpl implements MajorsService {
 	private MajorRepository majorRepository;
 	private Mapper<MajorEntity, Major> majorMapper;
 	private UserService userService;
+	private ExamService examService;
 
 	@Override
 	public Page<Major> findAll(int pageIndex, int pageSize) {
@@ -72,6 +76,29 @@ public class MajorServiceImpl implements MajorsService {
 	}
 
 	@Override
+	public Major findByIdWithUserRanking(Integer majorId) {
+		Major major = findById(majorId);
+		Set<Integer> majorExamsIds = major.getExams().stream()
+				.map(Exam::getId)
+				.collect(Collectors.toSet());
+
+		List<User> applicants = major.getApplicants().stream()
+				.map(student -> student = userService.findById(student.getId()))
+				.collect(Collectors.toList());
+
+		applicants.forEach(student -> student.getExams().forEach(exam -> {
+			if (majorExamsIds.contains(exam.getId())) {
+				student.setMajorScore(student.getMajorScore() + exam.getMark());
+			}
+		}));
+
+		applicants.sort(Comparator.comparing(User::getMajorScore).reversed());
+
+		major.setApplicants(applicants);
+		return major;
+	}
+
+	@Override
 	@Transactional
 	public Major save(Major major) {
 		MajorEntity majorEntity = majorRepository.save(majorMapper.mapDomainToEntity(major));
@@ -89,7 +116,7 @@ public class MajorServiceImpl implements MajorsService {
 	public Major applyForMajor(Integer majorId, User student) {
 		MajorEntity majorEntity = majorRepository.findById(majorId)
 				.orElseThrow(() -> new MajorNotFoundException("Major with id [" + majorId + "] is not found"));
-		majorEntity.setApplicants(majorEntity.getApplicants() + 1);
+		majorEntity.setApplicantsNum(majorEntity.getApplicantsNum() + 1);
 		majorEntity = majorRepository.save(majorEntity);
 
 		Set<Integer> majorIds = student.getMajors().stream().map(Major::getId).collect(Collectors.toSet());

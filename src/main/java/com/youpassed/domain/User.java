@@ -27,8 +27,9 @@ public class User implements UserDetails {
 	private String lastName;
 	private Role role;
 
-	private transient List<Major> majors = new ArrayList<>();;
-	private transient List<Exam> exams = new ArrayList<>();;
+	private transient List<Major> majors = new ArrayList<>();
+	private transient List<Exam> exams = new ArrayList<>();
+	private transient int majorScore;
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {

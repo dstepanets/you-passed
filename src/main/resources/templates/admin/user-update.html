@@ -5,7 +5,7 @@
 
 <body>
 
-<div th:insert="includes.html :: navAdmin"></div>
+<div th:with="usersActive='active'" th:insert="includes.html :: navAdmin"></div>
 
 <main class="page registration-page">
 	<section class="clean-block clean-form dark">
@@ -70,7 +70,7 @@
 								<td th:text="${major.id}">#</td>
 								<td th:text="${major.title}">title</td>
 								<td th:text="${major.capacity}">#</td>
-								<td th:text="${major.applicants}">#</td>
+								<td th:text="${major.applicantsNum}">#</td>
 							</tr>
 							</tbody>
 						</table>

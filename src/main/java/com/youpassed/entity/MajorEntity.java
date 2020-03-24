@@ -7,9 +7,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
+import org.hibernate.annotations.Fetch;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -40,9 +42,13 @@ public class MajorEntity {
 			inverseJoinColumns = @JoinColumn(name = "exam_id"))
 	@Cascade({CascadeType.MERGE, CascadeType.PERSIST})
 	private List<ExamEntity> examEntities;
+	@ManyToMany
+	@JoinTable(name = "student_majors", joinColumns = @JoinColumn(name = "major_id"),
+			inverseJoinColumns = @JoinColumn(name = "student_id"))
+	private List<UserEntity> applicants;
 	@Column(name = "capacity")
 	private int capacity;
 	@Column(name = "applicants")
-	private int applicants;
+	private int applicantsNum;
 
 }

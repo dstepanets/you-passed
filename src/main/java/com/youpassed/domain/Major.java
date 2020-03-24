@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -16,8 +15,9 @@ public class Major {
 	private Integer id;
 	private String title;
 	private List<Exam> exams;
+	private List<User> applicants;
 	private int capacity;
-	private int applicants;
+	private int applicantsNum;
 
 	private boolean isApplied;
 

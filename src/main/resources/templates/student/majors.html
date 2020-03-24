@@ -36,22 +36,27 @@
 								<div>
 									<div class="table-responsive table-borderless">
 										<table class="table table-bordered table-sm">
+											<thead>
+												<tr>
+													<th>Students Capacity</th>
+													<th>Applicants</th>
+													<th class="text-center">
+														<form th:action="@{'/student/majors/apply?pageSize=' + ${selectedPageSize} + '&page=' + ${majorsPage.number + 1}}" method="post">
+															<button th:unless="${major.applied}" class="btn btn-primary d-table-cell"
+															        type="submit" th:name="majorId" th:value="${major.id}">Apply</button>
+														</form>
+														<button th:if="${major.applied}" class="btn btn-primary d-table-cell" type="button" disabled>Applied</button>
+													</th>
+												</tr>
+											</thead>
 											<tbody>
 											<tr>
-												<td>
-													<p><strong>Students Capacity</strong></p>
-													<p th:text="${major.capacity}">25</p>
-												</td>
-												<td>
-													<p><strong>Applicants</strong></p>
-													<p th:text="${major.applicants}">33</p>
-												</td>
+												<td th:text="${major.capacity}">25</td>
+												<td th:text="${major.applicantsNum}">33</td>
 												<td class="text-center">
-													<form th:action="@{'/student/majors/apply?pageSize=' + ${selectedPageSize} + '&page=' + ${majorsPage.number + 1}}" method="post">
-														<button th:unless="${major.applied}" class="btn btn-primary d-table-cell"
-														        type="submit" th:name="majorId" th:value="${major.id}">Apply</button>
+													<form th:action="@{/student/majors/{majorId}/applicants(majorId = ${major.id})}" method="GET">
+														<button class="btn btn-primary d-table-cell" type="submit">Applicants Ranking</button>
 													</form>
-													<button th:if="${major.applied}" class="btn btn-primary d-table-cell" type="button" disabled>Applied</button>
 												</td>
 											</tr>
 											</tbody>
