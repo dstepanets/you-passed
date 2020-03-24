@@ -8,7 +8,7 @@ import com.youpassed.entity.ExamEntity;
 import com.youpassed.entity.MajorEntity;
 import com.youpassed.entity.StudentMarkEntity;
 import com.youpassed.entity.StudentMarkPK;
-import com.youpassed.entity.users.UserEntity;
+import com.youpassed.entity.UserEntity;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -94,13 +94,13 @@ public class UserMapper implements Mapper<UserEntity, User> {
 		return user;
 	}
 
-	private UserEntity.Role getUserEntityRoleNullSafe(User user) {
+	private com.youpassed.entity.Role getUserEntityRoleNullSafe(User user) {
 		Optional<Role> userRole = Optional.ofNullable(user.getRole());
-		return userRole.map(role -> UserEntity.Role.valueOf(role.name())).orElse(null);
+		return userRole.map(role -> com.youpassed.entity.Role.valueOf(role.name())).orElse(null);
 	}
 
 	private Role getUserRoleNullSafe(UserEntity entity) {
-		Optional<UserEntity.Role> userEntityRole = Optional.ofNullable(entity.getRole());
+		Optional<com.youpassed.entity.Role> userEntityRole = Optional.ofNullable(entity.getRole());
 		return userEntityRole.map(role -> Role.valueOf(role.name())).orElse(null);
 	}
 }

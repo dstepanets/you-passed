@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="includes.html :: headCommon ('Major Applicants Ranking - YouPassed')"></head>
+
+<body>
+
+<div th:with="majorsActive='active'" th:insert="includes.html :: navAdmin"></div>
+
+<main class="page catalog-page">
+	<section class="clean-block clean-catalog dark">
+		<div class="container">
+			<div class="block-heading" style="padding-top: 120px">
+				<h2 class="text-info">Major Applicants Ranking</h2>
+			</div>
+			<div class="content">
+				<div class="table-responsive table-borderless">
+					<table class="table table-sm table-striped">
+						<thead>
+						<tr>
+							<th>Rank</th>
+							<th>ID</th>
+							<th>First Name</th>
+							<th>Last Name</th>
+							<th>Score</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr th:each="applicant, appStat : ${major.applicants}">
+							<td th:text="${appStat.count}">rank</td>
+							<td th:text="${applicant.id}">id</td>
+							<td th:text="${applicant.firstName}">John</td>
+							<td th:text="${applicant.lastName}">LastNameson</td>
+							<td th:text="${applicant.majorScore}">score</td>
+						</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+		</div>
+	</section>
+</main>
+
+<div th:replace="includes.html :: footer"></div>
+
+</body>
+</html>

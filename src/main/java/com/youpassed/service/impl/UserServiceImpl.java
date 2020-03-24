@@ -2,7 +2,8 @@ package com.youpassed.service.impl;
 
 import com.youpassed.domain.PaginationUtility;
 import com.youpassed.domain.User;
-import com.youpassed.entity.users.UserEntity;
+import com.youpassed.entity.Role;
+import com.youpassed.entity.UserEntity;
 import com.youpassed.exception.UserNotFoundException;
 import com.youpassed.exception.ValidationException;
 import com.youpassed.mapper.UserMapper;
@@ -78,7 +79,7 @@ public class UserServiceImpl implements UserService {
 				.password(encryptedPass)
 				.firstName(user.getFirstName())
 				.lastName(user.getLastName())
-				.role(UserEntity.Role.valueOf(user.getRole().name()))
+				.role(Role.valueOf(user.getRole().name()))
 				.build();
 
 		UserEntity userEntity = userRepository.save(newUserEntity);

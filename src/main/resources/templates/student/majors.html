@@ -51,8 +51,8 @@
 											</thead>
 											<tbody>
 											<tr>
-												<td th:text="${major.capacity}">25</td>
-												<td th:text="${major.applicantsNum}">33</td>
+												<td th:text="${major.capacity}">000</td>
+												<td th:text="${major.applicantsNum}">000</td>
 												<td class="text-center">
 													<form th:action="@{/student/majors/{majorId}/applicants(majorId = ${major.id})}" method="GET">
 														<button class="btn btn-primary d-table-cell" type="submit">Applicants Ranking</button>

@@ -169,6 +169,14 @@ public class AdminController {
 		return "redirect:/admin/majors";
 	}
 
+	@GetMapping(value = {"/majors/{majorId}/applicants"})
+	public String showMajorApplicantsRanking(@PathVariable Integer majorId, Model model) {
+		Major major = majorsService.findByIdWithUserRanking(majorId);
+		System.out.println("\n\n[][]Major-applicants[] " + major + "\n\n");
+		model.addAttribute(major);
+		return "admin/major-applicants";
+	}
+
 	@ModelAttribute(name = "examList")
 	public List<Exam> provideExamList(){
 		return examService.findAll();

@@ -1,6 +1,5 @@
 package com.youpassed.entity;
 
-import com.youpassed.entity.users.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
