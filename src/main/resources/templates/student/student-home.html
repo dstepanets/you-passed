@@ -8,10 +8,17 @@
 <div th:insert="includes.html :: navStudent"></div>
 
 <main class="page landing-page">
-	<section class="clean-block clean-hero" style="background-image: url('/img/tech/image4.jpg');color: rgba(9, 162, 255, 0.85); height: 760px;">
+	<section class="clean-block clean-hero" style="background-image: url('/img/tech/image4.jpg');color: rgba(9, 162, 255, 0.85); height: 800px">
 		<div class="text">
-			<h2>So, you are a student!</h2>
-			<p>Or just going to be one. Good luck with that.</p>
+			<h2>Hello, <span th:text="${student.firstName}">Name</span>!</h2>
+			<p>Majors applied for:  <span th:text="${student.majors.size()}">0</span></p>
+			<p>Exams registered for: <span th:text="${student.exams.size()}">0</span></p>
+			<div th:if="${majorsAdmittedTo.size() > 0}">
+				<h3> Congratulations, you have passed! </h3>
+				<p> You are admitted to the following majors: </p>
+				<p th:each="m : ${majorsAdmittedTo}">&#10004 <strong><span th:text="${m.title}"></span></strong></p>
+				<p> Check your rankings on a major page. </p>
+			</div>
 		</div>
 	</section>
 </main>

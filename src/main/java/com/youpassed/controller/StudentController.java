@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/student")
@@ -33,27 +34,44 @@ public class StudentController {
 	private UserService userService;
 	private AuthenticationFacade authFacade;
 
+	@ModelAttribute(name = "student")
+	public User provideStudentWithLists(Model model){
+		User student = userService.findById(authFacade.getPrincipalUser().getId());
+//		model.addAttribute("student", student);
+		return student;
+	}
+
+	@GetMapping({"/home"})
+	public String home(@ModelAttribute(name = "student") User student, Model model) {
+
+		List<Major> majorsAdmittedTo = student.getMajors().stream()
+				.filter(Major::isYouPassed).collect(Collectors.toList());
+		model.addAttribute("majorsAdmittedTo", majorsAdmittedTo);
+		System.out.println(student);
+		System.out.println(majorsAdmittedTo);
+		return "student/student-home";
+	}
+
 	@GetMapping(value = {"/majors"})
 	public ModelAndView listMajors(@RequestParam(value = "pageSize", required = false) String pageSizeStr,
 								   @RequestParam(value = "page", required = false) String pageNumStr,
-								   @RequestParam(required = false) Integer selected) {
-
+								   @RequestParam(required = false) Integer selected,
+								   @ModelAttribute(name = "student") User student) {
 
 
 		final int pageSize = PaginationUtility.parsePageSize(pageSizeStr);
 		final int pageIndex = PaginationUtility.parsePageNumber(pageNumStr) - 1;
 
-		User student = userService.findById(authFacade.getPrincipalUser().getId());
 		Page<Major> majorsPage = majorsService.findAllForStudent(student, pageIndex, pageSize);
 
 		PaginationUtility pager = new PaginationUtility(majorsPage.getTotalPages(), majorsPage.getNumber());
 
 		ModelAndView modelAndView = new ModelAndView("student/majors");
 		modelAndView.addObject("majorsPage", majorsPage)
-					.addObject("selectedPageSize", pageSize)
-					.addObject("pageSizes", PaginationUtility.PAGE_SIZES)
-					.addObject("pager", pager)
-					.addObject("selected", selected);
+				.addObject("selectedPageSize", pageSize)
+				.addObject("pageSizes", PaginationUtility.PAGE_SIZES)
+				.addObject("pager", pager)
+				.addObject("selected", selected);
 
 		System.out.println("\n\n>>>> SelectedMajor id=" + selected + "\n");
 
@@ -62,13 +80,13 @@ public class StudentController {
 
 	@PostMapping(value = {"/majors/apply"})
 	public ModelAndView applyForMajor(@RequestParam Integer majorId,
-								   @RequestParam(value = "pageSize", required = false) String pageSizeStr,
-								   @RequestParam(value = "page", required = false) String pageNumStr) {
+									  @RequestParam(value = "pageSize", required = false) String pageSizeStr,
+									  @RequestParam(value = "page", required = false) String pageNumStr,
+									  @ModelAttribute(name = "student") User student) {
 
 		System.out.println("\n\n==== Major: " + majorId);
 		System.out.println("==== pageSize=" + pageSizeStr + " | pageNum=" + pageNumStr);
 
-		User student = userService.findById(authFacade.getPrincipalUser().getId());
 		Major selectedMajor = majorsService.applyForMajor(majorId, student);
 
 		System.out.println("\n\n===> " + selectedMajor + "\n\n");
@@ -91,14 +109,14 @@ public class StudentController {
 
 	@PostMapping(value = {"/majors/exam-register"})
 	public ModelAndView registerForExamInMajors(@RequestParam Integer examId,
-											   @RequestParam Integer majorId,
-											   @RequestParam(value = "pageSize", required = false) String pageSizeStr,
-											   @RequestParam(value = "page", required = false) String pageNumStr) {
+												@RequestParam Integer majorId,
+												@RequestParam(value = "pageSize", required = false) String pageSizeStr,
+												@RequestParam(value = "page", required = false) String pageNumStr,
+												@ModelAttribute(name = "student") User student) {
 
 		System.out.println("\n\n==exam-reg== majorId=" + majorId + "| examId=" + examId);
 		System.out.println("==exam-reg== pageSize=" + pageSizeStr + " | pageNum=" + pageNumStr);
 
-		User student = userService.findById(authFacade.getPrincipalUser().getId());
 		Exam exam = examService.registerStudent(examId, student);
 
 		System.out.println("\n\nexam=" + exam + "\n\n");
@@ -112,19 +130,18 @@ public class StudentController {
 	}
 
 	@GetMapping(value = {"/exams"})
-	public String listExams(Model model) {
-		User student = userService.findById(authFacade.getPrincipalUser().getId());
+	public String listExams(@ModelAttribute(name = "student") User student, Model model) {
 		List<Exam> examList = examService.findAllForStudent(student);
 		model.addAttribute(examList);
 		return "student/exams";
 	}
 
 	@PostMapping(value = {"/exams/register"})
-	public String registerForExam(@RequestParam Integer examId) {
+	public String registerForExam(@RequestParam Integer examId,
+								  @ModelAttribute(name = "student") User student) {
 
 		System.out.println("\n\nEXAMS||examId=" + examId);
 
-		User student = userService.findById(authFacade.getPrincipalUser().getId());
 		Exam exam = examService.registerStudent(examId, student);
 
 		System.out.println("\n\nEXAMS||exam=" + exam + "\n\n");

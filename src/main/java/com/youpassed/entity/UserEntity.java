@@ -63,9 +63,9 @@ public class UserEntity {
 //	@JoinTable(name = "student_majors", joinColumns = @JoinColumn(name = "student_id"),
 //				inverseJoinColumns = @JoinColumn(name = "major_id"))
 	@OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
-	private List<StudentMajorEntity> studMajors = new ArrayList<>();
+	private List<StudentMajorEntity> studMajors;
 
 	@OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
-	private List<StudentMarkEntity> marks = new ArrayList<>();
+	private List<StudentMarkEntity> marks;
 
 }

@@ -34,7 +34,7 @@ public class UserController {
 			return "index";
 		}
 		return authFacade.getPrincipalUser().getRole().equals(Role.STUDENT) ?
-				"student/student-home" : "admin/admin-home";
+				"redirect:/student/home" : "redirect:/admin/home";
 	}
 
 	@GetMapping(value = {"/login"})

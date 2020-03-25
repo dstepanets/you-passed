@@ -3,7 +3,6 @@ package com.youpassed.controller;
 import com.youpassed.domain.Exam;
 import com.youpassed.domain.Major;
 import com.youpassed.domain.PaginationUtility;
-import com.youpassed.domain.Role;
 import com.youpassed.domain.User;
 import com.youpassed.exception.ValidationException;
 import com.youpassed.service.ExamService;
@@ -19,10 +18,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
@@ -41,6 +38,12 @@ public class AdminController {
 	private MajorsService majorsService;
 	private ExamService examService;
 	private AuthenticationFacade authFacade;
+
+	@GetMapping({"/home"})
+	public String index(){
+
+		return "admin/admin-home";
+	}
 
 	@GetMapping(value = {"/users"})
 	public ModelAndView listUsers(@RequestParam(value = "pageSize", required = false) String pageSizeStr,
