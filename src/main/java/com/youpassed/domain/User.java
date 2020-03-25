@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,6 +15,7 @@ import java.util.Collections;
 import java.util.List;
 
 @Data
+//@ToString(exclude = "majors")
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -27,8 +29,8 @@ public class User implements UserDetails {
 	private String lastName;
 	private Role role;
 
-	private transient List<Major> majors = new ArrayList<>();
-	private transient List<Exam> exams = new ArrayList<>();
+	private transient List<Major> majors;
+	private transient List<Exam> exams;
 	private transient int majorScore;
 
 	@Override

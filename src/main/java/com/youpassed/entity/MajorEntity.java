@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import java.util.List;
@@ -38,10 +39,11 @@ public class MajorEntity {
 			inverseJoinColumns = @JoinColumn(name = "exam_id"))
 	@Cascade({CascadeType.MERGE, CascadeType.PERSIST})
 	private List<ExamEntity> examEntities;
-	@ManyToMany
-	@JoinTable(name = "student_majors", joinColumns = @JoinColumn(name = "major_id"),
-			inverseJoinColumns = @JoinColumn(name = "student_id"))
-	private List<UserEntity> applicants;
+//	@ManyToMany
+//	@JoinTable(name = "student_majors", joinColumns = @JoinColumn(name = "major_id"),
+//			inverseJoinColumns = @JoinColumn(name = "student_id"))
+	@OneToMany(mappedBy = "major", cascade = javax.persistence.CascadeType.ALL)
+	private List<StudentMajorEntity> applicants;
 	@Column(name = "capacity")
 	private int capacity;
 	@Column(name = "applicants")

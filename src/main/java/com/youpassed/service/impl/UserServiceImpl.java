@@ -90,7 +90,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User findById(Integer id) throws UserNotFoundException {
 		return userRepository.findById(id)
-				.map(userMapper::mapEntityToDomainFetchLists)
+				.map(userMapper::mapEntityToDomainWithLists)
 				.orElseThrow(() -> new UserNotFoundException("User with id [" + id + "] was not found"));
 	}
 

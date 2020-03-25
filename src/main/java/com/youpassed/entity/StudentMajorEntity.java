@@ -16,10 +16,10 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "student_exams")
-public class StudentMarkEntity implements Serializable {
+@Table(name = "student_majors")
+public class StudentMajorEntity implements Serializable {
 	@EmbeddedId
-	StudentMarkPK pk;
+	StudentMajorPK pk;
 
 	@ManyToOne
 	@MapsId("studentId")
@@ -27,9 +27,9 @@ public class StudentMarkEntity implements Serializable {
 	private UserEntity student;
 
 	@ManyToOne
-	@MapsId("examId")
-	@JoinColumn(name = "exam_id")
-	private ExamEntity exam;
+	@MapsId("majorId")
+	@JoinColumn(name = "major_id")
+	private MajorEntity major;
 
-	private Integer mark;
+	private boolean youPassed;
 }

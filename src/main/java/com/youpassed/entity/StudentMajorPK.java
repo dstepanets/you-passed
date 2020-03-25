@@ -13,11 +13,11 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "student_exams")
-public class StudentMarkPK implements Serializable {
+@Table(name = "student_majors")
+public class StudentMajorPK implements Serializable {
 	@Column(name = "student_id")
 	Integer studentId;
 
-	@Column(name = "exam_id")
-	Integer examId;
+	@Column(name = "major_id")
+	Integer majorId;
 }

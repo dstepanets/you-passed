@@ -59,17 +59,13 @@ public class UserEntity {
 	@Enumerated(EnumType.STRING)
 	private Role role;
 
-	@ManyToMany
-	@JoinTable(name = "student_majors", joinColumns = @JoinColumn(name = "student_id"),
-				inverseJoinColumns = @JoinColumn(name = "major_id"))
-//	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-//	@JoinTable(name = "student_majors", joinColumns = @JoinColumn(name = "student_id"))
-	private List<MajorEntity> majors = new ArrayList<>();
 //	@ManyToMany
-//	@JoinTable(name = "student_exams", joinColumns = @JoinColumn(name = "student_id"),
-//				inverseJoinColumns = @JoinColumn(name = "exam_id"))
+//	@JoinTable(name = "student_majors", joinColumns = @JoinColumn(name = "student_id"),
+//				inverseJoinColumns = @JoinColumn(name = "major_id"))
 	@OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
-//	@JoinTable(name = "student_exams", joinColumns = @JoinColumn(name = "student_id"))
+	private List<StudentMajorEntity> studMajors = new ArrayList<>();
+
+	@OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
 	private List<StudentMarkEntity> marks = new ArrayList<>();
 
 }

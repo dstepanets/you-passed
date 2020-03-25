@@ -42,10 +42,10 @@
 													<th>Applicants</th>
 													<th class="text-center">
 														<form th:action="@{'/student/majors/apply?pageSize=' + ${selectedPageSize} + '&page=' + ${majorsPage.number + 1}}" method="post">
-															<button th:unless="${major.applied}" class="btn btn-primary d-table-cell"
+															<button th:unless="${major.youPassed}" class="btn btn-primary d-table-cell"
 															        type="submit" th:name="majorId" th:value="${major.id}">Apply</button>
 														</form>
-														<button th:if="${major.applied}" class="btn btn-primary d-table-cell" type="button" disabled>Applied</button>
+														<button th:if="${major.youPassed}" class="btn btn-primary d-table-cell" type="button" disabled>Applied</button>
 													</th>
 												</tr>
 											</thead>

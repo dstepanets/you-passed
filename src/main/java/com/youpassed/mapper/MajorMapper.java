@@ -1,7 +1,10 @@
 package com.youpassed.mapper;
 
 import com.youpassed.domain.Major;
+import com.youpassed.domain.User;
 import com.youpassed.entity.MajorEntity;
+import com.youpassed.entity.StudentMajorEntity;
+import com.youpassed.entity.StudentMajorPK;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
@@ -30,10 +33,28 @@ public class MajorMapper implements Mapper<MajorEntity, Major> {
 						.examEntities(major.getExams().stream()
 								.map(examMapper::mapDomainToEntity)
 								.collect(Collectors.toList()))
-						.applicants(major.getApplicants().stream()
-								.map(userMapper::mapDomainToEntity)
-								.collect(Collectors.toList()))
 						.build();
+	}
+
+	public MajorEntity mapDomainToEntityWithApplicants(Major major) {
+		MajorEntity majorEntity = mapDomainToEntity(major);
+
+		if (majorEntity != null) {
+			majorEntity.setApplicants(major.getApplicants().stream()
+					.map(applicant -> {
+						StudentMajorEntity studMajor = new StudentMajorEntity();
+						StudentMajorPK pk = new StudentMajorPK();
+						pk.setStudentId(applicant.getId());
+						pk.setMajorId(major.getId());
+						studMajor.setPk(pk);
+						studMajor.setStudent(userMapper.mapDomainToEntity(applicant));
+						studMajor.setMajor(majorEntity);
+						studMajor.setYouPassed(major.isYouPassed());
+						return studMajor;
+					}).collect(Collectors.toList()));
+		}
+
+		return majorEntity;
 	}
 
 	@Override
@@ -47,9 +68,22 @@ public class MajorMapper implements Mapper<MajorEntity, Major> {
 						.exams(entity.getExamEntities().stream()
 								.map(examMapper::mapEntityToDomain)
 								.collect(Collectors.toList()))
-						.applicants(entity.getApplicants().stream()
-								.map(userMapper::mapEntityToDomain)
-								.collect(Collectors.toList()))
 						.build();
+	}
+
+	public Major mapEntityToDomainWithApplicants(MajorEntity majorEntity) {
+		Major major = mapEntityToDomain(majorEntity);
+
+		if (major != null) {
+			major.setApplicants(majorEntity.getApplicants().stream()
+					.map(applicant -> {
+						User student = userMapper.mapEntityToDomain(applicant.getStudent());
+						major.setYouPassed(applicant.isYouPassed());
+						major.setApplied(true);
+						return student;
+					}).collect(Collectors.toList()));
+		}
+
+		return major;
 	}
 }

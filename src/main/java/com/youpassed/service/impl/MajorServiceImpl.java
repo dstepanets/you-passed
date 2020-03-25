@@ -4,9 +4,9 @@ import com.youpassed.domain.Exam;
 import com.youpassed.domain.Major;
 import com.youpassed.domain.PaginationUtility;
 import com.youpassed.domain.User;
-import com.youpassed.entity.ExamEntity;
 import com.youpassed.entity.MajorEntity;
 import com.youpassed.exception.MajorNotFoundException;
+import com.youpassed.mapper.MajorMapper;
 import com.youpassed.mapper.Mapper;
 import com.youpassed.repository.MajorRepository;
 import com.youpassed.service.ExamService;
@@ -20,7 +20,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +31,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class MajorServiceImpl implements MajorsService {
 	private MajorRepository majorRepository;
-	private Mapper<MajorEntity, Major> majorMapper;
+	private MajorMapper majorMapper;
 	private UserService userService;
 	private ExamService examService;
 
@@ -56,7 +55,7 @@ public class MajorServiceImpl implements MajorsService {
 
 		majors.stream()
 				.filter(major -> studentMajors.containsKey(major.getId()))
-				.forEach(major -> major.setApplied(true));
+				.forEach(major -> major.setYouPassed(true));
 
 		majors.forEach(major -> major.getExams().stream()
 				.filter(exam -> studentExams.containsKey(exam.getId()))
@@ -71,7 +70,7 @@ public class MajorServiceImpl implements MajorsService {
 	@Override
 	public Major findById(Integer majorId) {
 		return majorRepository.findById(majorId)
-				.map(majorMapper::mapEntityToDomain)
+				.map(majorMapper::mapEntityToDomainWithApplicants)
 				.orElseThrow(() -> new MajorNotFoundException("Major with ID [" + majorId + "] was not found"));
 	}
 
