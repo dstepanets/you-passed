@@ -30,7 +30,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/admin")
-@SessionAttributes({"user", "exam", "major"})
+@SessionAttributes({"user", "exam", "major", "batchAdmissionMsg"})
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 @Slf4j
 public class AdminController {
@@ -39,10 +39,43 @@ public class AdminController {
 	private ExamService examService;
 	private AuthenticationFacade authFacade;
 
-	@GetMapping({"/home"})
-	public String index(){
+	private boolean admitAllActivated;
+	private boolean resetAdmissionActivated;
 
+	@ModelAttribute(name = "batchAdmissionMsg")
+	public String batchAdmissionMsg() {
+		if (admitAllActivated) {
+			return "Highest ranking applicants are admitted to all majors";
+		} else if (resetAdmissionActivated) {
+			return "Student admissions for all majors are canceled";
+		}
+		return null;
+	}
+
+	@GetMapping({"/home"})
+	public String home(Model model, @ModelAttribute(name = "batchAdmissionMsg") String batchAdmissionMsg) {
+		model.addAttribute("userCount", userService.count())
+				.addAttribute("majorCount", majorsService.count())
+				.addAttribute("examCount", examService.count());
 		return "admin/admin-home";
+	}
+
+	@PostMapping({"/home/admit-all"})
+	public String admitAll(SessionStatus sessionStatus) {
+		sessionStatus.setComplete();
+		majorsService.admitApplicantsForAllMajors();
+		admitAllActivated = true;
+		resetAdmissionActivated = false;
+		return "redirect:/admin/home";
+	}
+
+	@PostMapping({"/home/reset-all"})
+	public String resetAll(SessionStatus sessionStatus) {
+		sessionStatus.setComplete();
+		majorsService.resetAdmissionForAllMajors();
+		resetAdmissionActivated = true;
+		admitAllActivated = false;
+		return "redirect:/admin/home";
 	}
 
 	@GetMapping(value = {"/users"})
@@ -117,7 +150,7 @@ public class AdminController {
 	public String showNewMajorForm(Model model, @ModelAttribute List<Exam> examList) {
 		Major newMajor = new Major();
 		newMajor.setExams(new ArrayList<>());
-		model	.addAttribute("major", newMajor)
+		model.addAttribute("major", newMajor)
 				.addAttribute(examList);
 		return "admin/major-edit";
 	}
@@ -128,7 +161,7 @@ public class AdminController {
 									Model model) {
 		Major major = majorsService.findById(majorId);
 		System.out.println("\n\n][][[][]Major-edit][] " + major);
-		model	.addAttribute(major)
+		model.addAttribute(major)
 				.addAttribute(examList);
 		return "admin/major-edit";
 	}
@@ -155,7 +188,7 @@ public class AdminController {
 
 	@PostMapping(value = {"/majors/save"})
 	public String saveMajor(@ModelAttribute @Valid Major major,
-								SessionStatus sessionStatus) {
+							SessionStatus sessionStatus) {
 		Major savedMajor = majorsService.save(major);
 		if (major.getId() == null) {
 			return "redirect:/admin/majors/edit/" + savedMajor.getId();
@@ -166,7 +199,7 @@ public class AdminController {
 
 	@PostMapping(value = {"/majors/remove"})
 	public String removeMajor(@ModelAttribute @Valid Major major,
-							 SessionStatus sessionStatus) throws ValidationException {
+							  SessionStatus sessionStatus) throws ValidationException {
 		majorsService.delete(major);
 		sessionStatus.setComplete();
 		return "redirect:/admin/majors";
@@ -181,7 +214,7 @@ public class AdminController {
 	}
 
 	@ModelAttribute(name = "examList")
-	public List<Exam> provideExamList(){
+	public List<Exam> provideExamList() {
 		return examService.findAll();
 	}
 
@@ -207,7 +240,7 @@ public class AdminController {
 
 	@PostMapping(value = {"/exams/save"})
 	public String saveExam(@ModelAttribute @Valid Exam exam,
-								SessionStatus sessionStatus) throws ValidationException {
+						   SessionStatus sessionStatus) throws ValidationException {
 		examService.save(exam);
 		sessionStatus.setComplete();
 		return "redirect:/admin/exams";

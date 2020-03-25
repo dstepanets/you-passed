@@ -23,6 +23,16 @@ public class GeneralConfig {
 //		return messageSource;
 //	}
 
+	@Bean
+	public boolean admitAllActivated() {
+		return false;
+	}
+
+	@Bean
+	public boolean resetAdmissionActivated() {
+		return false;
+	}
+
 
 
 /*	@Bean

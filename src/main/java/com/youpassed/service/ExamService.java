@@ -13,6 +13,7 @@ public interface ExamService {
 	Exam save(Exam exam);
 
 	Exam findById(Integer examId);
+	Long count();
 
 	void delete(Exam exam);
 }

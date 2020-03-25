@@ -20,6 +20,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -75,26 +76,8 @@ public class MajorServiceImpl implements MajorsService {
 	}
 
 	@Override
-	public Major findByIdWithUserRanking(Integer majorId) {
-		Major major = findById(majorId);
-		Set<Integer> majorExamsIds = major.getExams().stream()
-				.map(Exam::getId)
-				.collect(Collectors.toSet());
-
-		List<User> applicants = major.getApplicants().stream()
-				.map(student -> student = userService.findById(student.getId()))
-				.collect(Collectors.toList());
-
-		applicants.forEach(student -> student.getExams().forEach(exam -> {
-			if (majorExamsIds.contains(exam.getId())) {
-				student.setMajorScore(student.getMajorScore() + exam.getMark());
-			}
-		}));
-
-		applicants.sort(Comparator.comparing(User::getMajorScore).reversed());
-
-		major.setApplicants(applicants);
-		return major;
+	public Long count() {
+		return majorRepository.count();
 	}
 
 	@Override
@@ -126,4 +109,63 @@ public class MajorServiceImpl implements MajorsService {
 
 		return majorMapper.mapEntityToDomain(majorEntity);
 	}
+
+	@Override
+	public Major findByIdWithUserRanking(Integer majorId) {
+		Major major = findById(majorId);
+		Set<Integer> majorExamsIds = major.getExams().stream()
+				.map(Exam::getId)
+				.collect(Collectors.toSet());
+
+		List<User> applicants = major.getApplicants().stream()
+				.map(student -> student = userService.findById(student.getId()))
+				.collect(Collectors.toList());
+
+		applicants.forEach(student -> student.getExams().forEach(exam -> {
+			if (majorExamsIds.contains(exam.getId())) {
+				student.setMajorScore(student.getMajorScore() + exam.getMark());
+			}
+		}));
+
+		applicants.sort(Comparator.comparing(User::getMajorScore).reversed());
+
+		major.setApplicants(applicants);
+		return major;
+	}
+
+	@Override
+	public List<User> admitApplicantsForMajor(Integer majorId) {
+		Major major = findByIdWithUserRanking(majorId);
+		List<User> admittedStudents = new ArrayList<>();
+		major.getApplicants().stream().limit(major.getCapacity()).forEach(student -> {
+			student.getMajors().stream()
+					.filter(m -> m.getId().equals(majorId))
+					.findFirst().get().setYouPassed(true);
+			userService.saveStudentWithLists(student);
+			admittedStudents.add(student);
+		});
+		return admittedStudents;
+	}
+
+	@Override
+	public void resetAdmissionForMajor(Integer majorId) {
+		Major major = findByIdWithUserRanking(majorId);
+		major.getApplicants().stream().forEach(student -> {
+			student.getMajors().stream()
+					.filter(m -> m.getId().equals(majorId))
+					.findFirst().get().setYouPassed(false);
+			userService.saveStudentWithLists(student);
+		});
+	}
+
+	@Override
+	public void admitApplicantsForAllMajors() {
+		majorRepository.findAll().forEach(major -> admitApplicantsForMajor(major.getId()));
+	}
+
+	@Override
+	public void resetAdmissionForAllMajors() {
+		majorRepository.findAll().forEach(major -> resetAdmissionForMajor(major.getId()));
+	}
+
 }

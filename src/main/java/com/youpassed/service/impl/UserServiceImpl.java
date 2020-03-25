@@ -103,6 +103,11 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	public Long count() {
+		return userRepository.count();
+	}
+
+	@Override
 	@Transactional
 	public User updateProfile(User currentUser, User userUpdate) throws ValidationException, UserNotFoundException {
 		if (!userUpdate.getEmail().equals(currentUser.getEmail()) &&

@@ -4,6 +4,8 @@ import com.youpassed.domain.Major;
 import com.youpassed.domain.User;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
+
 public interface MajorsService {
 
 	Page<Major> findAll(int pageIndex, int pageSize);
@@ -12,8 +14,15 @@ public interface MajorsService {
 
 	Major findById(Integer majorId);
 	Major findByIdWithUserRanking(Integer majorId);
+	Long count();
 
 	Major save(Major major);
-
 	void delete(Major major);
+
+	List<User> admitApplicantsForMajor(Integer majorId);
+	void resetAdmissionForMajor(Integer majorId);
+	void admitApplicantsForAllMajors();
+	void resetAdmissionForAllMajors();
+
+
 }

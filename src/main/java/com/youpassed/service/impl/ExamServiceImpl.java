@@ -61,6 +61,11 @@ public class ExamServiceImpl implements ExamService {
 	}
 
 	@Override
+	public Long count() {
+		return examRepository.count();
+	}
+
+	@Override
 	@Transactional
 	public Exam registerStudent(Integer examId, User student) {
 		Exam exam = findById(examId);

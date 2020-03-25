@@ -8,11 +8,25 @@
 <div th:insert="includes.html :: navAdmin"></div>
 
 <main class="page landing-page">
-	<section class="clean-block clean-hero" style="background-image: url('/img/tech/image4.jpg');color: rgba(9, 162, 255, 0.85); height: 760px;">
+	<section class="clean-block clean-hero"
+	         style="background-image: url('/img/tech/image4.jpg');color: rgba(9, 162, 255, 0.85); height: 800px">
 		<div class="text">
-			<h2>Wow, you are an admin!</h2>
-			<p>That's really cool, man!</p>
+			<h2>Hello, Administrator <span th:text="${#authentication.principal.firstName}">Name</span>!</h2>
+			<p>Users in the system:  <span th:text="${userCount}">0</span></p>
+			<p>Majors available:  <span th:text="${majorCount}">0</span></p>
+			<p>Exams available: <span th:text="${examCount}">0</span></p>
+			<div role="group" class="btn-group shadow-lg">
+				<form th:action="@{/admin/home/admit-all}" th:method="POST">
+					<button class="btn btn-success" type="submit"><strong>Admit All</strong></button>
+				</form>
+				<form th:action="@{/admin/home/reset-all}" th:method="POST">
+					<button class="btn btn-danger" type="submit">Reset Admission</button>
+				</form>
+			</div>
+			<p class="alert-warning" th:text="${batchAdmissionMsg}" style="margin-top: 24px"></p>
 		</div>
+
+
 	</section>
 </main>
 
