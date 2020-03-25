@@ -53,7 +53,9 @@ public class AdminController {
 	}
 
 	@GetMapping({"/home"})
-	public String home(Model model, @ModelAttribute(name = "batchAdmissionMsg") String batchAdmissionMsg) {
+	public String home(@ModelAttribute(name = "batchAdmissionMsg") String batchAdmissionMsg,
+					   Model model, SessionStatus sessionStatus) {
+		sessionStatus.setComplete();
 		model.addAttribute("userCount", userService.count())
 				.addAttribute("majorCount", majorsService.count())
 				.addAttribute("examCount", examService.count());
@@ -254,5 +256,26 @@ public class AdminController {
 		return "redirect:/admin/exams";
 	}
 
+	@PostMapping(value = {"/majors/{majorId}/applicants/admit"})
+	public String admitStudentForMajor(@PathVariable Integer majorId, Model model) {
+		majorsService.admitApplicantsForMajor(majorId);
+		String admissionMsg = "Highest ranking applicants are admitted to this major";
+		model.addAttribute("admissionMsg", admissionMsg);
+
+		admitAllActivated = false;
+		resetAdmissionActivated = false;
+		return "admin/major-applicants";
+	}
+
+	@PostMapping(value = {"/majors/{majorId}/applicants/reset"})
+	public String resetAdmissionForMajor(@PathVariable Integer majorId, Model model) {
+		majorsService.resetAdmissionForMajor(majorId);
+		String admissionMsg = "Student admissions for this major are canceled";
+		model.addAttribute("admissionMsg", admissionMsg);
+
+		admitAllActivated = false;
+		resetAdmissionActivated = false;
+		return "admin/major-applicants";
+	}
 
 }
