@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="includes.html :: headCommon ('Majors - YouPassed')"></head>
+<head th:replace="includes.html :: headCommon (#{nav.majors})"></head>
 
 <body>
 
@@ -11,7 +11,7 @@
 	<section class="clean-block clean-blog-list dark">
 		<div class="container">
 			<div class="block-heading" style="padding-top: 120px">
-				<h2 class="text-info">Available Majors</h2>
+				<h2 class="text-info" th:text="#{majors.heading}">Available Majors</h2>
 			</div>
 			<!-- Accordion -->
 			<div class="block-content">
@@ -25,7 +25,7 @@
 								   aria-controls="accordion-1 .item-" href="#accordion-1 .item-"
 								   th:class="${major.id != selected} ? 'collapsed'"
 								   th:attrappend="aria-controls=${major.id}, href=${major.id}"
-								   th:text="${major.title}">Major Title</a>
+								   th:text="#{'major.' + ${major.title}}">Major Title</a>
 							</h5>
 						</div>
 						<div class=" collapse"
@@ -38,11 +38,11 @@
 										<table class="table table-bordered table-sm">
 											<thead>
 											<tr>
-												<th>Students Capacity</th>
-												<th>Applicants</th>
+												<th th:text="#{majors.capacity}">Students Capacity</th>
+												<th th:text="#{majors.applicants}">Applicants</th>
 												<th class="text-center">
 													<form th:action="@{'/admin/majors/edit/' + ${major.id}}" method="get">
-														<button class="btn btn-primary d-table-cell"
+														<button class="btn btn-primary d-table-cell" th:text="#{majors.btn.edit}"
 														        type="submit" th:name="majorId" th:value="${major.id}">Edit
 														</button>
 													</form>
@@ -55,29 +55,31 @@
 												<td th:text="${major.applicantsNum}">000</td>
 												<td class="text-center">
 													<form th:action="@{/admin/majors/{majorId}/applicants(majorId = ${major.id})}" method="GET">
-														<button class="btn btn-primary d-table-cell" type="submit">Applicants Ranking</button>
+														<button class="btn btn-primary d-table-cell" type="submit"
+														        th:text="#{majors.btn.ranking}">Applicants Ranking
+														</button>
 													</form>
 												</td>
 											</tr>
 											</tbody>
 										</table>
 									</div>
-									<h5 class="text-center text-secondary" style="margin-bottom: 20px;margin-top: 12px;">Required
-										Exams</h5>
+									<h5 class="text-center text-secondary" style="margin-bottom: 20px;margin-top: 12px;"
+									    th:text="#{majors.requiredExams}">Required Exams</h5>
 								</div>
 
 								<div class="table-responsive table-borderless" style="font-size: 15px;">
 									<table class="table table-bordered table-sm">
 										<thead>
 										<tr>
-											<th>Subject</th>
-											<th>Date</th>
-											<th>Location</th>
+											<th th:text="#{exams.subject}">Subject</th>
+											<th th:text="#{exams.date}">Date</th>
+											<th th:text="#{exams.location}">Location</th>
 										</tr>
 										</thead>
 										<tbody>
 										<tr th:each="exam : ${major.exams}">
-											<td th:text="${exam.subject}">Subject</td>
+											<td th:text="#{'examSubj.' + ${exam.subject}}">Subject</td>
 											<td th:text="${exam.date}">20.12.2020</td>
 											<td th:text="${exam.location}">Location</td>
 										</tr>
@@ -92,7 +94,7 @@
 				</div>
 				<div class="text-right" style="padding-top: 12px;">
 					<form th:action="@{/admin/major/new}" method="get">
-						<button class="btn btn-primary btn-block" type="submit">+ New Major</button>
+						<button class="btn btn-primary btn-block" type="submit" th:text="#{majors.btn.new}">+ New Major</button>
 					</form>
 				</div>
 			</div>

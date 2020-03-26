@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="includes.html :: headCommon ('Home - YouPassed')"></head>
+<head th:replace="includes.html :: headCommon (#{nav.home})"></head>
 
 <body>
 
@@ -11,16 +11,16 @@
 	<section class="clean-block clean-hero"
 	         style="background-image: url('/img/tech/image4.jpg');color: rgba(9, 162, 255, 0.85); height: 800px">
 		<div class="text">
-			<h2>Hello, Administrator <span th:text="${#authentication.principal.firstName}">Name</span>!</h2>
-			<p>Users in the system:  <span th:text="${userCount}">0</span></p>
-			<p>Majors available:  <span th:text="${majorCount}">0</span></p>
-			<p>Exams available: <span th:text="${examCount}">0</span></p>
+			<h2 th:text="#{admHome.geeting} + ' ' + ${#authentication.principal.firstName} + '!'">Hello, Administrator Name!</h2>
+			<p th:text="#{admHome.usersNum} + ' ' + ${userCount}">Users in the system: 0</p>
+			<p th:text="#{admHome.majorsNum} + ' ' + ${majorCount}">Majors available:  0</p>
+			<p th:text="#{admHome.examsNum} + ' ' + ${examCount}">Exams available: 0</p>
 			<div role="group" class="btn-group shadow-lg">
 				<form th:action="@{/admin/home/admit-all}" th:method="POST">
-					<button class="btn btn-success" type="submit"><strong>Admit All</strong></button>
+					<button class="btn btn-success" type="submit" th:text="#{admHome.admitAll}"><strong>Admit All</strong></button>
 				</form>
 				<form th:action="@{/admin/home/reset-all}" th:method="POST">
-					<button class="btn btn-danger" type="submit">Reset Admission</button>
+					<button class="btn btn-danger" type="submit" th:text="#{admHome.resetAll}">Reset Admission</button>
 				</form>
 			</div>
 			<p class="alert-warning" th:text="${batchAdmissionMsg}" style="margin-top: 24px"></p>

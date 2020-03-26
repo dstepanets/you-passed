@@ -5,7 +5,7 @@
 <head th:fragment="headCommon (pageTitle)">
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-	<title th:text="${pageTitle}">YouPassed</title>
+	<title th:text="${pageTitle} + ' - YouPassed'">YouPassed</title>
 	<meta name="description" content="YouPassed - University Admission System">
 
 	<link rel="stylesheet" type="text/css" th:href="@{/bootstrap/css/bootstrap.min.css}">
@@ -26,14 +26,18 @@
 		</button>
 		<div class="collapse navbar-collapse" id="navcol-1">
 			<ul class="nav navbar-nav ml-auto">
-				<li class="nav-item" role="presentation"><a class="nav-link" th:attrappend="class=${' ' + homeActive}"
-				                                            th:href="@{/}">Home</a></li>
-				<li class="nav-item" role="presentation"><a class="nav-link" th:attrappend="class=${' ' + loginActive}"
-				                                            th:href="@{/login}">Log In</a></li>
-				<li class="nav-item" role="presentation"><a class="nav-link" th:attrappend="class=${' ' + registerActive}"
-				                                            th:href="@{/register}">Register</a></li>
+				<li class="nav-item" role="presentation">
+					<a class="nav-link" th:attrappend="class=${' ' + homeActive}"
+					   th:href="@{/}" th:text="#{nav.home}">Home</a></li>
+				<li class="nav-item" role="presentation">
+					<a class="nav-link" th:attrappend="class=${' ' + loginActive}"
+					   th:href="@{/login}" th:text="#{nav.log_in}">Log In</a></li>
+				<li class="nav-item" role="presentation">
+					<a class="nav-link" th:attrappend="class=${' ' + registerActive}"
+					   th:href="@{/register}" th:text="#{nav.register}">Register</a></li>
 			</ul>
-			<a href="#" style="font-size: 14px;">UA</a><span class="navbar-text">&nbsp;/&nbsp;</span><a href="#" style="font-size: 14px;">EN</a>
+			<a href="?lang=ua" style="font-size: 14px;">UA</a><span class="navbar-text">&nbsp;/&nbsp;</span>
+			<a href="?lang=en" style="font-size: 14px;">EN</a>
 		</div>
 	</div>
 </nav>
@@ -49,22 +53,28 @@
 		</button>
 		<div class="collapse navbar-collapse" id="navcol-1">
 			<ul class="nav navbar-nav ml-auto">
-				<li class="nav-item" role="presentation"><a class="nav-link" th:attrappend="class=${' ' + majorsActive}"
-				                                            th:href="@{/admin/majors}">Majors</a></li>
-				<li class="nav-item" role="presentation"><a class="nav-link" th:attrappend="class=${' ' + examsActive}"
-				                                            th:href="@{/admin/exams}">Exams</a></li>
-				<li class="nav-item" role="presentation"><a class="nav-link" th:attrappend="class=${' ' + usersActive}"
-				                                            th:href="@{/admin/users}">Users</a></li>
+				<li class="nav-item" role="presentation">
+					<a class="nav-link" th:attrappend="class=${' ' + majorsActive}"
+					   th:href="@{/admin/majors}" th:text="#{nav.majors}">Majors</a></li>
+				<li class="nav-item" role="presentation">
+					<a class="nav-link" th:attrappend="class=${' ' + examsActive}"
+					   th:href="@{/admin/exams}" th:text="#{nav.exams}">Exams</a></li>
+				<li class="nav-item" role="presentation">
+					<a class="nav-link" th:attrappend="class=${' ' + usersActive}"
+					   th:href="@{/admin/users}" th:text="#{nav.users}">Users</a></li>
 			</ul>
-			<a href="#" style="font-size: 14px;">UA</a><span class="navbar-text">&nbsp;/&nbsp;</span><a href="#" style="font-size: 14px;">EN</a>
+			<a href="?lang=ua" style="font-size: 14px;">UA</a><span class="navbar-text">&nbsp;/&nbsp;</span>
+			<a href="?lang=en" style="font-size: 14px;">EN</a>
 		</div>
 		<div class="dropdown" style="margin-left: 30px;">
 			<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false" href="#"
 			   th:text="${#authentication.principal.firstName}" style="font-size: 15px;">UserFirstName</a>
 			<div class="dropdown-menu" role="menu">
-				<a class="dropdown-item" role="presentation" th:href="@{/profile}" style="font-size: 15px;">Profile</a>
+				<a class="dropdown-item" role="presentation" th:href="@{/profile}" style="font-size: 15px;"
+				   th:text="#{nav.profile}">Profile</a>
 				<form th:action="@{/logout}" method="POST">
-					<input class="dropdown-item" role="presentation" style="font-size: 15px;" type="submit" value="Log Out"/>
+					<input class="dropdown-item" role="presentation" style="font-size: 15px;" type="submit"
+					       th:value="#{nav.log_out}"/>
 				</form>
 			</div>
 		</div>
@@ -82,20 +92,25 @@
 		</button>
 		<div class="collapse navbar-collapse" id="navcol-1">
 			<ul class="nav navbar-nav ml-auto">
-				<li class="nav-item" role="presentation"><a class="nav-link" th:attrappend="class=${' ' + majorsActive}"
-				                                            th:href="@{/student/majors}">Majors</a></li>
-				<li class="nav-item" role="presentation"><a class="nav-link" th:attrappend="class=${' ' + examsActive}"
-				                                            th:href="@{/student/exams}">Exams</a></li>
+				<li class="nav-item" role="presentation">
+					<a class="nav-link" th:attrappend="class=${' ' + majorsActive}"
+					   th:href="@{/student/majors}" th:text="#{nav.majors}">Majors</a></li>
+				<li class="nav-item" role="presentation">
+					<a class="nav-link" th:attrappend="class=${' ' + examsActive}"
+					   th:href="@{/student/exams}" th:text="#{nav.exams}">Exams</a></li>
 			</ul>
-			<a href="#" style="font-size: 14px;">UA</a><span class="navbar-text">&nbsp;/&nbsp;</span><a href="#" style="font-size: 14px;">EN</a>
+			<a href="?lang=ua" style="font-size: 14px;">UA</a>
+			<span class="navbar-text">&nbsp;/&nbsp;</span>
+			<a href="?lang=en" style="font-size: 14px;">EN</a>
 		</div>
 		<div class="dropdown" style="margin-left: 30px;">
 			<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false" href="#"
 			   th:text="${#authentication.principal.firstName}" style="font-size: 15px;">UserFirstName</a>
 			<div class="dropdown-menu" role="menu">
-				<a class="dropdown-item" role="presentation" th:href="@{/profile}" style="font-size: 15px;">Profile</a>
+				<a class="dropdown-item" role="presentation" th:href="@{/profile}" style="font-size: 15px;"
+				   th:text="#{nav.profile}">Profile</a>
 				<form th:action="@{/logout}" method="POST">
-					<input class="dropdown-item" role="presentation" style="font-size: 15px;" type="submit" value="Log Out"/>
+					<input class="dropdown-item" role="presentation" style="font-size: 15px;" type="submit" th:value="#{nav.log_out}"/>
 				</form>
 			</div>
 		</div>
@@ -116,7 +131,6 @@
 	<script src="/js/smoothproducts.min.js"></script>
 	<script src="/js/theme.js"></script>
 	<script src="/js/pagination-page-size-switch.js"></script>
-<!--	<script src="https://code.jquery.com/jquery-1.11.1.min.js" integrity="sha256-VAvG3sHdS5LqTT+5A/aeq/bZGa/Uj04xKxY8KM/w9EE=" crossorigin="anonymous"></script-->
 </div>
 
 

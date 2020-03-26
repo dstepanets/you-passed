@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="includes.html :: headCommon ('Majors - YouPassed')"></head>
+<head th:replace="includes.html :: headCommon (#{nav.majors})"></head>
 
 <body>
 
@@ -11,12 +11,12 @@
 	<section class="clean-block clean-blog-list dark">
 		<div class="container">
 			<div class="block-heading" style="padding-top: 120px">
-				<h2 class="text-info">Available Majors</h2>
+				<h2 class="text-info" th:text="#{majors.heading}">Available Majors</h2>
 			</div>
-<!-- Accordion -->
+			<!-- Accordion -->
 			<div class="block-content">
 				<div role="tablist" id="accordion-1">
-<!-- Accordion card -->
+					<!-- Accordion card -->
 					<div class="card" th:each="major : ${majorsPage}">
 						<div class="card-header" role="tab">
 							<h5 class="mb-0">
@@ -25,7 +25,7 @@
 								   aria-controls="accordion-1 .item-" href="#accordion-1 .item-"
 								   th:class="${major.id != selected} ? 'collapsed'"
 								   th:attrappend="aria-controls=${major.id}, href=${major.id}"
-								   th:text="${major.title}">Major Title</a>
+								   th:text="#{'major.' + ${major.title}}">Major Title</a>
 							</h5>
 						</div>
 						<div class=" collapse"
@@ -37,17 +37,23 @@
 									<div class="table-responsive table-borderless">
 										<table class="table table-bordered table-sm">
 											<thead>
-												<tr>
-													<th>Students Capacity</th>
-													<th>Applicants</th>
-													<th class="text-center">
-														<form th:action="@{'/student/majors/apply?pageSize=' + ${selectedPageSize} + '&page=' + ${majorsPage.number + 1}}" method="post">
-															<button th:unless="${major.youPassed}" class="btn btn-primary d-table-cell"
-															        type="submit" th:name="majorId" th:value="${major.id}">Apply</button>
-														</form>
-														<button th:if="${major.youPassed}" class="btn btn-primary d-table-cell" type="button" disabled>Applied</button>
-													</th>
-												</tr>
+											<tr>
+												<th th:text="#{majors.capacity}">Students Capacity</th>
+												<th th:text="#{majors.applicants}">Applicants</th>
+												<th class="text-center">
+													<form th:action="@{'/student/majors/apply?pageSize=' + ${selectedPageSize} + '&page=' + ${majorsPage.number + 1}}"
+													      method="post">
+														<button th:unless="${major.youPassed}"
+														        class="btn btn-primary d-table-cell" type="submit"
+														        th:name="majorId" th:value="${major.id}" th:text="#{majors.apply}">Apply
+														</button>
+													</form>
+													<button th:if="${major.youPassed}"
+													        class="btn btn-primary d-table-cell" type="button" disabled
+													        th:text="#{majors.applied}">Applied
+													</button>
+												</th>
+											</tr>
 											</thead>
 											<tbody>
 											<tr>
@@ -55,36 +61,41 @@
 												<td th:text="${major.applicantsNum}">000</td>
 												<td class="text-center">
 													<form th:action="@{/student/majors/{majorId}/applicants(majorId = ${major.id})}" method="GET">
-														<button class="btn btn-primary d-table-cell" type="submit">Applicants Ranking</button>
+														<button class="btn btn-primary d-table-cell" type="submit"
+														        th:text="#{majors.btn.ranking}">Applicants Ranking
+														</button>
 													</form>
 												</td>
 											</tr>
 											</tbody>
 										</table>
 									</div>
-									<h5 class="text-center text-secondary" style="margin-bottom: 20px;margin-top: 12px;">Required Exams</h5>
+									<h5 class="text-center text-secondary" style="margin-bottom: 20px;margin-top: 12px;"
+									    th:text="#{majors.requiredExams}">Required Exams</h5>
 								</div>
 								<div class="table-responsive table-borderless" style="font-size: 15px;">
 									<table class="table table-bordered table-sm">
 										<thead>
 										<tr>
-											<th>Subject</th>
-											<th>Date</th>
-											<th>Location</th>
+											<th th:text="#{exams.subject}">Subject</th>
+											<th th:text="#{exams.date}">Date</th>
+											<th th:text="#{exams.location}">Location</th>
 										</tr>
 										</thead>
 										<tbody>
 										<tr th:each="exam : ${major.exams}">
-											<td th:text="${exam.subject}">Subject</td>
+											<td th:text="#{'examSubj.' + ${exam.subject}}">Subject</td>
 											<td th:text="${exam.date}">20.12.2020</td>
 											<td th:text="${exam.location}">Location</td>
 											<td>
-												<form th:action="@{'/student/majors/exam-register?pageSize=' + ${selectedPageSize} + '&page=' + ${majorsPage.number + 1}}" method="post">
-													<button th:unless="${exam.registered}" class="btn btn-outline-primary btn-sm"
-													        type="submit" th:name="examId" th:value="${exam.id}">Register</button>
+												<form th:action="@{'/student/majors/exam-register?pageSize=' + ${selectedPageSize} + '&page=' + ${majorsPage.number + 1}}"
+												      method="post">
+													<button th:unless="${exam.registered}" class="btn btn-outline-primary btn-sm" type="submit"
+													        th:name="examId" th:value="${exam.id}" th:text="#{exams.register}">Register</button>
 													<input th:type="hidden" th:name="majorId" th:value="${major.id}"/>
 												</form>
-												<button th:if="${exam.registered}"class="btn btn-outline-primary btn-sm" type="button" disabled>Registered</button>
+												<button th:if="${exam.registered}" class="btn btn-outline-primary btn-sm" type="button"
+												        disabled th:text="#{exams.registered}">Registered</button>
 											</td>
 										</tr>
 										</tbody>
@@ -93,43 +104,52 @@
 							</div>
 						</div>
 					</div>
-<!-- Accordion Tab End -->
+					<!-- Accordion Tab End -->
 				</div>
 			</div>
-<!-- Accordion End -->
-<!--	PAGINATION		-->
+			<!-- Accordion End -->
+			<!--	PAGINATION		-->
 			<nav th:with="currentViewPath='/student/majors'" class="row d-flex justify-content-center">
 				<ul class="pagination">
 					<li th:class="${majorsPage.number == 0} ? 'page-item disabled'" class="page-item">
-						<a class="page-link" th:href="@{${currentViewPath}(pageSize=${selectedPageSize}, page=1)}" aria-label="Previous">
+						<a class="page-link" th:href="@{${currentViewPath}(pageSize=${selectedPageSize}, page=1)}"
+						   aria-label="Previous">
 							<span aria-hidden="true">&laquo;</span>
 						</a>
 					</li>
 					<li th:class="${majorsPage.number == 0} ? 'page-item disabled'" class="page-item">
-						<a class="page-link" th:href="@{${currentViewPath}(pageSize=${selectedPageSize}, page=${majorsPage.number})}" aria-label="Previous">
+						<a class="page-link"
+						   th:href="@{${currentViewPath}(pageSize=${selectedPageSize}, page=${majorsPage.number})}"
+						   aria-label="Previous">
 							<span aria-hidden="true">&larr;</span>
 						</a>
 					</li>
 					<li class="page-item" th:class="${majorsPage.number == (page - 1)} ? 'page-item active'"
 					    th:each="page : ${#numbers.sequence(pager.startPage, pager.endPage)}">
-						<a class="page-link" th:href="@{${currentViewPath}(pageSize=${selectedPageSize}, page=${page})}" th:text="${page}">1</a>
+						<a class="page-link" th:href="@{${currentViewPath}(pageSize=${selectedPageSize}, page=${page})}"
+						   th:text="${page}">1</a>
 					</li>
 					<li class="page-item" th:class="${majorsPage.number >= majorsPage.totalPages - 1} ? 'page-item disabled'">
-						<a class="page-link" th:href="@{${currentViewPath}(pageSize=${selectedPageSize}, page=${majorsPage.number} + 2)}" aria-label="Next">
+						<a class="page-link"
+						   th:href="@{${currentViewPath}(pageSize=${selectedPageSize}, page=${majorsPage.number} + 2)}"
+						   aria-label="Next">
 							<span aria-hidden="true">&rarr;</span>
 						</a>
 					</li>
 					<li class="page-item" th:class="${majorsPage.number >= majorsPage.totalPages - 1} ? 'page-item disabled'">
-						<a class="page-link" th:href="@{${currentViewPath}(pageSize=${selectedPageSize}, page=${majorsPage.totalPages})}" aria-label="Next">
+						<a class="page-link"
+						   th:href="@{${currentViewPath}(pageSize=${selectedPageSize}, page=${majorsPage.totalPages})}"
+						   aria-label="Next">
 							<span aria-hidden="true">&raquo;</span>
 						</a>
 					</li>
-						<select class="form-control pagination" id="pageSizeSelect">
-							<option th:each="size : ${pageSizes}" th:text="${size}" th:value="${size}" th:selected="${size} == ${selectedPageSize}"></option>
-						</select>
+					<select class="form-control pagination" id="pageSizeSelect">
+						<option th:each="size : ${pageSizes}" th:text="${size}" th:value="${size}"
+						        th:selected="${size} == ${selectedPageSize}"></option>
+					</select>
 				</ul>
 			</nav>
-<!--	PAGINATION END		-->
+			<!--	PAGINATION END		-->
 		</div>
 	</section>
 </main>

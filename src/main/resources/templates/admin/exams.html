@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="includes.html :: headCommon ('Exams - YouPassed')"></head>
+<head th:replace="includes.html :: headCommon (#{nav.exams})"></head>
 
 <body>
 
@@ -11,29 +11,28 @@
 	<section class="clean-block clean-catalog dark">
 		<div class="container">
 			<div class="block-heading" style="padding-top: 120px">
-				<h2 class="text-info">Exams List</h2>
+				<h2 class="text-info" th:text="#{exams.heading}">Exams List</h2>
 			</div>
 			<div class="content">
 				<div class="table-responsive table-borderless">
 					<table class="table table-sm table-striped">
 						<thead>
 						<tr>
-							<th>Subject</th>
-							<th>Date</th>
-							<th>Location</th>
+							<th th:text="#{exams.subject}">Subject</th>
+							<th th:text="#{exams.date}">Date</th>
+							<th th:text="#{exams.location}">Location</th>
 							<th></th>
 						</tr>
 						</thead>
 						<tbody>
 						<tr th:each="exam : ${examList}">
-							<td th:text="${exam.subject}">Subject</td>
+							<td th:text="#{'examSubj.' + ${exam.subject}}">Subject</td>
 							<td th:text="${exam.date}">00.00.00</td>
 							<td th:text="${exam.location}">Somewhere</td>
 							<td>
 								<form th:action="@{'/admin/exams/edit/' + ${exam.id}}" method="get">
-									<button class="btn btn-primary" type="submit"
-									        style="font-size: 14px;padding-bottom: 0px;padding-top: 0px;">Edit
-									</button>
+									<button class="btn btn-primary" type="submit" th:text="#{exams.btn.edit}"
+									        style="font-size: 14px;padding-bottom: 0px;padding-top: 0px;">Edit</button>
 								</form>
 							</td>
 						</tr>
@@ -42,7 +41,7 @@
 					</table>
 					<div style="padding-top: 12px;">
 						<form th:action="@{/admin/exams/new}" method="get">
-							<button class="btn btn-primary btn-block" type="submit">+ New Exam</button>
+							<button class="btn btn-primary btn-block" type="submit" th:text="#{exams.btn.new}">+ New Exam</button>
 						</form>
 					</div>
 				</div>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="includes.html :: headCommon ('Users - YouPassed')"></head>
+<head th:replace="includes.html :: headCommon (#{nav.users})"></head>
 
 <body>
 
@@ -11,7 +11,7 @@
 	<section class="clean-block clean-catalog dark">
 		<div class="container">
 			<div class="block-heading" style="padding-top: 120px">
-				<h2 class="text-info">Users List</h2>
+				<h2 class="text-info" th:text="#{users.h}">Users List</h2>
 			</div>
 			<div class="content">
 				<div class="table-responsive table-borderless">
@@ -19,10 +19,10 @@
 						<thead>
 							<tr>
 								<th>ID</th>
-								<th>Email</th>
-								<th>First Name</th>
-								<th>Last Name</th>
-								<th>Role</th>
+								<th th:text="#{user.email}">Email</th>
+								<th th:text="#{user.firstName}">First Name</th>
+								<th th:text="#{user.lastName}">Last Name</th>
+								<th th:text="#{user.role}">Role</th>
 								<th></th>
 							</tr>
 						</thead>
@@ -35,7 +35,8 @@
 								<td th:text="${user.role}">STUDENT</td>
 								<td>
 									<form th:action="@{'/admin/users/update/' + ${user.id}}" method="get">
-										<button class="btn btn-primary" type="submit" style="font-size: 14px;padding-bottom: 0px;padding-top: 0px;">Update</button>
+										<button class="btn btn-primary" type="submit" style="font-size: 14px;padding-bottom: 0px;padding-top: 0px;"
+										th:text="#{users.btn.update}">Update</button>
 									</form>
 								</td>
 							</tr>

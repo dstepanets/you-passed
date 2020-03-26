@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="includes.html :: headCommon ('Edit Major - YouPassed')"></head>
+<head th:replace="includes.html :: headCommon (#{majors.edit})"></head>
 
 <body>
 
@@ -15,32 +15,31 @@
 				<div class="col-lg-10 col-xl-8 offset-lg-1 offset-xl-2">
 
 					<div class="block-heading" style="padding-top: 120px">
-						<h2 class="text-info">Edit Major</h2>
+						<h2 class="text-info" th:text="#{majors.edit}">Edit Major</h2>
 					</div>
 
 					<form th:action="@{/admin/majors/save}" method="post" th:object="${major}">
 
 						<label for="id">ID</label>
 						<input class="form-control item" type="number" id="id" name="id" th:field="*{id}" disabled>
-						<label for="title">Title</label>
+						<label for="title" th:text="#{majors.title}">Title</label>
 						<input class="form-control item" type="text" id="title" name="title" required="required"
 						       th:field="*{title}">
-						<label for="capacity">Student Capacity</label>
+						<label for="capacity" th:text="#{majors.capacity}">Student Capacity</label>
 						<input class="form-control item" type="number" min="0" id="capacity" name="capacity" required="required"
 						       th:field="*{capacity}">
-						<label for="applicants-num">Applicants</label>
+						<label for="applicants-num" th:text="#{majors.applicants}">Applicants</label>
 						<input class="form-control item" type="number" id="applicants-num" name="applicants-num" required="required"
 						       th:field="*{applicantsNum}" disabled>
 
 						<div style="padding-top: 12px">
-							<button class="btn btn-primary btn-block" type="submit"
-							        th:formaction="@{/admin/majors/save}" th:value="${major}">Save Major
-							</button>
+							<button class="btn btn-primary btn-block" type="submit" th:text="#{majors.btn.save}"
+							        th:formaction="@{/admin/majors/save}" th:value="${major}">Save Major</button>
 						</div>
 
 						<div th:if="${major.id != null}" style="padding-top: 12px">
 							<button class="btn btn-danger btn-block" type="submit" th:value="${major}"
-							        th:formaction="@{/admin/majors/remove}"
+							        th:formaction="@{/admin/majors/remove}" th:text="#{majors.btn.remove}"
 							        onclick="return confirm('Are you sure you want to delete this major permanently?');">Remove Major
 							</button>
 						</div>
@@ -48,28 +47,26 @@
 					</form>
 
 					<div th:if="${major.id != null}" class="table-responsive table-borderless" style="font-size: 15px;">
-						<h5 class="text-center text-secondary" style="margin-bottom: 20px;margin-top: 12px;">Required Exams</h5>
+						<h5 class="text-center text-secondary" style="margin-bottom: 20px;margin-top: 12px;"
+						    th:text="#{majors.requiredExams}">Required Exams</h5>
 						<table class="table table-sm">
 							<thead>
 							<tr>
-								<th>Subject</th>
-								<th>Date</th>
-								<th>Location</th>
+								<th th:text="#{exams.subject}">Subject</th>
+								<th th:text="#{exams.date}">Date</th>
+								<th th:text="#{exams.location}">Location</th>
 							</tr>
 							</thead>
 							<tbody>
-
 							<form th:action="@{/admin/majors/edit/remove-exam}" th:method="POST">
 								<tr th:each="exam, itemStat : ${major.exams}">
-									<td th:text="${exam.subject}">Subject</td>
+									<td th:text="#{'examSubj.' + ${exam.subject}}">Subject</td>
 									<td th:text="${exam.date}">20.12.2020</td>
 									<td th:text="${exam.location}">Location</td>
 									<td>
 										<button class="btn btn-danger btn-sm" type="submit"
-										        th:value="${itemStat.index}" name="examIdx"
-										        onclick="return confirm('Are you sure you want to delete this exam from the major?');">
-											Remove
-										</button>
+										        th:value="${itemStat.index}" name="examIdx" th:text="#{exams.btn.remove}"
+										        onclick="return confirm('Are you sure you want to delete this exam from the major?');">Remove</button>
 									</td>
 								</tr>
 							</form>
@@ -80,10 +77,9 @@
 										<select th:name="examId">
 											<option th:each="examOption, itemStat : ${examList}"
 											        th:unless="${major.exams.contains(examOption)}"
-											        th:value="${examOption.id}" th:text="${examOption.subject}">Exam Option
-											</option>
+											        th:value="${examOption.id}" th:text="#{'examSubj.' + ${examOption.subject}}">Exam Option</option>
 										</select>
-										<button class="btn btn-outline-primary btn-sm" type="submit">Add Exam</button>
+										<button class="btn btn-outline-primary btn-sm" type="submit" th:text="#{exams.btn.add}">Add Exam</button>
 									</td>
 								</form>
 							</tr>

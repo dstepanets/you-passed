@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="includes.html :: headCommon ('Update User - YouPassed')"></head>
+<head th:replace="includes.html :: headCommon (#{users.update})"></head>
 
 <body>
 
@@ -12,7 +12,7 @@
 		<div class="container">
 
 			<div class="block-heading" style="padding-top: 120px">
-				<h2 class="text-info">User Update</h2>
+				<h2 class="text-info" th:text="#{users.update}">User Update</h2>
 			</div>
 
 			<form th:action="@{/admin/users/update/submit}" method="post" th:object="${user}">
@@ -26,19 +26,19 @@
 								<td th:text="${user.id}">#</td>
 							</tr>
 							<tr>
-								<td><strong>Email</strong></td>
+								<td th:text="#{user.email}"><strong>Email</strong></td>
 								<td th:text="${user.email}">email@e.com</td>
 							</tr>
 							<tr>
-								<td><strong>First Name</strong></td>
+								<td th:text="#{user.firstName}"><strong>First Name</strong></td>
 								<td th:text="${user.firstName}">First Name</td>
 							</tr>
 							<tr>
-								<td><strong>Last Name</strong></td>
+								<td th:text="#{user.lastName}"><strong>Last Name</strong></td>
 								<td th:text="${user.lastName}">Last Name</td>
 							</tr>
 							<tr>
-								<td><strong>Role</strong></td>
+								<td th:text="#{user.role}"><strong>Role</strong></td>
 								<td>
 									<select name="new-role" th:field="*{role}">
 										<option th:each="role : ${T(com.youpassed.domain.Role).values()}"
@@ -54,21 +54,22 @@
 				</div>
 
 				<div th:if="${user.role == T(com.youpassed.domain.Role).STUDENT}" th:class="content">
-					<h4 class="text-center text-secondary" style="padding-top: 30px;">Majors Applied</h4>
+					<h4 class="text-center text-secondary" style="padding-top: 30px;" th:text="#{users.majors}">Majors
+						Applied</h4>
 					<div class="table-responsive table-borderless">
 						<table class="table table-striped table-bordered table-sm">
 							<thead>
 							<tr>
 								<th>ID</th>
-								<th>Title</th>
-								<th>Capacity</th>
-								<th>Applicants</th>
+								<th th:text="#{majors.title}">Title</th>
+								<th th:text="#{majors.capacity}">Capacity</th>
+								<th th:text="#{majors.applicants}">Applicants</th>
 							</tr>
 							</thead>
 							<tbody>
 							<tr th:each="major : ${user.majors}">
 								<td th:text="${major.id}">#</td>
-								<td th:text="${major.title}">title</td>
+								<td th:text="#{'major.' + ${major.title}}">title</td>
 								<td th:text="${major.capacity}">#</td>
 								<td th:text="${major.applicantsNum}">#</td>
 							</tr>
@@ -78,26 +79,27 @@
 				</div>
 
 				<div th:if="${user.role == T(com.youpassed.domain.Role).STUDENT}" th:class="content">
-					<h4 class="text-center text-secondary" style="padding-top: 30px;">Exams Registered</h4>
+					<h4 class="text-center text-secondary" style="padding-top: 30px;" th:text="#{users.exams}">Exams
+						Registered</h4>
 					<div class="table-responsive table-borderless">
 						<table class="table table-striped table-bordered table-sm">
 							<thead>
 							<tr>
 								<th>ID</th>
-								<th>Subject</th>
-								<th>Date</th>
-								<th>Location</th>
-								<th>Mark</th>
+								<th th:text="#{exams.subject}">Subject</th>
+								<th th:text="#{exams.date}">Date</th>
+								<th th:text="#{exams.location}">Location</th>
+								<th th:text="#{exams.mark}">Mark</th>
 							</tr>
 							</thead>
 							<tbody>
 							<tr th:each="exam, iterStat : ${user.exams}">
 								<td th:text="${exam.id}">#</td>
-								<td th:text="${exam.subject}">title</td>
+								<td th:text="#{'examSubj.' + ${exam.subject}}">title</td>
 								<td th:text="${exam.date}">#</td>
 								<td th:text="${exam.location}">#</td>
 								<td><input type="number" min="0" max="200" step="1" name="mark"
-								           th:value="${exam.mark}" th:field="*{exams[__${iterStat.index}__].mark}" /></td>
+								           th:value="${exam.mark}" th:field="*{exams[__${iterStat.index}__].mark}"/></td>
 							</tr>
 							</tbody>
 						</table>
@@ -105,7 +107,9 @@
 				</div>
 
 				<div style="padding-top: 12px">
-					<button class="btn btn-primary btn-block" type="submit" th:value="${user}">Update User</button>
+					<button class="btn btn-primary btn-block" type="submit" th:value="${user}"
+					        th:text="#{users.btn.update}">Update User
+					</button>
 				</div>
 
 			</form>

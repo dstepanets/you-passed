@@ -11,6 +11,7 @@ import com.youpassed.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,6 +28,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 @Controller
 @RequestMapping("/admin")
@@ -37,19 +39,21 @@ public class AdminController {
 	private UserService userService;
 	private MajorsService majorsService;
 	private ExamService examService;
+	private MessageSource messageSource;
 	private AuthenticationFacade authFacade;
 
 	private boolean admitAllActivated;
 	private boolean resetAdmissionActivated;
 
 	@ModelAttribute(name = "batchAdmissionMsg")
-	public String batchAdmissionMsg() {
+	public String batchAdmissionMsg(Locale locale) {
+		String batchAdmissionMsg = null;
 		if (admitAllActivated) {
-			return "Highest ranking applicants are admitted to all majors";
+			batchAdmissionMsg =  messageSource.getMessage("adm.msg.allAdmitted", new Object[]{}, locale);
 		} else if (resetAdmissionActivated) {
-			return "Student admissions for all majors are canceled";
+			batchAdmissionMsg =  messageSource.getMessage("adm.msg.allAdmissionsReset", new Object[]{}, locale);
 		}
-		return null;
+		return batchAdmissionMsg;
 	}
 
 	@GetMapping({"/home"})
@@ -257,10 +261,10 @@ public class AdminController {
 	}
 
 	@PostMapping(value = {"/majors/{majorId}/applicants/admit"})
-	public String admitStudentForMajor(@PathVariable Integer majorId, Model model) {
+	public String admitStudentForMajor(@PathVariable Integer majorId, Model model, Locale locale) {
 		majorsService.admitApplicantsForMajor(majorId);
-		String admissionMsg = "Highest ranking applicants are admitted to this major";
-		model.addAttribute("admissionMsg", admissionMsg);
+		String admissionMsg = messageSource.getMessage("adm.msg.majorAdmitted", new Object[]{}, locale);
+		model.addAttribute("admissionMsg", admissionMsg);		// TODO bug localization - POST not allowed
 
 		admitAllActivated = false;
 		resetAdmissionActivated = false;
@@ -268,9 +272,9 @@ public class AdminController {
 	}
 
 	@PostMapping(value = {"/majors/{majorId}/applicants/reset"})
-	public String resetAdmissionForMajor(@PathVariable Integer majorId, Model model) {
+	public String resetAdmissionForMajor(@PathVariable Integer majorId, Model model, Locale locale) {
 		majorsService.resetAdmissionForMajor(majorId);
-		String admissionMsg = "Student admissions for this major are canceled";
+		String admissionMsg = messageSource.getMessage("adm.msg.majorAdmissionReset", new Object[]{}, locale);
 		model.addAttribute("admissionMsg", admissionMsg);
 
 		admitAllActivated = false;

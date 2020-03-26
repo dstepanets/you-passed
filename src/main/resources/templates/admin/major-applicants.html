@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="includes.html :: headCommon ('Major Applicants Ranking - YouPassed')"></head>
+<head th:replace="includes.html :: headCommon (#{majors.ranking.h})"></head>
 
 <body>
 
@@ -11,16 +11,18 @@
 	<section class="clean-block clean-catalog dark">
 		<div class="container">
 			<div class="block-heading" style="padding-top: 120px">
-				<h2 class="text-info">Major Applicants Ranking</h2>
+				<h2 class="text-info" th:text="#{majors.ranking.h}">Major Applicants Ranking</h2>
 			</div>
 
 			<div class="text-center">
 				<div role="group" class="btn-group shadow-lg">
 					<form th:action="@{/admin/majors/{majorId}/applicants/admit(majorId = ${major.id})}" th:method="POST">
-						<button class="btn btn-success" type="submit" th:value="${major.id}">Admit Students</button>
+						<button class="btn btn-success" type="submit" th:value="${major.id}"
+						        th:text="#{majors.ranking.btn.admit}">Admit Students</button>
 					</form>
 					<form th:action="@{/admin/majors/{majorId}/applicants/reset(majorId = ${major.id})}" th:method="POST">
-						<button class="btn btn-danger" type="submit" th:value="${major.id}">Reset Admission</button>
+						<button class="btn btn-danger" type="submit" th:value="${major.id}"
+						        th:text="#{majors.ranking.btn.reset}">Reset Admission</button>
 					</form>
 				</div>
 				<p class="alert-warning" th:text="${admissionMsg}" style="margin-top: 12px"></p>
@@ -31,11 +33,11 @@
 					<table class="table table-sm table-striped">
 						<thead>
 						<tr>
-							<th>Rank</th>
+							<th th:text="#{majors.ranking.rank}">Rank</th>
 							<th>ID</th>
-							<th>First Name</th>
-							<th>Last Name</th>
-							<th>Score</th>
+							<th th:text="#{user.firstName}">First Name</th>
+							<th th:text="#{user.lastName}">Last Name</th>
+							<th th:text="#{majors.ranking.score}">Score</th>
 						</tr>
 						</thead>
 						<tbody>
