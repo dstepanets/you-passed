@@ -41,13 +41,18 @@
 						</tr>
 						</thead>
 						<tbody>
-						<tr th:each="applicant, appStat : ${major.applicants}">
-							<td th:text="${appStat.count}">rank</td>
-							<td th:text="${applicant.id}">id</td>
-							<td th:text="${applicant.firstName}">John</td>
-							<td th:text="${applicant.lastName}">LastNameson</td>
-							<td th:text="${applicant.majorScore}">score</td>
-						</tr>
+						<div th:each="applicant, appStat : ${major.applicants}">
+							<tr>
+								<td th:text="${appStat.count}">rank</td>
+								<td th:text="${applicant.id}">id</td>
+								<td th:text="${applicant.firstName}">John</td>
+								<td th:text="${applicant.lastName}">LastNameson</td>
+								<td th:text="${applicant.majorScore}">score</td>
+							</tr>
+							<tr th:if="${appStat.count == major.capacity}">
+								<td colspan="5" class="text-center h4" th:utext="#{majors.ranking.dontpass}"></td>
+							</tr>
+						</div>
 						</tbody>
 					</table>
 				</div>

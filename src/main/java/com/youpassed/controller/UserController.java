@@ -48,12 +48,12 @@ public class UserController {
 	public String logInSuccess() {
 /*		for (int i = 0; i < 100 ; i++) {
 			User user = User.builder()
-					.email(i + "@email.com")
-					.password("passw@RD")
-					.password2("passw@RD")
-					.firstName(i + " Name")
-					.lastName(i + " lastName")
-					.role(User.Role.STUDENT)
+					.email(i + "@email.yo")
+					.password("Qwe!23")
+					.password2("Qwe!23")
+					.firstName("Bot" + i)
+					.lastName("Loopson")
+					.role(Role.STUDENT)
 					.build();
 			try {
 				userService.register(user);
