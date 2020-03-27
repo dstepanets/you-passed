@@ -27,8 +27,10 @@ public class UserController {
 	private UserService userService;
 
 	@GetMapping({"", "/"})
-	public String index(){
+	public String index() {
 		Authentication authentication = authFacade.getAuthentication();
+//		User user = (User) authentication.getPrincipal();
+//		System.out.println(user);
 		Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
 		if (!authentication.isAuthenticated() || roles.contains("ROLE_ANONYMOUS")) {
 			return "index";
@@ -78,13 +80,7 @@ public class UserController {
 	@GetMapping(value = {"/profile"})
 	public String showProfileForm(Model model) {
 		User currentUser = userService.findById(authFacade.getPrincipalUser().getId());
-//		session.setAttribute("userUpdate", currentUser);
-//		User currentUser = authFacade.getPrincipalUser();
 		model.addAttribute("userUpdate", currentUser);
-
-		System.out.println("\n\n------------------\n" + currentUser.getExams());
-		System.out.println(currentUser.getMajors() + "\n\n========================");
-
 		return "profile";
 	}
 

@@ -5,7 +5,7 @@
 
 <body>
 
-<div th:insert="includes.html :: ${#authentication.principal.role == 'ADMIN'} ? 'navAdmin' : 'navStudent'"></div>
+<div th:insert="includes.html :: ${#authentication.principal.role == T(com.youpassed.domain.Role).ADMIN} ? 'navAdmin' : 'navStudent'"></div>
 
 <main class="page registration-page">
 	<section class="clean-block clean-form dark">
