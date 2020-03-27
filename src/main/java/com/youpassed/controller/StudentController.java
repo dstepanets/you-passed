@@ -29,72 +29,62 @@ import java.util.stream.Collectors;
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 @Slf4j
 public class StudentController {
+	public static final String PAGE = "page";
+	public static final String PAGE_SIZE = "pageSize";
+	public static final String STUDENT = "student";
+	public static final String SELECTED = "selected";
+
 	private MajorsService majorsService;
 	private ExamService examService;
 	private UserService userService;
 	private AuthenticationFacade authFacade;
 
-	@ModelAttribute(name = "student")
-	public User provideStudentWithLists(Model model){
-		User student = userService.findById(authFacade.getPrincipalUser().getId());
-//		model.addAttribute("student", student);
-		return student;
+	@ModelAttribute(name = STUDENT)
+	public User provideStudentWithLists() {
+		return userService.findById(authFacade.getPrincipalUser().getId());
 	}
 
 	@GetMapping({"/home"})
-	public String home(@ModelAttribute(name = "student") User student, Model model) {
-
+	public String home(@ModelAttribute(name = STUDENT) User student, Model model) {
 		List<Major> majorsAdmittedTo = student.getMajors().stream()
 				.filter(Major::isYouPassed).collect(Collectors.toList());
 		model.addAttribute("majorsAdmittedTo", majorsAdmittedTo);
-		System.out.println(student);
-		System.out.println(majorsAdmittedTo);
 		return "student/student-home";
 	}
 
 	@GetMapping(value = {"/majors"})
-	public ModelAndView listMajors(@RequestParam(value = "pageSize", required = false) String pageSizeStr,
-								   @RequestParam(value = "page", required = false) String pageNumStr,
+	public ModelAndView listMajors(@RequestParam(value = PAGE_SIZE, required = false) String pageSizeStr,
+								   @RequestParam(value = PAGE, required = false) String pageNumStr,
 								   @RequestParam(required = false) Integer selected,
-								   @ModelAttribute(name = "student") User student) {
-
+								   @ModelAttribute(name = STUDENT) User student) {
 
 		final int pageSize = PaginationUtility.parsePageSize(pageSizeStr);
 		final int pageIndex = PaginationUtility.parsePageNumber(pageNumStr) - 1;
-
 		Page<Major> majorsPage = majorsService.findAllForStudent(student, pageIndex, pageSize);
-
 		PaginationUtility pager = new PaginationUtility(majorsPage.getTotalPages(), majorsPage.getNumber());
 
 		ModelAndView modelAndView = new ModelAndView("student/majors");
 		modelAndView.addObject("majorsPage", majorsPage)
-				.addObject("selectedPageSize", pageSize)
-				.addObject("pageSizes", PaginationUtility.PAGE_SIZES)
-				.addObject("pager", pager)
-				.addObject("selected", selected);
-
-		System.out.println("\n\n>>>> SelectedMajor id=" + selected + "\n");
+					.addObject("selectedPageSize", pageSize)
+					.addObject("pageSizes", PaginationUtility.PAGE_SIZES)
+					.addObject("pager", pager)
+					.addObject(SELECTED, selected);
 
 		return modelAndView;
 	}
 
 	@PostMapping(value = {"/majors/apply"})
 	public ModelAndView applyForMajor(@RequestParam Integer majorId,
-									  @RequestParam(value = "pageSize", required = false) String pageSizeStr,
-									  @RequestParam(value = "page", required = false) String pageNumStr,
-									  @ModelAttribute(name = "student") User student) {
+									  @RequestParam(value = PAGE_SIZE, required = false) String pageSizeStr,
+									  @RequestParam(value = PAGE, required = false) String pageNumStr,
+									  @ModelAttribute(name = STUDENT) User student) {
 
-		System.out.println("\n\n==== Major: " + majorId);
-		System.out.println("==== pageSize=" + pageSizeStr + " | pageNum=" + pageNumStr);
-
-		Major selectedMajor = majorsService.applyForMajor(majorId, student);
-
-		System.out.println("\n\n===> " + selectedMajor + "\n\n");
+		majorsService.applyForMajor(majorId, student);
 
 		ModelAndView modelAndView = new ModelAndView("redirect:/student/majors");
-		modelAndView.addObject("pageSize", pageSizeStr)
-				.addObject("page", pageNumStr)
-				.addObject("selected", majorId);
+		modelAndView.addObject(PAGE_SIZE, pageSizeStr)
+					.addObject(PAGE, pageNumStr)
+					.addObject(SELECTED, majorId);
 
 		return modelAndView;
 	}
@@ -102,7 +92,6 @@ public class StudentController {
 	@GetMapping(value = {"/majors/{majorId}/applicants"})
 	public String showMajorApplicantsRanking(@PathVariable Integer majorId, Model model) {
 		Major major = majorsService.findByIdWithUserRanking(majorId);
-		System.out.println("\n\n[][]Major-applicants[] " + major + "\n\n");
 		model.addAttribute(major);
 		return "student/major-applicants";
 	}
@@ -110,27 +99,21 @@ public class StudentController {
 	@PostMapping(value = {"/majors/exam-register"})
 	public ModelAndView registerForExamInMajors(@RequestParam Integer examId,
 												@RequestParam Integer majorId,
-												@RequestParam(value = "pageSize", required = false) String pageSizeStr,
-												@RequestParam(value = "page", required = false) String pageNumStr,
-												@ModelAttribute(name = "student") User student) {
+												@RequestParam(value = PAGE_SIZE, required = false) String pageSizeStr,
+												@RequestParam(value = PAGE, required = false) String pageNumStr,
+												@ModelAttribute(name = STUDENT) User student) {
 
-		System.out.println("\n\n==exam-reg== majorId=" + majorId + "| examId=" + examId);
-		System.out.println("==exam-reg== pageSize=" + pageSizeStr + " | pageNum=" + pageNumStr);
-
-		Exam exam = examService.registerStudent(examId, student);
-
-		System.out.println("\n\nexam=" + exam + "\n\n");
-
+		examService.registerStudent(examId, student);
 		ModelAndView modelAndView = new ModelAndView("redirect:/student/majors");
-		modelAndView.addObject("pageSize", pageSizeStr)
-				.addObject("page", pageNumStr)
-				.addObject("selected", majorId);
+		modelAndView.addObject(PAGE_SIZE, pageSizeStr)
+					.addObject(PAGE, pageNumStr)
+					.addObject(SELECTED, majorId);
 
 		return modelAndView;
 	}
 
 	@GetMapping(value = {"/exams"})
-	public String listExams(@ModelAttribute(name = "student") User student, Model model) {
+	public String listExams(@ModelAttribute(name = STUDENT) User student, Model model) {
 		List<Exam> examList = examService.findAllForStudent(student);
 		model.addAttribute(examList);
 		return "student/exams";
@@ -138,14 +121,8 @@ public class StudentController {
 
 	@PostMapping(value = {"/exams/register"})
 	public String registerForExam(@RequestParam Integer examId,
-								  @ModelAttribute(name = "student") User student) {
-
-		System.out.println("\n\nEXAMS||examId=" + examId);
-
-		Exam exam = examService.registerStudent(examId, student);
-
-		System.out.println("\n\nEXAMS||exam=" + exam + "\n\n");
-
+								  @ModelAttribute(name = STUDENT) User student) {
+		examService.registerStudent(examId, student);
 		return "redirect:/student/exams";
 	}
 

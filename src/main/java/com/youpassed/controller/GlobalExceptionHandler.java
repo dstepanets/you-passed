@@ -21,7 +21,7 @@ public class GlobalExceptionHandler {
 
 		final String errorMessage = (throwable != null ? throwable.getMessage() : "Unknown error");
 
-		model.addAttribute("errorMessage", errorMessage)
+		model	.addAttribute("errorMessage", errorMessage)
 				.addAttribute("requestUrl", url);
 		return "error/error";
 	}

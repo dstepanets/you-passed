@@ -1,8 +1,6 @@
 package com.youpassed.config;
 
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -21,8 +19,6 @@ import java.util.Locale;
 @ComponentScan(basePackages = {"com.youpassed.service"})
 @Slf4j
 public class GeneralConfig implements WebMvcConfigurer {
-
-	//TODO: Internationalization
 
 	@Bean
 	public ResourceBundleMessageSource messageSource() {
@@ -59,31 +55,5 @@ public class GeneralConfig implements WebMvcConfigurer {
 	public boolean resetAdmissionActivated() {
 		return false;
 	}
-
-
-
-/*	@Bean
-	public DataSource dataSource() {
-		DriverManagerDataSource dataSource = new DriverManagerDataSource();
-
-		return dataSource;
-	}*/
-
-
-/*	@Bean
-	public DataSource dataSource () {
-		try {
-			EmbeddedDatabaseBuilder dbBuilder = new EmbeddedDatabaseBuilder();
-			return dbBuilder.setType(EmbeddedDatabaseType.H2)
-					.addScripts("classpath:dЬ/schema.sql", "classpath:dЬ/data.sql")
-					.build();
-		} catch (Exception е) {
-			LOGGER.error("Embedded DataSource bean cannot Ье created!", е);
-			return null;
-		}
-	}*/
-
-
-
 
 }
