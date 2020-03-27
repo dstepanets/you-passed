@@ -30,42 +30,17 @@ public class UserServiceImpl implements UserService {
 	private PasswordEncoder passwordEncoder;
 	private UserMapper userMapper;
 
-/*	@Override
-	public void defaultAllUsersPasswords() {
-		List<UserEntity> userList = userRepository.findAll();
-		final String encodedPass = passwordEncoder.encode("pass");
-		for (UserEntity ue : userList) {
-			System.out.println(ue);
-			ue.setPassword(encodedPass);
-			System.out.println(encodedPass);
-			userRepository.save(ue);
-		}
-	}*/
-
 	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-//		defaultAllUsersPasswords();
-
+	public UserDetails loadUserByUsername(String username) {
 		final Optional<UserEntity> userEntity = userRepository.findByEmail(username);
 		return userEntity
 				.map(userMapper::mapEntityToDomain)
 				.orElseThrow(() -> new UsernameNotFoundException("User with email '" + username + "' is not found."));
 	}
 
-/*	@Override
-	public Optional<User> login(String email, String password) {
-		final Optional<UserEntity> userEntity = userRepository.findByEmail(email);
-		if (userEntity.isPresent()) {
-			String encryptedPassword = passwordEncoder.encode(password);
-			if (encryptedPassword.equals(userEntity.get().getPassword()))
-				return Optional.of(userMapper.mapEntityToDomain(userEntity.get()));
-		}
-		return Optional.empty();
-	}*/
-
 	@Transactional
 	@Override
-	public User register(User user) throws ValidationException {
+	public User register(User user) {
 		if (!user.getPassword().equals(user.getPassword2())) {
 			throw new ValidationException("Passwords don't match");
 		}
@@ -83,12 +58,12 @@ public class UserServiceImpl implements UserService {
 				.build();
 
 		UserEntity userEntity = userRepository.save(newUserEntity);
-//		як варіант, id повертати?
+		log.info(String.format("User '%s' (ID %d) was registered", userEntity.getEmail(), userEntity.getId()));
 		return userMapper.mapEntityToDomain(userEntity);
 	}
 
 	@Override
-	public User findById(Integer id) throws UserNotFoundException {
+	public User findById(Integer id) {
 		return userRepository.findById(id)
 				.map(userMapper::mapEntityToDomainWithLists)
 				.orElseThrow(() -> new UserNotFoundException("User with id [" + id + "] was not found"));
@@ -97,7 +72,6 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public Page<User> findAll(int pageIndex, int pageSize) {
 		pageIndex = PaginationUtility.limitPageIndex(userRepository.count(), pageIndex, pageSize);
-
 		return userRepository.findAll(PageRequest.of(pageIndex, pageSize))
 				.map(userMapper::mapEntityToDomain);
 	}
@@ -109,7 +83,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@Transactional
-	public User updateProfile(User currentUser, User userUpdate) throws ValidationException, UserNotFoundException {
+	public User updateProfile(User currentUser, User userUpdate) {
 		if (!userUpdate.getEmail().equals(currentUser.getEmail()) &&
 				userRepository.findByEmail(userUpdate.getEmail()).isPresent()) {
 			throw new ValidationException("User with this email was registered already");
@@ -128,6 +102,7 @@ public class UserServiceImpl implements UserService {
 		userUpdate.setRole(currentUser.getRole());
 
 		userRepository.save(userMapper.mapDomainToEntity(userUpdate));
+		log.trace(String.format("User '%s' (ID %d) updated profile", userUpdate.getEmail(), userUpdate.getId()));
 		return userUpdate;
 	}
 
@@ -135,7 +110,7 @@ public class UserServiceImpl implements UserService {
 	@Transactional
 	public User saveStudentWithLists(User student) {
 		UserEntity userEntity = userRepository.save(userMapper.mapDomainToEntityWithLists(student));
+		log.debug(String.format("User '%s' (ID %d) was saved with lists", userEntity.getEmail(), userEntity.getId()));
 		return userMapper.mapEntityToDomain(userEntity);
 	}
-
 }

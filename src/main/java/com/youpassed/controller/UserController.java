@@ -2,7 +2,6 @@ package com.youpassed.controller;
 
 import com.youpassed.domain.Role;
 import com.youpassed.domain.User;
-import com.youpassed.exception.ValidationException;
 import com.youpassed.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +28,6 @@ public class UserController {
 	@GetMapping({"", "/"})
 	public String index() {
 		Authentication authentication = authFacade.getAuthentication();
-//		User user = (User) authentication.getPrincipal();
-//		System.out.println(user);
 		Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
 		if (!authentication.isAuthenticated() || roles.contains("ROLE_ANONYMOUS")) {
 			return "index";
@@ -46,21 +43,6 @@ public class UserController {
 
 	@PostMapping("/login-success")
 	public String logInSuccess() {
-/*		for (int i = 0; i < 100 ; i++) {
-			User user = User.builder()
-					.email(i + "@email.yo")
-					.password("Qwe!23")
-					.password2("Qwe!23")
-					.firstName("Bot" + i)
-					.lastName("Loopson")
-					.role(Role.STUDENT)
-					.build();
-			try {
-				userService.register(user);
-			} catch (ValidationException e) {
-				e.printStackTrace();
-			}
-		}*/
 		return "redirect:";
 	}
 
@@ -71,7 +53,7 @@ public class UserController {
 	}
 
 	@PostMapping(value = {"/register"})
-	public String submitRegisterForm(@ModelAttribute @Valid User user) throws ValidationException {
+	public String submitRegisterForm(@ModelAttribute @Valid User user) {
 		user.setRole(Role.STUDENT);
 		userService.register(user);
 		return "redirect:/login";
@@ -87,11 +69,10 @@ public class UserController {
 	@PostMapping(value = {"/profile"})
 	public String submitProfileForm(@ModelAttribute @Valid User userUpdate,
 									HttpServletRequest request,
-									HttpServletResponse response) throws ValidationException {
+									HttpServletResponse response) {
 		User currentUser = authFacade.getPrincipalUser();
 		userService.updateProfile(currentUser, userUpdate);
 		new SecurityContextLogoutHandler().logout(request, response, authFacade.getAuthentication());
 		return "redirect:/login";
 	}
-
 }

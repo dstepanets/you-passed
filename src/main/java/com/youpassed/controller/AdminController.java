@@ -270,5 +270,4 @@ public class AdminController {
 				auth.getPrincipalUser().getEmail(), majorId));
 		return ADMIN_MAJOR_APPLICANTS;
 	}
-
 }

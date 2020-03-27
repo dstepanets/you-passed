@@ -12,7 +12,6 @@ import java.sql.Date;
 @NoArgsConstructor
 @Builder
 public class Exam {
-
 	private Integer id;
 	private String subject;
 	private Date date;

@@ -1,12 +1,9 @@
 package com.youpassed.service.impl;
 
 import com.youpassed.domain.Exam;
-import com.youpassed.domain.Major;
 import com.youpassed.domain.User;
 import com.youpassed.entity.ExamEntity;
-import com.youpassed.entity.MajorEntity;
 import com.youpassed.exception.ExamNotFoundException;
-import com.youpassed.exception.MajorNotFoundException;
 import com.youpassed.mapper.Mapper;
 import com.youpassed.repository.ExamRepository;
 import com.youpassed.service.ExamService;
@@ -18,8 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -54,7 +49,7 @@ public class ExamServiceImpl implements ExamService {
 	}
 
 	@Override
-	public Exam findById(Integer examId) throws ExamNotFoundException{
+	public Exam findById(Integer examId) {
 		return examRepository.findById(examId)
 				.map(examMapper::mapEntityToDomain)
 				.orElseThrow(() -> new ExamNotFoundException("Exam with id [" + examId + "] was not found"));
@@ -76,6 +71,7 @@ public class ExamServiceImpl implements ExamService {
 			userService.saveStudentWithLists(student);
 		}
 
+		log.trace(String.format("Student '%s' registered for exam '%s'", student.getEmail(), exam.getSubject()));
 		return exam;
 	}
 
@@ -83,6 +79,7 @@ public class ExamServiceImpl implements ExamService {
 	@Transactional
 	public Exam save(Exam exam) {
 		ExamEntity examEntity = examRepository.save(examMapper.mapDomainToEntity(exam));
+		log.info(String.format("Exam '%s' ID '%d' was saved", exam.getSubject(), exam.getId()));
 		return examMapper.mapEntityToDomain(examEntity);
 	}
 
@@ -90,5 +87,6 @@ public class ExamServiceImpl implements ExamService {
 	@Transactional
 	public void delete(Exam exam) {
 		examRepository.delete(examMapper.mapDomainToEntity(exam));
+		log.info(String.format("Exam '%s' ID '%d' was deleted from the system", exam.getSubject(), exam.getId()));
 	}
 }

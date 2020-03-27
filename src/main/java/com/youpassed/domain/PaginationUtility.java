@@ -1,13 +1,14 @@
 package com.youpassed.domain;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class PaginationUtility {
-
 	public static final int DEFAULT_BUTTONS_NUM = 10;
 	public static final int INITIAL_PAGE_NUM = 1;
 	public static final int INITIAL_PAGE_SIZE = 10;
-	public static final Integer[] PAGE_SIZES = {5, 10, 20};
+	public static final List<Integer> PAGE_SIZES = Collections.unmodifiableList(Arrays.asList(5, 10, 20));
 
 	private int buttonsToShow;
 	private int startPage;
@@ -41,7 +42,7 @@ public class PaginationUtility {
 				throw new NumberFormatException();
 			}
 			pageSize = Integer.parseInt(pageSizeStr);
-			if (!Arrays.asList(PAGE_SIZES).contains(pageSize)) {
+			if (PAGE_SIZES.contains(pageSize)) {
 				throw new NumberFormatException();
 			}
 		} catch (NumberFormatException e) {
@@ -73,33 +74,12 @@ public class PaginationUtility {
 		return pageIndex;
 	}
 
-
-	public int getButtonsToShow() {
-		return buttonsToShow;
-	}
-
-	public void setButtonsToShow(int buttonsToShow) {
-		if (buttonsToShow % 2 != 0) {
-			this.buttonsToShow = buttonsToShow;
-		} else {
-			throw new IllegalArgumentException("Must be an odd value!");
-		}
-	}
-
 	public int getStartPage() {
 		return startPage;
 	}
 
-	public void setStartPage(int startPage) {
-		this.startPage = startPage;
-	}
-
 	public int getEndPage() {
 		return endPage;
-	}
-
-	public void setEndPage(int endPage) {
-		this.endPage = endPage;
 	}
 
 	@Override

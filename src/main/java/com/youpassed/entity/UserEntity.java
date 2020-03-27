@@ -14,15 +14,11 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
-import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -31,9 +27,7 @@ import java.util.List;
 @Builder
 @Entity(name = "user")
 @Table(name = "users")
-//@DiscriminatorColumn(name="role_id")
 public class UserEntity {
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id", nullable = false, unique = true)
@@ -59,13 +53,8 @@ public class UserEntity {
 	@Enumerated(EnumType.STRING)
 	private Role role;
 
-//	@ManyToMany
-//	@JoinTable(name = "student_majors", joinColumns = @JoinColumn(name = "student_id"),
-//				inverseJoinColumns = @JoinColumn(name = "major_id"))
 	@OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
 	private List<StudentMajorEntity> studMajors;
-
 	@OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
 	private List<StudentMarkEntity> marks;
-
 }

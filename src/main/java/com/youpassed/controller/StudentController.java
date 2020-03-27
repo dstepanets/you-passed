@@ -125,5 +125,4 @@ public class StudentController {
 		examService.registerStudent(examId, student);
 		return "redirect:/student/exams";
 	}
-
 }

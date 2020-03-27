@@ -24,12 +24,12 @@ public class StudentMarkEntity implements Serializable {
 	@ManyToOne
 	@MapsId("studentId")
 	@JoinColumn(name = "student_id")
-	private UserEntity student;
+	private transient UserEntity student;
 
 	@ManyToOne
 	@MapsId("examId")
 	@JoinColumn(name = "exam_id")
-	private ExamEntity exam;
+	private transient ExamEntity exam;
 
 	private Integer mark;
 }

@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 @Data
-//@ToString(exclude = "applicants")
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

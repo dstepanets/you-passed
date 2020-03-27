@@ -1,6 +1,5 @@
 package com.youpassed.entity;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -40,7 +39,6 @@ public class ExamEntity {
 	private String location;
 
 	@OneToMany(mappedBy = "exam", cascade = CascadeType.ALL)
-//	@JoinTable(name = "student_exams", joinColumns = @JoinColumn(name = "exam_id"))
 	private List<StudentMarkEntity> mark = new ArrayList<>();
 
 }

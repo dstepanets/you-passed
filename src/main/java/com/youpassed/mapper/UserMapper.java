@@ -92,7 +92,6 @@ public class UserMapper implements Mapper<UserEntity, User> {
 			user.setMajors(entity.getStudMajors().stream()
 					.map(studMajor -> {
 						Major major = majorMapper.mapEntityToDomain(studMajor.getMajor());
-//						major.getApplicants().add(user);
 						major.setApplied(true);
 						major.setYouPassed(studMajor.isYouPassed());
 						return major;

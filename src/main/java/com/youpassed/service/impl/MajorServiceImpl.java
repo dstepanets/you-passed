@@ -7,9 +7,7 @@ import com.youpassed.domain.User;
 import com.youpassed.entity.MajorEntity;
 import com.youpassed.exception.MajorNotFoundException;
 import com.youpassed.mapper.MajorMapper;
-import com.youpassed.mapper.Mapper;
 import com.youpassed.repository.MajorRepository;
-import com.youpassed.service.ExamService;
 import com.youpassed.service.MajorsService;
 import com.youpassed.service.UserService;
 import lombok.AllArgsConstructor;
@@ -34,12 +32,10 @@ public class MajorServiceImpl implements MajorsService {
 	private MajorRepository majorRepository;
 	private MajorMapper majorMapper;
 	private UserService userService;
-	private ExamService examService;
 
 	@Override
 	public Page<Major> findAll(int pageIndex, int pageSize) {
 		pageIndex = PaginationUtility.limitPageIndex(majorRepository.count(), pageIndex, pageSize);
-
 		return majorRepository.findAll(PageRequest.of(pageIndex, pageSize))
 				.map(majorMapper::mapEntityToDomain);
 	}
@@ -84,6 +80,7 @@ public class MajorServiceImpl implements MajorsService {
 	@Transactional
 	public Major save(Major major) {
 		MajorEntity majorEntity = majorRepository.save(majorMapper.mapDomainToEntity(major));
+		log.info(String.format("Major '%s' ID '%d' was saved", major.getTitle(), major.getId()));
 		return majorMapper.mapEntityToDomain(majorEntity);
 	}
 
@@ -91,6 +88,7 @@ public class MajorServiceImpl implements MajorsService {
 	@Transactional
 	public void delete(Major major) {
 		majorRepository.delete(majorMapper.mapDomainToEntity(major));
+		log.info(String.format("Major '%s' ID '%d' was deleted from the system", major.getTitle(), major.getId()));
 	}
 
 	@Override
@@ -107,6 +105,8 @@ public class MajorServiceImpl implements MajorsService {
 			userService.saveStudentWithLists(student);
 		}
 
+		log.debug(String.format("Student '%s' (ID %d) applied for major '%s' (ID %d)",
+				student.getEmail(), student.getId(), majorEntity.getTitle(), majorEntity.getId()));
 		return majorMapper.mapEntityToDomain(majorEntity);
 	}
 
@@ -140,22 +140,33 @@ public class MajorServiceImpl implements MajorsService {
 		major.getApplicants().stream().limit(major.getCapacity()).forEach(student -> {
 			student.getMajors().stream()
 					.filter(m -> m.getId().equals(majorId))
-					.findFirst().get().setYouPassed(true);
+					.findFirst()
+					.orElseGet(() -> {
+						student.getMajors().add(major);
+						return major;
+					}).setYouPassed(true);
 			userService.saveStudentWithLists(student);
 			admittedStudents.add(student);
 		});
+		log.debug(String.format("'%d' students were admitted for major '%s' (ID %d)",
+				admittedStudents.size(), major.getTitle(), major.getId()));
 		return admittedStudents;
 	}
 
 	@Override
 	public void resetAdmissionForMajor(Integer majorId) {
 		Major major = findByIdWithUserRanking(majorId);
-		major.getApplicants().stream().forEach(student -> {
+		major.getApplicants().forEach(student -> {
 			student.getMajors().stream()
 					.filter(m -> m.getId().equals(majorId))
-					.findFirst().get().setYouPassed(false);
+					.findFirst()
+					.orElseGet(() -> {
+						student.getMajors().add(major);
+						return major;
+					}).setYouPassed(false);
 			userService.saveStudentWithLists(student);
 		});
+		log.debug(String.format("Admission was reset for major '%s' (ID %d)", major.getTitle(), major.getId()));
 	}
 
 	@Override
@@ -167,5 +178,4 @@ public class MajorServiceImpl implements MajorsService {
 	public void resetAdmissionForAllMajors() {
 		majorRepository.findAll().forEach(major -> resetAdmissionForMajor(major.getId()));
 	}
-
 }
