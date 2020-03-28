@@ -26,13 +26,13 @@ All users can register, login, update their profiles.
 
 ### Technology Stack and Features
 
-- Java SE 8;
-- Spring Core, Boot, MVC, Security;
-- MySQL database (and H2 for testing);
-- Hibernate / JPA object-relational mapping instruments;
-- Thymeleaf template engine and Bootstrap CSS framework for the front-end;
-- Slf4j logging;
-- Maven build tool.
+- Java SE 8
+- Spring Core, Boot, MVC, Security
+- MySQL database (and H2 for testing)
+- Hibernate / JPA object-relational mapping instruments
+- Thymeleaf template engine and Bootstrap CSS framework for the front-end
+- Slf4j logging
+- Maven build tool
 
 ## Usage
 
