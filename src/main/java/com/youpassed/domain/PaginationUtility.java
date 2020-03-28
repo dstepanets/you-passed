@@ -1,14 +1,12 @@
 package com.youpassed.domain;
 
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 public class PaginationUtility {
 	public static final int DEFAULT_BUTTONS_NUM = 10;
 	public static final int INITIAL_PAGE_NUM = 1;
 	public static final int INITIAL_PAGE_SIZE = 10;
-	public static final List<Integer> PAGE_SIZES = Collections.unmodifiableList(Arrays.asList(5, 10, 20));
+	public static final Integer[] PAGE_SIZES = {5, 10, 20};
 
 	private int buttonsToShow;
 	private int startPage;
@@ -42,7 +40,7 @@ public class PaginationUtility {
 				throw new NumberFormatException();
 			}
 			pageSize = Integer.parseInt(pageSizeStr);
-			if (PAGE_SIZES.contains(pageSize)) {
+			if (!Arrays.asList(PAGE_SIZES).contains(pageSize)) {
 				throw new NumberFormatException();
 			}
 		} catch (NumberFormatException e) {

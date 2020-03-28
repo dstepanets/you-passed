@@ -24,12 +24,12 @@ public class StudentMajorEntity implements Serializable {
 	@ManyToOne
 	@MapsId("studentId")
 	@JoinColumn(name = "student_id")
-	private transient UserEntity student;
+	private UserEntity student;
 
 	@ManyToOne
 	@MapsId("majorId")
 	@JoinColumn(name = "major_id")
-	private transient MajorEntity major;
+	private MajorEntity major;
 
 	private boolean youPassed;
 }
