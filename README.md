@@ -45,11 +45,11 @@ All users can register, login, update their profiles.
 `YouPassed/src/main/resources/application.properties`
 change according to your MySQL settings these lines:
 ```
--spring.datasource.url 
--spring.datasource.username 
--spring.datasource.password
+spring.datasource.url 
+spring.datasource.username 
+spring.datasource.password
 ```
--	Run SQL scripts schema.sql and data.sql in YouPassed/db-setup/mysql/ to create a schema and generate initial data 
+-	Run SQL scripts `schema.sql` and `data.sql in` `YouPassed/db-setup/mysql/` to create a schema and generate initial data 
 
 #### 2) Build the app with Maven
 `mvn clean install`
