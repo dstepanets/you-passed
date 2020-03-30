@@ -4,7 +4,7 @@ University Admission Management System  - web application made on Java 8 with Sp
 
 ![](views-demo/index.png)
 
-## Description and Features
+## Overview
 
 The application designed to help an institution of higher education to manage student applications and admission process. There are two *User Roles*: Student and Administrator.
 
@@ -40,10 +40,10 @@ All users can register, login, update their profiles.
 
 ## Usage
 
-#### 1) Setup MySQL
+#### 1) Set up MySQL
 -	In the configuration file 
 `YouPassed/src/main/resources/application.properties`
-change according to your MySQL settings these lines:
+change these lines according to your MySQL settings:
 ```
 spring.datasource.url 
 spring.datasource.username 
@@ -52,10 +52,10 @@ spring.datasource.password
 -	Run SQL scripts `schema.sql` and `data.sql in` `YouPassed/db-setup/mysql/` to create a schema and generate initial data 
 
 #### 2) Build the app with Maven
-`mvn clean install`
+`$ mvn clean install`
 
 #### 3) Run the app
-`java -jar target/youpassed-1.0-SNAPSHOT.jar`
+`$ java -jar target/youpassed-1.0-SNAPSHOT.jar`
 
 #### 4) Open it in a browser
 `http://localhost:8080/`
