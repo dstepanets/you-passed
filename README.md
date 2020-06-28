@@ -52,7 +52,7 @@ spring.datasource.password
 -	Run SQL scripts `schema.sql` and `data.sql in` `YouPassed/db-setup/mysql/` to create a schema and generate initial data 
 
 #### 2) Build the app with Maven
-`$ mvn clean install`
+`$ mvn clean package`
 
 #### 3) Run the app
 `$ java -jar target/youpassed-1.0-SNAPSHOT.jar`
